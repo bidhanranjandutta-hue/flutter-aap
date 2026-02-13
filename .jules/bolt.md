@@ -1,0 +1,3 @@
+## 2024-05-22 - Environment Mismatch and Build Optimization
+**Learning:** The development environment's Dart SDK version (3.10.7) was older than the project requirement (^3.11.0). To verify changes, I temporarily downgraded `pubspec.yaml`, which allowed `flutter pub get` and `flutter test`. However, these changes must be reverted before submission to maintain project integrity.
+**Action:** Always verify SDK compatibility early. If downgrading is necessary for local verification, ensure it's reverted before submitting. Also, enabling `isMinifyEnabled` in `build.gradle.kts` is a powerful optimization for Flutter release builds.
