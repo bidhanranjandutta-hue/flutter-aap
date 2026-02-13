@@ -10,8 +10,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
+      debugShowCheckedModeBanner: false,
+      home: Material(
+        child: Center(
           child: Text('Hello World!'),
         ),
       ),
