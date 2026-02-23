@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/screens/welcome_screen.dart';
-import 'package:flutter_application_1/screens/dashboard_screen.dart';
+import 'package:nyaya_assist/main.dart';
+import 'package:nyaya_assist/screens/welcome_screen.dart';
+import 'package:nyaya_assist/screens/dashboard_screen.dart';
 
 void main() {
   testWidgets('App navigation flow test', (WidgetTester tester) async {

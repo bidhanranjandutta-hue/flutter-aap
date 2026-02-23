@@ -1,5 +1,5 @@
-name: flutter_application_1
-description: "A new Flutter project."
+name: nyaya_assist
+description: "NyayaAssist - AI-powered Police Back-Office SaaS."
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -9,6 +9,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Firebase Core
+  firebase_core: ^2.24.2
+
+  # Firebase Auth
+  firebase_auth: ^4.15.3
+
+  # Cloud Firestore
+  cloud_firestore: ^4.13.3
+
+  # Google Sign In
+  google_sign_in: ^6.1.6
+
+  # Google ML Kit Text Recognition
+  google_mlkit_text_recognition: ^0.11.0
+
+  # Gemini API (Generative AI)
+  google_generative_ai: ^0.2.0
 
 dev_dependencies:
   flutter_test:
