@@ -27,6 +27,8 @@ dependencies:
 
   # Gemini API (Generative AI)
   google_generative_ai: ^0.2.0
+  googleapis: ^16.0.0
+  extension_google_sign_in_as_googleapis_auth: ^2.0.13
 
 dev_dependencies:
   flutter_test:
