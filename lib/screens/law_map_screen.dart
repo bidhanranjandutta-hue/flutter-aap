@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/law_card.dart';
+import '../widgets/info_box.dart';
 
+/// Screen for displaying the compatibility map between Old Laws (IPC) and New Laws (BNS).
+///
+/// Provides a side-by-side comparison, highlighting key changes and AI-driven insights.
 class LawMapScreen extends StatefulWidget {
   const LawMapScreen({super.key});
 
@@ -194,52 +199,50 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Comparison Cards
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                  // Comparison Cards (Refactored to use LawCard widget)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        _buildLawCard(
-                          context,
-                          'IPC',
-                          'Section 302',
-                          'Indian Penal Code',
-                          'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
+                        LawCard(
+                          tag: 'IPC',
+                          title: 'Section 302',
+                          subtitle: 'Indian Penal Code',
+                          content:
+                              'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
                           isOld: true,
                         ),
-                        const SizedBox(height: 8),
-                        const Icon(Icons.arrow_downward, color: Colors.grey),
-                        const SizedBox(height: 8),
-                        _buildLawCard(
-                          context,
-                          'BNS',
-                          'Section 103',
-                          'Bharatiya Nyaya Sanhita',
-                          '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
+                        SizedBox(height: 8),
+                        Icon(Icons.arrow_downward, color: Colors.grey),
+                        SizedBox(height: 8),
+                        LawCard(
+                          tag: 'BNS',
+                          title: 'Section 103',
+                          subtitle: 'Bharatiya Nyaya Sanhita',
+                          content:
+                              '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
                           isOld: false,
                           highlight: true,
                         ),
                       ],
                     ),
                   ),
-                  // Additional Info
-                  Padding(
-                    padding: const EdgeInsets.all(16),
+                  // Additional Info (Refactored to use InfoBox widget)
+                  const Padding(
+                    padding: EdgeInsets.all(16),
                     child: Row(
                       children: [
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Max Penalty',
-                            'Death / Life Imprisonment',
+                          child: InfoBox(
+                            label: 'Max Penalty',
+                            value: 'Death / Life Imprisonment',
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Compoundable',
-                            'Non-Compoundable',
+                          child: InfoBox(
+                            label: 'Compoundable',
+                            value: 'Non-Compoundable',
                           ),
                         ),
                       ],
@@ -382,213 +385,6 @@ class _LawMapScreenState extends State<LawMapScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildLawCard(
-    BuildContext context,
-    String tag,
-    String title,
-    String subtitle,
-    String content, {
-    required bool isOld,
-    bool highlight = false,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isOld
-            ? Theme.of(context).cardColor
-            : AppTheme.primary.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isOld
-              ? Theme.of(context).dividerColor
-              : AppTheme.primary.withOpacity(0.2),
-        ),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: isOld
-                          ? Colors.grey[200]
-                          : AppTheme.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      tag,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        color: isOld ? Colors.grey[600] : AppTheme.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  if (!isOld)
-                    IconButton(
-                      icon: const Icon(
-                        Icons.bookmark_border,
-                        color: AppTheme.primary,
-                      ),
-                      onPressed: () {},
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    icon: const Icon(Icons.copy, color: Colors.grey),
-                    onPressed: () {},
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.only(left: 12),
-            decoration: BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: isOld ? Colors.grey[300]! : AppTheme.primary,
-                  width: 2,
-                ),
-              ),
-            ),
-            child: highlight
-                ? RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
-                        fontSize: 14,
-                        height: 1.5,
-                      ),
-                      children: [
-                        const TextSpan(
-                          text:
-                              "(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n",
-                        ),
-                        const TextSpan(text: "(2) "),
-                        TextSpan(
-                          text:
-                              "When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.",
-                          style: TextStyle(
-                            backgroundColor: Colors.green.withOpacity(0.1),
-                            color: Colors.green[800],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Text(
-                    content,
-                    style: const TextStyle(fontSize: 14, height: 1.5),
-                  ),
-          ),
-          if (!isOld) ...[
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green[50],
-                    border: Border.all(color: Colors.green[100]!),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    'Added: Mob Lynching Clause',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[700],
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    'Active Law',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.primary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          ),
-        ],
-      ),
     );
   }
 }
