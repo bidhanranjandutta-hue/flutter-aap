@@ -38,4 +38,31 @@ class DatabaseService {
       throw Exception('Failed to retrieve user data');
     }
   }
+
+  /// Saves temporary data (e.g., cached session info) that expires after 24 hours.
+  ///
+  /// Automatically adds 'createdAt' and 'expiresAt' timestamps.
+  Future<void> saveTemporaryData(
+    String uid,
+    String docId,
+    Map<String, dynamic> data,
+  ) async {
+    final now = DateTime.now();
+    final expiration = now.add(const Duration(hours: 24));
+
+    final tempData = {
+      ...data,
+      'ownerId': uid,
+      'createdAt': Timestamp.fromDate(now),
+      'expiresAt': Timestamp.fromDate(expiration),
+    };
+
+    try {
+      await _db.collection('temp_data').doc(docId).set(tempData);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error saving temp data: $e');
+      }
+    }
+  }
 }

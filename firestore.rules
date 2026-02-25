@@ -2,16 +2,34 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Default rule: Deny all access
-    // This is the most secure starting point.
-    // Explicitly allow access only where needed for specific collections.
+    // --------------------------------------------------------------------------------
+    // STRICT DATA OWNERSHIP: Users can read/write ONLY their own document.
+    // --------------------------------------------------------------------------------
+
+    // User Profile Documents
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Subcollections (e.g., specific user data)
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // --------------------------------------------------------------------------------
+    // TEMPORARY DATA (Session/Cache)
+    // --------------------------------------------------------------------------------
+    // This collection is intended for temporary session data.
+    // Rules enforce that users can only access their own temporary data.
+    // Ideally, a Cloud Function should run daily to delete documents where expiresAt < now()
+    match /temp_data/{docId} {
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Default deny-all rule for everything else
     match /{document=**} {
       allow read, write: if false;
     }
-
-    // Example: Allow users to read/write only their own data
-    // match /users/{userId} {
-    //   allow read, write: if request.auth != null && request.auth.uid == userId;
-    // }
   }
 }
