@@ -45,196 +45,190 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
       ),
       body: Stack(
         children: [
-          SingleChildScrollView(
+          ListView(
             padding: const EdgeInsets.only(
               left: 16,
               right: 16,
               top: 16,
               bottom: 100,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Upload Section
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 32,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      // Dashed border simulated as solid for simplicity
-                      color: AppTheme.primary.withOpacity(0.3),
-                      width: 2,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.upload_file,
-                          color: AppTheme.primary,
-                          size: 32,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Upload Case File',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Tap to scan or upload FIR (PDF, JPG)',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 14),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text('Select File'),
-                      ),
-                    ],
+            children: [
+              // Upload Section
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 32,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    // Dashed border simulated as solid for simplicity
+                    color: AppTheme.primary.withOpacity(0.3),
+                    width: 2,
                   ),
                 ),
-                const SizedBox(height: 24),
-                // Smart Summary Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.psychology, color: AppTheme.primary),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Smart Summary',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.thumb_up_outlined, size: 20),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.thumb_down_outlined, size: 20),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Theme.of(context).dividerColor),
-                  ),
-                  child: Column(
-                    children: [
-                      TabBar(
-                        controller: _tabController,
-                        labelColor: AppTheme.primary,
-                        unselectedLabelColor: Colors.grey,
-                        indicatorColor: AppTheme.primary,
-                        tabs: const [
-                          Tab(text: 'Subject'),
-                          Tab(text: 'Situation'),
-                          Tab(text: 'Position'),
-                        ],
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary.withOpacity(0.1),
+                        shape: BoxShape.circle,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            _buildSummaryItem(
-                              Icons.gavel,
-                              'Alleged Offence',
-                              'Theft in a dwelling house involving the breaking of a lock during night hours.',
-                            ),
-                            const SizedBox(height: 16),
-                            const Divider(),
-                            const SizedBox(height: 16),
-                            _buildSummaryItem(
-                              Icons.schedule,
-                              'Time of Occurrence',
-                              'Between 02:00 AM and 04:00 AM on 14th Oct 2023.',
-                            ),
-                          ],
-                        ),
+                      child: const Icon(
+                        Icons.upload_file,
+                        color: AppTheme.primary,
+                        size: 32,
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                // Suggested Legal Sections
-                Row(
-                  children: [
-                    const Icon(Icons.book, color: AppTheme.primary),
-                    const SizedBox(width: 8),
+                    ),
+                    const SizedBox(height: 16),
                     const Text(
-                      'Suggested Legal Sections',
+                      'Upload Case File',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Tap to scan or upload FIR (PDF, JPG)',
+                      style: TextStyle(color: Colors.grey[500], fontSize: 14),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text('Select File'),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Smart Summary Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.psychology, color: AppTheme.primary),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Smart Summary',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.thumb_up_outlined, size: 20),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.thumb_down_outlined, size: 20),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Theme.of(context).dividerColor),
+                ),
+                child: Column(
+                  children: [
+                    TabBar(
+                      controller: _tabController,
+                      labelColor: AppTheme.primary,
+                      unselectedLabelColor: Colors.grey,
+                      indicatorColor: AppTheme.primary,
+                      tabs: const [
+                        Tab(text: 'Subject'),
+                        Tab(text: 'Situation'),
+                        Tab(text: 'Position'),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          _buildSummaryItem(
+                            Icons.gavel,
+                            'Alleged Offence',
+                            'Theft in a dwelling house involving the breaking of a lock during night hours.',
+                          ),
+                          const SizedBox(height: 16),
+                          const Divider(),
+                          const SizedBox(height: 16),
+                          _buildSummaryItem(
+                            Icons.schedule,
+                            'Time of Occurrence',
+                            'Between 02:00 AM and 04:00 AM on 14th Oct 2023.',
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                _buildLegalCard(
-                  context,
-                  'BNS 2023',
-                  'Section 305',
-                  'Theft in a dwelling house, etc.',
-                  'Mapped from IPC Section 380',
-                  AppTheme.primary,
-                ),
-                const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
-                  'BNS 2023',
-                  'Section 331(4)',
-                  'Lurking house-trespass or house-breaking by night.',
-                  'Mapped from IPC Section 457',
-                  Colors.purple,
-                ),
-                const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
-                  'Constitution',
-                  'Article 21',
-                  'Protection of life and personal liberty.',
-                  null,
-                  Colors.orange,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 24),
+              // Suggested Legal Sections
+              Row(
+                children: [
+                  const Icon(Icons.book, color: AppTheme.primary),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Suggested Legal Sections',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildLegalCard(
+                context,
+                'BNS 2023',
+                'Section 305',
+                'Theft in a dwelling house, etc.',
+                'Mapped from IPC Section 380',
+                AppTheme.primary,
+              ),
+              const SizedBox(height: 12),
+              _buildLegalCard(
+                context,
+                'BNS 2023',
+                'Section 331(4)',
+                'Lurking house-trespass or house-breaking by night.',
+                'Mapped from IPC Section 457',
+                Colors.purple,
+              ),
+              const SizedBox(height: 12),
+              _buildLegalCard(
+                context,
+                'Constitution',
+                'Article 21',
+                'Protection of life and personal liberty.',
+                null,
+                Colors.orange,
+              ),
+            ],
           ),
           Positioned(
             bottom: 80,
