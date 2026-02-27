@@ -8,22 +8,7 @@ class CaseSynopsisScreen extends StatefulWidget {
   State<CaseSynopsisScreen> createState() => _CaseSynopsisScreenState();
 }
 
-class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
+class _CaseSynopsisScreenState extends State<CaseSynopsisScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,17 +142,6 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   ),
                   child: Column(
                     children: [
-                      TabBar(
-                        controller: _tabController,
-                        labelColor: AppTheme.primary,
-                        unselectedLabelColor: Colors.grey,
-                        indicatorColor: AppTheme.primary,
-                        tabs: const [
-                          Tab(text: 'Subject'),
-                          Tab(text: 'Situation'),
-                          Tab(text: 'Position'),
-                        ],
-                      ),
                       Container(
                         padding: const EdgeInsets.all(20),
                         child: Column(
