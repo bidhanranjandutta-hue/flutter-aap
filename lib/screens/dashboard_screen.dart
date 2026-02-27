@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/file_item_card.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -249,36 +250,32 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'FIR_2023_0912_Theft.pdf',
-                          'Edited 10m ago • Case #402',
-                          Icons.picture_as_pdf,
-                          Colors.red,
+                        const FileItemCard(
+                          title: 'FIR_2023_0912_Theft.pdf',
+                          subtitle: 'Edited 10m ago • Case #402',
+                          icon: Icons.picture_as_pdf,
+                          iconColor: Colors.red,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Witness_Statement_Rao.docx',
-                          'Edited 1h ago • Case #398',
-                          Icons.description,
-                          Colors.blue,
+                        const FileItemCard(
+                          title: 'Witness_Statement_Rao.docx',
+                          subtitle: 'Edited 1h ago • Case #398',
+                          icon: Icons.description,
+                          iconColor: Colors.blue,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Evidence_Photos_Site_B',
-                          'Created yesterday • 12 items',
-                          Icons.folder,
-                          Colors.amber,
+                        const FileItemCard(
+                          title: 'Evidence_Photos_Site_B',
+                          subtitle: 'Created yesterday • 12 items',
+                          icon: Icons.folder,
+                          iconColor: Colors.amber,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'BNS_Reference_Draft_v2.pdf',
-                          'Edited 2 days ago • Personal',
-                          Icons.picture_as_pdf,
-                          Colors.red,
+                        const FileItemCard(
+                          title: 'BNS_Reference_Draft_v2.pdf',
+                          subtitle: 'Edited 2 days ago • Personal',
+                          icon: Icons.picture_as_pdf,
+                          iconColor: Colors.red,
                         ),
                       ],
                     ),
@@ -384,58 +381,6 @@ class DashboardScreen extends StatelessWidget {
               ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildFileItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: iconColor, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.grey),
-            onPressed: () {},
-          ),
-        ],
       ),
     );
   }
