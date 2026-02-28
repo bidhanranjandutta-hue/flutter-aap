@@ -1,0 +1,3 @@
+## 2024-05-24 - TextEditingController Instantiation in Build Method
+**Learning:** Found a performance bottleneck specific to this Flutter codebase: instantiating `TextEditingController` directly within the `build` method of a `StatefulWidget` (like in `LawMapScreen`). This causes redundant allocations and potential memory leaks because a new controller is created on every re-render (e.g., when toggling segments using `setState`), and the old ones are never disposed.
+**Action:** Move `TextEditingController` initialization to `initState` and ensure it is properly disposed in the `dispose` method of the `State` class. Apply this pattern consistently across all stateful forms in the app.
