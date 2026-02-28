@@ -221,18 +221,18 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.translate,
-                    'Translate',
-                    'Hindi • English',
+                  child: const ActionButton(
+                    icon: Icons.translate,
+                    label: 'Translate',
+                    subLabel: 'Hindi • English',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.ios_share,
-                    'Export',
-                    'PDF • DOCX',
+                  child: const ActionButton(
+                    icon: Icons.ios_share,
+                    label: 'Export',
+                    subLabel: 'PDF • DOCX',
                   ),
                 ),
               ],
@@ -298,8 +298,22 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       ),
     );
   }
+}
 
-  Widget _buildActionButton(IconData icon, String label, String subLabel) {
+class ActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subLabel;
+
+  const ActionButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.subLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
