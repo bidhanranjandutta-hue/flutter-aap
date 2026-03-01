@@ -1,0 +1,3 @@
+## 2024-05-28 - Extract UI Helpers to const StatelessWidgets
+**Learning:** This codebase relies heavily on extracting UI components, but an anti-pattern exists where components are extracted into functions (like `_buildFileItem` in `DashboardScreen`) rather than `const StatelessWidget` classes. Function-based extraction forces the entire parent widget to rebuild when its state changes, even if the sub-component's inputs haven't changed.
+**Action:** When optimizing frontend performance in this Flutter app, actively hunt for `_buildX` helper methods and refactor them into private `_X` classes extending `StatelessWidget`. This leverages Flutter's `const` widget caching and significantly reduces the widget tree rebuild cost.
