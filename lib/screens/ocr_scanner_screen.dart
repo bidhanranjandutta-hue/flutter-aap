@@ -107,215 +107,175 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Column(
-          children: [
-            const Text(
-              'NyayaAssist OCR',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            if (_imageFile != null)
+    // Return Column instead of Scaffold since it's wrapped in MainLayout now.
+    return Column(
+      children: [
+        // Simulated App Bar for the Inner Tab (Optional, but good for context)
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          color: Theme.of(context).cardColor,
+          child: Column(
+            children: [
+              const Text(
+                'OCR Document Scanner',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
               Text(
-                'Image Captured',
-                style: TextStyle(color: Colors.grey[500], fontSize: 12),
-              )
-            else
-              Text(
-                'Tap Scan to Start',
+                _imageFile != null ? 'Image Captured' : 'Tap Capture to Start',
                 style: TextStyle(color: Colors.grey[500], fontSize: 12),
               ),
-          ],
+            ],
+          ),
         ),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).cardColor,
-        elevation: 1,
-        actions: [
-          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
-        ],
-      ),
-      body: Column(
-        children: [
-          // View Toggle
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
-              ),
+        // View Toggle
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          color: Theme.of(context).cardColor.withOpacity(0.95),
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(8),
             ),
-          ),
-          // Document Preview / Text View
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Theme.of(context).dividerColor),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: _viewMode == 0
-                    ? (_imageFile != null
-                          ? Image.file(_imageFile!, fit: BoxFit.contain)
-                          : Container(
-                              color: Colors.grey[300],
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.image_search,
-                                    size: 64,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text('No Image Scanned'),
-                                  const SizedBox(height: 16),
-                                  ElevatedButton.icon(
-                                    onPressed: () =>
-                                        _pickImage(ImageSource.camera),
-                                    icon: const Icon(Icons.camera_alt),
-                                    label: const Text('Capture from Camera'),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextButton.icon(
-                                    onPressed: () =>
-                                        _pickImage(ImageSource.gallery),
-                                    icon: const Icon(Icons.photo_library),
-                                    label: const Text('Upload from Gallery'),
-                                  ),
-                                ],
-                              ),
-                            ))
-                    : SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          _recognizedText,
-                          style: const TextStyle(fontSize: 16, height: 1.5),
-                        ),
-                      ),
-              ),
-            ),
-          ),
-          // Status Bar
-          if (_isProcessing)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                  border: Border.all(color: Colors.blue[100]!),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      'Processing document...',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          const SizedBox(height: 16),
-          // Action Grid
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
             child: Row(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton.icon(
-                    onPressed: _isProcessing ? null : _enhanceText,
-                    icon: const Icon(Icons.auto_fix_high),
-                    label: const Text('Enhance Text'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildActionButton(
-                    Icons.translate,
-                    'Translate',
-                    'Hindi',
-                    _translateText,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildActionButton(
-                    Icons.ios_share,
-                    'Export',
-                    'PDF/DOCX',
-                    () {
-                      _showExportOptions(context);
-                    },
-                  ),
-                ),
+                _buildToggleOption(0, 'Original Scan'),
+                _buildToggleOption(1, 'Digitized Text'),
               ],
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex:
-            1, // 'Scan' is 2nd item (index 1) in list: [Home, Scan, Cases, Profile]
-        selectedItemColor: AppTheme.primary,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.document_scanner),
-            label: 'Scan',
+        ),
+        // Document Preview / Text View
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Theme.of(context).dividerColor),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: _viewMode == 0
+                  ? (_imageFile != null
+                        ? Image.file(_imageFile!, fit: BoxFit.contain)
+                        : Container(
+                            color: Colors.grey[300],
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.image_search,
+                                  size: 64,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(height: 16),
+                                const Text('No Image Scanned'),
+                                const SizedBox(height: 16),
+                                ElevatedButton.icon(
+                                  onPressed: () =>
+                                      _pickImage(ImageSource.camera),
+                                  icon: const Icon(Icons.camera_alt),
+                                  label: const Text('Capture from Camera'),
+                                ),
+                                const SizedBox(height: 8),
+                                TextButton.icon(
+                                  onPressed: () =>
+                                      _pickImage(ImageSource.gallery),
+                                  icon: const Icon(Icons.photo_library),
+                                  label: const Text('Upload from Gallery'),
+                                ),
+                              ],
+                            ),
+                          ))
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        _recognizedText,
+                        style: const TextStyle(fontSize: 16, height: 1.5),
+                      ),
+                    ),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder_open),
-            label: 'Cases',
+        ),
+        // Status Bar
+        if (_isProcessing)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                border: Border.all(color: Colors.blue[100]!),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Processing document...',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
-        },
-      ),
+        const SizedBox(height: 16),
+        // Action Grid
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: ElevatedButton.icon(
+                  onPressed: _isProcessing ? null : _enhanceText,
+                  icon: const Icon(Icons.auto_fix_high),
+                  label: const Text('Enhance Text'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildActionButton(
+                  Icons.translate,
+                  'Translate',
+                  'Hindi',
+                  _translateText,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildActionButton(
+                  Icons.ios_share,
+                  'Export',
+                  'PDF/DOCX',
+                  () {
+                    _showExportOptions(context);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

@@ -44,6 +44,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Keep Scaffold here if accessed directly via route push,
+      // but if accessed via IndexedStack, it will just nest the Scaffold which is fine
+      // but usually we remove the AppBar if MainLayout has one.
+      // Given we push this screen via route in Dashboard, we keep Scaffold and AppBar.
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
@@ -51,11 +55,6 @@ class _LawMapScreenState extends State<LawMapScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).cardColor,
-        elevation: 1,
-        actions: [
-          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
-        ],
       ),
       body: Column(
         children: [
@@ -353,26 +352,9 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: Theme.of(context).cardColor,
-        foregroundColor: Theme.of(context).iconTheme.color,
+        backgroundColor: AppTheme.primary,
+        foregroundColor: Colors.white,
         child: const Icon(Icons.save_alt),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 2, // Law Map
-        selectedItemColor: AppTheme.primary,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.folder), label: 'Cases'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Law Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.gavel), label: 'BNS Guide'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
-        },
       ),
     );
   }

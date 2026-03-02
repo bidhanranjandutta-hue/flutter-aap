@@ -182,51 +182,51 @@ class LawMappingDb {
     LawMappingRelation(
       oldLaw: _oldIpc302,
       newLaw: _newBns103,
-      mappingType: MappingType.EXACT,
+      mappingType: MappingType.exact,
       mappingNotes: "Added distinct category for mob lynching.",
     ),
     LawMappingRelation(
       oldLaw: _oldIpc376,
       newLaw: _newBns65,
-      mappingType: MappingType.EXACT,
+      mappingType: MappingType.exact,
       mappingNotes: "Consolidated definitions.",
     ),
     LawMappingRelation(
       oldLaw: _oldIpc420,
       newLaw: _newBns318,
-      mappingType: MappingType.EXACT,
+      mappingType: MappingType.exact,
       mappingNotes: "Maintains similar scope.",
     ),
     LawMappingRelation(
       oldLaw: _oldIpc304A,
       newLaw: _newBns106,
-      mappingType: MappingType.EXACT,
+      mappingType: MappingType.exact,
       mappingNotes:
           "Punishment increased to 5 years; specific clause for registered medical practitioners (2 years).",
     ),
     LawMappingRelation(
       oldLaw: _oldIpc498A,
       newLaw: _newBns85,
-      mappingType: MappingType.EXACT,
+      mappingType: MappingType.exact,
       mappingNotes: "Wordings updated.",
     ),
     LawMappingRelation(
       oldLaw: _oldCrpc144,
       newLaw: _newBnss163,
-      mappingType: MappingType.EXACT,
+      mappingType: MappingType.exact,
       mappingNotes: "Functionally identical.",
     ),
     LawMappingRelation(
       oldLaw: _oldCrpc41,
       newLaw: _newBnss35,
-      mappingType: MappingType.PARTIAL,
+      mappingType: MappingType.partial,
       mappingNotes:
           "Restructured with stricter compliance requirements for arbitrary arrests.",
     ),
     LawMappingRelation(
       oldLaw: _oldCrpc154,
       newLaw: _newBnss173,
-      mappingType: MappingType.EXACT,
+      mappingType: MappingType.exact,
       mappingNotes: "Formalized electronic FIR (e-FIR) process.",
     ),
   ];

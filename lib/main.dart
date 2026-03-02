@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'theme/app_theme.dart';
 import 'screens/welcome_screen.dart';
-import 'screens/dashboard_screen.dart';
+import 'screens/main_layout.dart';
 import 'screens/law_map_screen.dart';
-import 'screens/ocr_scanner_screen.dart';
 import 'screens/case_synopsis_screen.dart';
 
 void main() async {
@@ -38,8 +37,7 @@ class MainApp extends StatelessWidget {
       },
       routes: {
         '/': (context) => const WelcomeScreen(),
-        '/dashbord': (context) => const DashboardScreen(),
-        '/ocr': (context) => const OCRScannerScreen(),
+        '/dashbord': (context) => const MainLayout(),
         '/synopsis': (context) => const CaseSynopsisScreen(),
       },
     );
