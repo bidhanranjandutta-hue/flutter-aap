@@ -1,0 +1,3 @@
+## 2026-03-02 - Extract UI helper methods to const StatelessWidgets
+**Learning:** In Flutter, extracting UI helper methods (like `_buildToolCard` or `_buildFileItem`) into `const StatelessWidget` classes significantly improves frontend performance. Using functions returning widgets defeats Flutter's widget caching mechanism, causing the entire sub-tree to rebuild whenever the parent rebuilds. By converting them into `const StatelessWidget`s, Flutter can cache the widget instances and short-circuit the build process, preventing unnecessary widget rebuilds.
+**Action:** When creating complex UIs in Flutter, prefer creating smaller, composable `const StatelessWidget` classes over creating helper functions that return widgets.
