@@ -1,0 +1,3 @@
+## 2024-03-24 - [Const StatelessWidget Refactor]
+**Learning:** Flutter's memory usage and widget build time can be optimized by extracting common UI helper methods (like `_buildLegalCard`, `_buildSummaryItem`) into `const StatelessWidget` instances. The codebase has a pattern of defining these helper methods inside StatefulWidgets which causes unnecessary re-renders.
+**Action:** Identify a screen that uses a UI helper method inside a `StatefulWidget` or `StatelessWidget` to build UI, and refactor the method into a `const StatelessWidget`. This allows Flutter's framework to short-circuit the rebuild process for these widgets since they are `const`.
