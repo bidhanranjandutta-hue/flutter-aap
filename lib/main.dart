@@ -27,10 +27,18 @@ class MainApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       initialRoute: '/',
+      onGenerateRoute: (settings) {
+        if (settings.name == '/law_map') {
+          final query = settings.arguments as String?;
+          return MaterialPageRoute(
+            builder: (context) => LawMapScreen(initialQuery: query),
+          );
+        }
+        return null;
+      },
       routes: {
         '/': (context) => const WelcomeScreen(),
         '/dashbord': (context) => const DashboardScreen(),
-        '/law_map': (context) => const LawMapScreen(),
         '/ocr': (context) => const OCRScannerScreen(),
         '/synopsis': (context) => const CaseSynopsisScreen(),
       },

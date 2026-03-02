@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/law_card.dart';
 import '../widgets/info_box.dart';
+import '../data/law_mapping_db.dart';
 
 /// Screen for displaying the compatibility map between Old Laws (IPC) and New Laws (BNS).
 ///
 /// Provides a side-by-side comparison, highlighting key changes and AI-driven insights.
 class LawMapScreen extends StatefulWidget {
-  const LawMapScreen({super.key});
+  final String? initialQuery;
+  const LawMapScreen({super.key, this.initialQuery});
 
   @override
   State<LawMapScreen> createState() => _LawMapScreenState();
@@ -15,6 +17,29 @@ class LawMapScreen extends StatefulWidget {
 
 class _LawMapScreenState extends State<LawMapScreen> {
   int _selectedSegment = 0;
+  late TextEditingController _searchController;
+  LawMapping? _currentMapping;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(
+      text: widget.initialQuery ?? "IPC 302",
+    );
+    _performSearch(_searchController.text);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _performSearch(String query) {
+    setState(() {
+      _currentMapping = LawMappingDb.search(query);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +64,16 @@ class _LawMapScreenState extends State<LawMapScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: Theme.of(context).cardColor,
             child: TextField(
+              controller: _searchController,
+              onSubmitted: _performSearch,
+              textInputAction: TextInputAction.search,
               decoration: InputDecoration(
-                hintText: 'Search IPC Section (e.g., 302)',
+                hintText: 'Search old laws (e.g. IPC 302, CrPC 41)...',
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: const Icon(Icons.mic, color: AppTheme.primary),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.mic, color: AppTheme.primary),
+                  onPressed: () {},
+                ),
                 filled: true,
                 fillColor: Theme.of(context).scaffoldBackgroundColor,
                 border: OutlineInputBorder(
@@ -51,7 +82,6 @@ class _LawMapScreenState extends State<LawMapScreen> {
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              controller: TextEditingController(text: "IPC 302"),
             ),
           ),
           // Segmented Control
@@ -78,174 +108,206 @@ class _LawMapScreenState extends State<LawMapScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Result Header Card
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [AppTheme.primary, Colors.blue],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                  if (_currentMapping == null)
+                    const Padding(
+                      padding: EdgeInsets.all(32.0),
+                      child: Center(
+                        child: Text(
+                          'No mapping found. Try "IPC 302" or "CrPC 41".',
                         ),
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.3),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _buildLawHeader(
-                                context,
-                                'Old Law',
-                                'IPC 302',
-                                '1860 Code',
-                                Colors.white,
-                              ),
-                              const Icon(
-                                Icons.arrow_forward,
-                                color: Colors.white,
-                                size: 32,
-                              ),
-                              _buildLawHeader(
-                                context,
-                                'New Law',
-                                'BNS 103',
-                                '2023 Sanhita',
-                                Colors.greenAccent,
-                              ),
-                            ],
+                    )
+                  else ...[
+                    // Result Header Card
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [AppTheme.primary, Colors.blue],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          const SizedBox(height: 16),
-                          const Divider(color: Colors.white24),
-                          const SizedBox(height: 8),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.gavel, color: Colors.white, size: 20),
-                              SizedBox(width: 8),
-                              Text(
-                                'Punishment for Murder',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // AI Insight Badge
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.amber[50],
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.amber[100]!),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: Colors.amber[100],
-                              borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primary.withOpacity(0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                            child: Icon(
-                              Icons.lightbulb,
-                              color: Colors.amber[800],
-                              size: 20,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  'AI Insight: Key Change',
-                                  style: TextStyle(
-                                    color: Colors.amber[800],
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
+                                _buildLawHeader(
+                                  context,
+                                  'Old Law',
+                                  '${_currentMapping!.oldTag} ${_currentMapping!.oldSection}',
+                                  'Legacy Code',
+                                  Colors.white,
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
-                                  "The definition of 'mob lynching' has been explicitly added as a distinct category under this section, carrying rigorous penalties including life imprisonment.",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 14,
+                                const Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  size: 32,
+                                ),
+                                _buildLawHeader(
+                                  context,
+                                  'New Law',
+                                  '${_currentMapping!.newTag} ${_currentMapping!.newSection}',
+                                  '2023 Sanhita',
+                                  Colors.greenAccent,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            const Divider(color: Colors.white24),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.gavel,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    _currentMapping!.newTitle,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // AI Insight Badge
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.amber[50],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.amber[100]!),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.amber[100],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(
+                                Icons.lightbulb,
+                                color: Colors.amber[800],
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'AI Insight: Key Change',
+                                    style: TextStyle(
+                                      color: Colors.amber[800],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    _currentMapping!.keyChange,
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Comparison Cards (Refactored to use LawCard widget)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          LawCard(
+                            tag: _currentMapping!.oldTag,
+                            title: 'Section ${_currentMapping!.oldSection}',
+                            subtitle: _currentMapping!.oldTitle,
+                            content: _currentMapping!.oldText,
+                            isOld: true,
+                          ),
+                          const SizedBox(height: 8),
+                          const Icon(Icons.arrow_downward, color: Colors.grey),
+                          const SizedBox(height: 8),
+                          LawCard(
+                            tag: _currentMapping!.newTag,
+                            title: 'Section ${_currentMapping!.newSection}',
+                            subtitle: _currentMapping!.newTitle,
+                            content: _currentMapping!.newText,
+                            isOld: false,
+                            highlight:
+                                true, // Highlighting assumes specific format, kept for demo
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Comparison Cards (Refactored to use LawCard widget)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        LawCard(
-                          tag: 'IPC',
-                          title: 'Section 302',
-                          subtitle: 'Indian Penal Code',
-                          content:
-                              'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
-                          isOld: true,
-                        ),
-                        SizedBox(height: 8),
-                        Icon(Icons.arrow_downward, color: Colors.grey),
-                        SizedBox(height: 8),
-                        LawCard(
-                          tag: 'BNS',
-                          title: 'Section 103',
-                          subtitle: 'Bharatiya Nyaya Sanhita',
-                          content:
-                              '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
-                          isOld: false,
-                          highlight: true,
-                        ),
-                      ],
+                    // Additional Info (Refactored to use InfoBox widget)
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InfoBox(
+                              label: 'Max Penalty',
+                              value: _currentMapping!.maxPenalty,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: InfoBox(
+                              label: 'Compoundable',
+                              value: _currentMapping!.compoundable,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  // Additional Info (Refactored to use InfoBox widget)
+                  ],
+                  // AI Disclaimer
                   const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: InfoBox(
-                            label: 'Max Penalty',
-                            value: 'Death / Life Imprisonment',
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: InfoBox(
-                            label: 'Compoundable',
-                            value: 'Non-Compoundable',
-                          ),
-                        ),
-                      ],
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Text(
+                      'AI-generated assistance. Verify with official gazette.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 10,
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
                   ),
                   // Offline Indicator

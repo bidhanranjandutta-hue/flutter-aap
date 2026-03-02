@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  void _handleSearch(String query) {
+    if (query.trim().isNotEmpty) {
+      Navigator.pushNamed(context, '/law_map', arguments: query.trim());
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +106,16 @@ class DashboardScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 // Search Bar
                 TextField(
+                  controller: _searchController,
+                  onSubmitted: _handleSearch,
+                  textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: 'Search FIRs, statutes, or people...',
+                    hintText: 'Search laws (e.g. IPC 302)...',
                     prefixIcon: const Icon(Icons.search),
-                    suffixIcon: const Icon(Icons.mic, color: AppTheme.primary),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.mic, color: AppTheme.primary),
+                      onPressed: () {},
+                    ),
                     filled: true,
                     fillColor: Theme.of(context).colorScheme.surface,
                     border: OutlineInputBorder(

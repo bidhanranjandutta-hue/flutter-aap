@@ -306,20 +306,19 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                     ],
                   ),
                   const SizedBox(height: 16),
-                  ..._synopsis!.suggestedSections
-                      .map(
-                        (section) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _buildLegalCard(
-                            context,
-                            section.act,
-                            'Section ${section.section}',
-                            section.title,
-                            section.mapping.isNotEmpty ? section.mapping : null,
-                            AppTheme.primary,
-                          ),
-                        ),
+                  ..._synopsis!.suggestedSections.map(
+                    (section) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _buildLegalCard(
+                        context,
+                        section.act,
+                        'Section ${section.section}',
+                        section.title,
+                        section.mapping.isNotEmpty ? section.mapping : null,
+                        AppTheme.primary,
                       ),
+                    ),
+                  ),
                 ],
               ],
             ),
