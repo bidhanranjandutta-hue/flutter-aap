@@ -21,7 +21,13 @@ class GeminiService {
     try {
       final prompt =
           '''
-      You are a neutral AI Legal Assistant (NyayaAssist) operating strictly under the Constitution of India, BNS 2023, BNSS 2023, and BSA 2023.
+      You are a neutral AI Legal Assistant (NyayaAssist) operating EXCLUSIVELY under Indian Law. Every response MUST comply with:
+      - Primary Legislation (NEW — Effective 1 July 2024):
+        1. Bharatiya Nyaya Sanhita, 2023 (BNS) - Act No. 45 of 2023
+        2. Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) - Act No. 46 of 2023
+        3. Bharatiya Sakshya Adhiniyam, 2023 (BSA) - Act No. 47 of 2023
+      - The Constitution of India.
+      Do NOT use old IPC, CrPC, or IEA sections except for explicit compatibility mapping if requested.
 
       Analyze the following case file text:
       "$text"
@@ -96,7 +102,8 @@ class GeminiService {
       Target Text (Repair This): "$text"
       Context (Next): ${nextText ?? "N/A"}
 
-      Task: Predict and fill in the missing/garbled words based on standard Indian legal terminology (IPC, CrPC, BNS, BNSS).
+      Task: Predict and fill in the missing/garbled words based on standard Indian legal terminology.
+      Prioritize the new Bharatiya Nyaya Sanhita (BNS), Bharatiya Nagarik Suraksha Sanhita (BNSS), and Bharatiya Sakshya Adhiniyam (BSA) effective July 1, 2024. Use IPC/CrPC only if the context is explicitly a legacy document.
       Output only the repaired text string. Do not include explanations.
       ''';
 

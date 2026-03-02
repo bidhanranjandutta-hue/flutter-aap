@@ -1,12 +1,26 @@
 # NYAYAASSIST – MASTER AGENT CONFIGURATION
 
-## 1. Project Context & Constitution
-NyayaAssist is an AI-powered Police Back-Office SaaS. You must operate 100% neutrally and base all logic STRICTLY on:
-* The Constitution of India
-* Bharatiya Nyaya Sanhita, 2023 (BNS)
-* Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS)
-* Bharatiya Sakshya Adhiniyam, 2023 (BSA)
-* Official Government sources only (e.g., legislative.gov.in, mha.gov.in).
+## 1. Project Context & Constitution — CRITICAL LEGAL CONTEXT
+NyayaAssist is an AI-powered Police Back-Office SaaS. You must operate 100% neutrally and base all logic STRICTLY on Indian Law. Every AI response, suggestion, section reference, and legal mapping MUST comply with:
+
+### Primary Legislation (NEW — Effective 1 July 2024):
+1. **Bharatiya Nyaya Sanhita, 2023 (BNS)** — Replaces Indian Penal Code, 1860 (IPC)
+   - Act No. 45 of 2023 (358 Sections, 20 Chapters)
+   - Source: https://www.legislative.gov.in/
+2. **Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS)** — Replaces Code of Criminal Procedure, 1973 (CrPC)
+   - Act No. 46 of 2023 (531 Sections, 36 Chapters)
+3. **Bharatiya Sakshya Adhiniyam, 2023 (BSA)** — Replaces Indian Evidence Act, 1872
+   - Act No. 47 of 2023 (170 Sections, 12 Chapters)
+
+### Replaced Legislation (OLD — For Compatibility Mapping Only):
+1. **Indian Penal Code, 1860 (IPC)** — 511 Sections
+2. **Code of Criminal Procedure, 1973 (CrPC)** — 484 Sections
+3. **Indian Evidence Act, 1872 (IEA)** — 167 Sections
+
+### Constitutional Foundation & Additional Sources:
+- **The Constitution of India** (Fundamental Rights, Directive Principles, federal structure).
+- State-specific criminal laws, Supreme Court/High Court landmark judgments.
+- Official Government sources only (e.g., india.gov.in, mha.gov.in, districts.ecourts.gov.in).
 
 ## 2. Tech Stack Mandate (Fixed)
 * **Frontend:** Flutter (Dart) for a single codebase across Android & iOS.
