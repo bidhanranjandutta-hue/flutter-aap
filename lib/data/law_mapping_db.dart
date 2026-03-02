@@ -1,99 +1,262 @@
-/// Represents a mapping between an old law (IPC, CrPC, IEA) and a new law (BNS, BNSS, BSA).
-class LawMapping {
-  final String oldTag;
-  final String oldSection;
-  final String oldTitle;
-  final String oldText;
-  final String newTag;
-  final String newSection;
-  final String newTitle;
-  final String newText;
-  final String keyChange;
-  final String maxPenalty;
-  final String compoundable;
+/// Represents a legacy law (IPC, CrPC, IEA).
+class OldLaw {
+  final String act; // e.g., "IPC", "CrPC"
+  final String sectionNumber;
+  final String sectionTitle;
+  final String sectionDescription;
+  final String? punishment;
 
-  const LawMapping({
-    required this.oldTag,
-    required this.oldSection,
-    required this.oldTitle,
-    required this.oldText,
-    required this.newTag,
-    required this.newSection,
-    required this.newTitle,
-    required this.newText,
-    required this.keyChange,
-    required this.maxPenalty,
-    required this.compoundable,
+  const OldLaw({
+    required this.act,
+    required this.sectionNumber,
+    required this.sectionTitle,
+    required this.sectionDescription,
+    this.punishment,
   });
 }
 
-/// Offline, hardcoded database for instant law mappings.
+/// Represents a new law (BNS, BNSS, BSA).
+class NewLaw {
+  final String act; // e.g., "BNS", "BNSS"
+  final String sectionNumber;
+  final String sectionTitle;
+  final String sectionDescription;
+  final String? punishment;
+
+  const NewLaw({
+    required this.act,
+    required this.sectionNumber,
+    required this.sectionTitle,
+    required this.sectionDescription,
+    this.punishment,
+  });
+}
+
+/// Defines the mapping types.
+enum MappingType { exact, partial, merged, split, newType, abolished }
+
+/// Represents the relationship between an old law and a new law.
+class LawMappingRelation {
+  final OldLaw? oldLaw;
+  final NewLaw? newLaw;
+  final MappingType mappingType;
+  final String mappingNotes;
+  final String effectiveDate;
+
+  const LawMappingRelation({
+    this.oldLaw,
+    this.newLaw,
+    required this.mappingType,
+    required this.mappingNotes,
+    this.effectiveDate = '2024-07-01',
+  });
+}
+
+/// Offline database implementing the required relational schema for Law Mapping.
 class LawMappingDb {
-  static const List<LawMapping> _mappings = [
-    LawMapping(
-      oldTag: 'IPC',
-      oldSection: '302',
-      oldTitle: 'Punishment for Murder',
-      oldText:
-          'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
-      newTag: 'BNS',
-      newSection: '103',
-      newTitle: 'Punishment for Murder',
-      newText:
-          '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
-      keyChange:
-          'The definition of \'mob lynching\' has been explicitly added as a distinct category under this section, carrying rigorous penalties including life imprisonment.',
-      maxPenalty: 'Death / Life Imprisonment',
-      compoundable: 'Non-Compoundable',
+  // --- OLD LAWS ---
+  static const _oldIpc302 = OldLaw(
+    act: "IPC",
+    sectionNumber: "302",
+    sectionTitle: "Murder",
+    sectionDescription:
+        "Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.",
+    punishment: "Death / Life Imprisonment",
+  );
+  static const _oldIpc376 = OldLaw(
+    act: "IPC",
+    sectionNumber: "376",
+    sectionTitle: "Rape",
+    sectionDescription: "Punishment for rape.",
+    punishment: "Various terms",
+  );
+  static const _oldIpc420 = OldLaw(
+    act: "IPC",
+    sectionNumber: "420",
+    sectionTitle: "Cheating",
+    sectionDescription:
+        "Cheating and dishonestly inducing delivery of property.",
+    punishment: "7 Years",
+  );
+  static const _oldIpc304A = OldLaw(
+    act: "IPC",
+    sectionNumber: "304A",
+    sectionTitle: "Death by negligence",
+    sectionDescription: "Causing death by negligence.",
+    punishment: "2 Years",
+  );
+  static const _oldIpc498A = OldLaw(
+    act: "IPC",
+    sectionNumber: "498A",
+    sectionTitle: "Cruelty by husband",
+    sectionDescription:
+        "Husband or relative of husband of a woman subjecting her to cruelty.",
+    punishment: "3 Years",
+  );
+  static const _oldCrpc144 = OldLaw(
+    act: "CrPC",
+    sectionNumber: "144",
+    sectionTitle: "Prohibitory orders",
+    sectionDescription:
+        "Power to issue order in urgent cases of nuisance of apprehended danger.",
+    punishment: null,
+  );
+  static const _oldCrpc41 = OldLaw(
+    act: "CrPC",
+    sectionNumber: "41",
+    sectionTitle: "Arrest without warrant",
+    sectionDescription: "When police may arrest without warrant.",
+    punishment: null,
+  );
+  static const _oldCrpc154 = OldLaw(
+    act: "CrPC",
+    sectionNumber: "154",
+    sectionTitle: "FIR",
+    sectionDescription: "Information in cognizable cases.",
+    punishment: null,
+  );
+
+  // --- NEW LAWS ---
+  static const _newBns103 = NewLaw(
+    act: "BNS",
+    sectionNumber: "103",
+    sectionTitle: "Murder",
+    sectionDescription:
+        "(1) Whoever commits murder shall be punished...\n(2) Mob lynching clause...",
+    punishment: "Death / Life Imprisonment",
+  );
+  static const _newBns65 = NewLaw(
+    act: "BNS",
+    sectionNumber: "65",
+    sectionTitle: "Rape",
+    sectionDescription: "Punishment for rape (updated definitions).",
+    punishment: "Rigorous Imprisonment",
+  );
+  static const _newBns318 = NewLaw(
+    act: "BNS",
+    sectionNumber: "318",
+    sectionTitle: "Cheating",
+    sectionDescription: "Cheating definition and punishment.",
+    punishment: "7 Years",
+  );
+  static const _newBns106 = NewLaw(
+    act: "BNS",
+    sectionNumber: "106",
+    sectionTitle: "Death by negligence",
+    sectionDescription:
+        "Causing death by negligence (includes medical negligence distinctions).",
+    punishment: "5 Years",
+  );
+  static const _newBns85 = NewLaw(
+    act: "BNS",
+    sectionNumber: "85",
+    sectionTitle: "Cruelty by husband",
+    sectionDescription: "Husband or relative subjecting woman to cruelty.",
+    punishment: "3 Years",
+  );
+  static const _newBnss163 = NewLaw(
+    act: "BNSS",
+    sectionNumber: "163",
+    sectionTitle: "Prohibitory orders",
+    sectionDescription: "Power to issue order in urgent cases.",
+    punishment: null,
+  );
+  static const _newBnss35 = NewLaw(
+    act: "BNSS",
+    sectionNumber: "35",
+    sectionTitle: "Arrest without warrant",
+    sectionDescription:
+        "When police may arrest without warrant (stricter compliance).",
+    punishment: null,
+  );
+  static const _newBnss173 = NewLaw(
+    act: "BNSS",
+    sectionNumber: "173",
+    sectionTitle: "FIR",
+    sectionDescription: "Information in cognizable cases (e-FIR allowed).",
+    punishment: null,
+  );
+
+  // --- MAPPINGS ---
+  static const List<LawMappingRelation> _relations = [
+    LawMappingRelation(
+      oldLaw: _oldIpc302,
+      newLaw: _newBns103,
+      mappingType: MappingType.EXACT,
+      mappingNotes: "Added distinct category for mob lynching.",
     ),
-    LawMapping(
-      oldTag: 'CrPC',
-      oldSection: '41',
-      oldTitle: 'When police may arrest without warrant',
-      oldText:
-          'Any police officer may without an order from a Magistrate and without a warrant, arrest any person...',
-      newTag: 'BNSS',
-      newSection: '35',
-      newTitle: 'When police may arrest without warrant',
-      newText:
-          'Any police officer may without an order from a Magistrate and without a warrant, arrest any person who commits, in the presence of a police officer, a cognizable offence...',
-      keyChange:
-          'Restructured and consolidated arrest provisions with stricter compliance requirements for arbitrary arrests.',
-      maxPenalty: 'N/A (Procedural)',
-      compoundable: 'N/A',
+    LawMappingRelation(
+      oldLaw: _oldIpc376,
+      newLaw: _newBns65,
+      mappingType: MappingType.EXACT,
+      mappingNotes: "Consolidated definitions.",
     ),
-    LawMapping(
-      oldTag: 'IPC',
-      oldSection: '124A',
-      oldTitle: 'Sedition',
-      oldText:
-          'Whoever by words, either spoken or written, or by signs, or by visible representation, or otherwise, brings or attempts to bring into hatred or contempt...',
-      newTag: 'BNS',
-      newSection: '152',
-      newTitle: 'Act endangering sovereignty, unity and integrity of India',
-      newText:
-          'Whoever, purposely or knowingly, by words, either spoken or written, or by signs, or by visible representation, or by electronic communication or by use of financial mean, or otherwise, excites or attempts to excite, secession or armed rebellion or subversive activities...',
-      keyChange:
-          'The word "Sedition" is removed. Scope expanded to include electronic communication and financial means.',
-      maxPenalty: 'Life Imprisonment / 7 Years',
-      compoundable: 'Non-Compoundable',
+    LawMappingRelation(
+      oldLaw: _oldIpc420,
+      newLaw: _newBns318,
+      mappingType: MappingType.EXACT,
+      mappingNotes: "Maintains similar scope.",
+    ),
+    LawMappingRelation(
+      oldLaw: _oldIpc304A,
+      newLaw: _newBns106,
+      mappingType: MappingType.EXACT,
+      mappingNotes:
+          "Punishment increased to 5 years; specific clause for registered medical practitioners (2 years).",
+    ),
+    LawMappingRelation(
+      oldLaw: _oldIpc498A,
+      newLaw: _newBns85,
+      mappingType: MappingType.EXACT,
+      mappingNotes: "Wordings updated.",
+    ),
+    LawMappingRelation(
+      oldLaw: _oldCrpc144,
+      newLaw: _newBnss163,
+      mappingType: MappingType.EXACT,
+      mappingNotes: "Functionally identical.",
+    ),
+    LawMappingRelation(
+      oldLaw: _oldCrpc41,
+      newLaw: _newBnss35,
+      mappingType: MappingType.PARTIAL,
+      mappingNotes:
+          "Restructured with stricter compliance requirements for arbitrary arrests.",
+    ),
+    LawMappingRelation(
+      oldLaw: _oldCrpc154,
+      newLaw: _newBnss173,
+      mappingType: MappingType.EXACT,
+      mappingNotes: "Formalized electronic FIR (e-FIR) process.",
     ),
   ];
 
-  /// Searches for a mapping based on a query (e.g., "IPC 302" or "302").
-  static LawMapping? search(String query) {
+  /// Searches for a mapping based on a query.
+  /// Rule 5: Always show BOTH old and new when user searches either.
+  static LawMappingRelation? search(String query) {
     if (query.isEmpty) return null;
 
     final q = query.toLowerCase().replaceAll(' ', '');
 
-    for (var mapping in _mappings) {
-      final oldRef =
-          '${mapping.oldTag.toLowerCase()}${mapping.oldSection.toLowerCase()}';
-      final newRef =
-          '${mapping.newTag.toLowerCase()}${mapping.newSection.toLowerCase()}';
+    for (var relation in _relations) {
+      // Check Old Law
+      if (relation.oldLaw != null) {
+        final oldRef =
+            '${relation.oldLaw!.act.toLowerCase()}${relation.oldLaw!.sectionNumber.toLowerCase()}';
+        if (oldRef.contains(q) ||
+            relation.oldLaw!.sectionNumber.toLowerCase() == q) {
+          return relation;
+        }
+      }
 
-      if (oldRef.contains(q) || newRef.contains(q) || mapping.oldSection == q) {
-        return mapping;
+      // Check New Law
+      if (relation.newLaw != null) {
+        final newRef =
+            '${relation.newLaw!.act.toLowerCase()}${relation.newLaw!.sectionNumber.toLowerCase()}';
+        if (newRef.contains(q) ||
+            relation.newLaw!.sectionNumber.toLowerCase() == q) {
+          return relation;
+        }
       }
     }
     return null;

@@ -18,7 +18,7 @@ class LawMapScreen extends StatefulWidget {
 class _LawMapScreenState extends State<LawMapScreen> {
   int _selectedSegment = 0;
   late TextEditingController _searchController;
-  LawMapping? _currentMapping;
+  LawMappingRelation? _currentMapping;
 
   @override
   void initState() {
@@ -143,25 +143,27 @@ class _LawMapScreenState extends State<LawMapScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _buildLawHeader(
-                                  context,
-                                  'Old Law',
-                                  '${_currentMapping!.oldTag} ${_currentMapping!.oldSection}',
-                                  'Legacy Code',
-                                  Colors.white,
-                                ),
+                                if (_currentMapping!.oldLaw != null)
+                                  _buildLawHeader(
+                                    context,
+                                    'Old Law',
+                                    '${_currentMapping!.oldLaw!.act} ${_currentMapping!.oldLaw!.sectionNumber}',
+                                    'Legacy Code',
+                                    Colors.white,
+                                  ),
                                 const Icon(
                                   Icons.arrow_forward,
                                   color: Colors.white,
                                   size: 32,
                                 ),
-                                _buildLawHeader(
-                                  context,
-                                  'New Law',
-                                  '${_currentMapping!.newTag} ${_currentMapping!.newSection}',
-                                  '2023 Sanhita',
-                                  Colors.greenAccent,
-                                ),
+                                if (_currentMapping!.newLaw != null)
+                                  _buildLawHeader(
+                                    context,
+                                    'New Law',
+                                    '${_currentMapping!.newLaw!.act} ${_currentMapping!.newLaw!.sectionNumber}',
+                                    '2023 Sanhita',
+                                    Colors.greenAccent,
+                                  ),
                               ],
                             ),
                             const SizedBox(height: 16),
@@ -178,7 +180,9 @@ class _LawMapScreenState extends State<LawMapScreen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    _currentMapping!.newTitle,
+                                    _currentMapping!.newLaw?.sectionTitle ??
+                                        _currentMapping!.oldLaw?.sectionTitle ??
+                                        '',
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -234,7 +238,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    _currentMapping!.keyChange,
+                                    _currentMapping!.mappingNotes,
                                     style: const TextStyle(
                                       color: Colors.black87,
                                       fontSize: 14,
@@ -253,25 +257,34 @@ class _LawMapScreenState extends State<LawMapScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
-                          LawCard(
-                            tag: _currentMapping!.oldTag,
-                            title: 'Section ${_currentMapping!.oldSection}',
-                            subtitle: _currentMapping!.oldTitle,
-                            content: _currentMapping!.oldText,
-                            isOld: true,
-                          ),
-                          const SizedBox(height: 8),
-                          const Icon(Icons.arrow_downward, color: Colors.grey),
-                          const SizedBox(height: 8),
-                          LawCard(
-                            tag: _currentMapping!.newTag,
-                            title: 'Section ${_currentMapping!.newSection}',
-                            subtitle: _currentMapping!.newTitle,
-                            content: _currentMapping!.newText,
-                            isOld: false,
-                            highlight:
-                                true, // Highlighting assumes specific format, kept for demo
-                          ),
+                          if (_currentMapping!.oldLaw != null) ...[
+                            LawCard(
+                              tag: _currentMapping!.oldLaw!.act,
+                              title:
+                                  'Section ${_currentMapping!.oldLaw!.sectionNumber}',
+                              subtitle: _currentMapping!.oldLaw!.sectionTitle,
+                              content:
+                                  _currentMapping!.oldLaw!.sectionDescription,
+                              isOld: true,
+                            ),
+                            const SizedBox(height: 8),
+                            const Icon(
+                              Icons.arrow_downward,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                          if (_currentMapping!.newLaw != null)
+                            LawCard(
+                              tag: _currentMapping!.newLaw!.act,
+                              title:
+                                  'Section ${_currentMapping!.newLaw!.sectionNumber}',
+                              subtitle: _currentMapping!.newLaw!.sectionTitle,
+                              content:
+                                  _currentMapping!.newLaw!.sectionDescription,
+                              isOld: false,
+                              highlight: true,
+                            ),
                         ],
                       ),
                     ),
@@ -282,15 +295,17 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         children: [
                           Expanded(
                             child: InfoBox(
-                              label: 'Max Penalty',
-                              value: _currentMapping!.maxPenalty,
+                              label: 'Old Penalty',
+                              value:
+                                  _currentMapping!.oldLaw?.punishment ?? 'N/A',
                             ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: InfoBox(
-                              label: 'Compoundable',
-                              value: _currentMapping!.compoundable,
+                              label: 'New Penalty',
+                              value:
+                                  _currentMapping!.newLaw?.punishment ?? 'N/A',
                             ),
                           ),
                         ],
