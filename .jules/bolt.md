@@ -1,0 +1,3 @@
+## 2023-11-20 - Stateless Widget Extraction for Rebuild Optimization
+**Learning:** In Flutter, using helper methods like `_buildSomething(...)` within a `StatefulWidget`'s `build` method causes the entire subtree returned by that method to rebuild whenever `setState` is called, even if the inputs to the helper method haven't changed. This is because the method is evaluated as part of the parent's `build` cycle.
+**Action:** Extract static or pure UI subtrees into `const StatelessWidget` classes. This allows Flutter to cache the widget instance and short-circuit the rebuild process for that specific subtree during subsequent state updates, significantly improving performance, especially in list views or complex screens.
