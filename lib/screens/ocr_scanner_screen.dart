@@ -53,8 +53,16 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
               ),
               child: Row(
                 children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
+                  _ToggleOption(
+                    text: 'Original Scan',
+                    isSelected: _viewMode == 0,
+                    onTap: () => setState(() => _viewMode = 0),
+                  ),
+                  _ToggleOption(
+                    text: 'Digitized Text',
+                    isSelected: _viewMode == 1,
+                    onTap: () => setState(() => _viewMode = 1),
+                  ),
                 ],
               ),
             ),
@@ -266,11 +274,49 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildToggleOption(int index, String text) {
-    bool isSelected = _viewMode == index;
+  Widget _buildActionButton(IconData icon, String label, String subLabel) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        border: Border.all(color: Theme.of(context).dividerColor),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: Colors.grey[700], size: 24),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+          ),
+          Text(
+            subLabel,
+            style: TextStyle(color: Colors.grey[400], fontSize: 10),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ToggleOption extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _ToggleOption({
+    super.key,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => _viewMode = index),
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
@@ -295,31 +341,6 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton(IconData icon, String label, String subLabel) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border.all(color: Theme.of(context).dividerColor),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.grey[700], size: 24),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-          Text(
-            subLabel,
-            style: TextStyle(color: Colors.grey[400], fontSize: 10),
-          ),
-        ],
       ),
     );
   }
