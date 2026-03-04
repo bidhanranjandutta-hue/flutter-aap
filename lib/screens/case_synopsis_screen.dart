@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import '../theme/app_theme.dart';
+import '../models/case_synopsis_model.dart';
+import '../services/gemini_service.dart';
 
 class CaseSynopsisScreen extends StatefulWidget {
   const CaseSynopsisScreen({super.key});
@@ -11,11 +14,54 @@ class CaseSynopsisScreen extends StatefulWidget {
 class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  bool _isLoading = false;
+  CaseSynopsisModel? _synopsis;
+
+  // In production, inject this or get from a provider
+  final GeminiService _geminiService = GeminiService('YOUR_API_KEY_HERE');
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+  }
+
+  Future<void> _handleUpload() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'txt', 'jpg', 'png'],
+    );
+
+    if (result != null) {
+      setState(() => _isLoading = true);
+
+      try {
+        // Simulate reading text from the file (in reality, use OCR or PDF text extraction)
+        // For demonstration, we use a mock FIR text to send to Gemini
+        String mockFirText = """
+        FIR No: 102/2023. Date: 14/10/2023. Time: 05:30 AM.
+        Complainant Ramesh reported that between 2 AM and 4 AM, unknown persons broke the lock of his house in Sector 4 and stole gold ornaments and cash.
+        """;
+
+        String? jsonResponse = await _geminiService.generateCaseSynopsis(
+          mockFirText,
+        );
+
+        if (jsonResponse != null) {
+          setState(() {
+            _synopsis = CaseSynopsisModel.fromJson(jsonResponse);
+          });
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to generate synopsis.')),
+          );
+        }
+      } finally {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override
@@ -99,7 +145,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _isLoading ? null : _handleUpload,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.primary,
                           foregroundColor: Colors.white,
@@ -111,154 +157,196 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text('Select File'),
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text('Select File'),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                // Smart Summary Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+                if (_synopsis != null) ...[
+                  const SizedBox(height: 24),
+                  // Smart Summary Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.psychology, color: AppTheme.primary),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Smart Summary',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.thumb_up_outlined, size: 20),
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.thumb_down_outlined,
+                              size: 20,
+                            ),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                    ),
+                    child: Column(
                       children: [
-                        const Icon(Icons.psychology, color: AppTheme.primary),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Smart Summary',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                        TabBar(
+                          controller: _tabController,
+                          labelColor: AppTheme.primary,
+                          unselectedLabelColor: Colors.grey,
+                          indicatorColor: AppTheme.primary,
+                          tabs: const [
+                            Tab(text: 'Subject'),
+                            Tab(text: 'Situation'),
+                            Tab(text: 'Position'),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 200,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              // Subject Tab (5Ws)
+                              ListView(
+                                padding: const EdgeInsets.all(16),
+                                children: _synopsis!.fiveWs.entries
+                                    .map(
+                                      (e) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 12,
+                                        ),
+                                        child: _buildSummaryItem(
+                                          Icons.info_outline,
+                                          e.key,
+                                          e.value,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                              // Situation Tab
+                              ListView(
+                                padding: const EdgeInsets.all(16),
+                                children: [
+                                  _buildSummaryItem(
+                                    Icons.gavel,
+                                    'Subject',
+                                    _synopsis!.analysis['Subject'] ?? 'N/A',
+                                  ),
+                                  const SizedBox(height: 12),
+                                  _buildSummaryItem(
+                                    Icons.place,
+                                    'Situation',
+                                    _synopsis!.analysis['Situation'] ?? 'N/A',
+                                  ),
+                                ],
+                              ),
+                              // Position Tab
+                              ListView(
+                                padding: const EdgeInsets.all(16),
+                                children: [
+                                  _buildSummaryItem(
+                                    Icons.balance,
+                                    'Position',
+                                    _synopsis!.analysis['Position'] ?? 'N/A',
+                                  ),
+                                  const SizedBox(height: 12),
+                                  _buildSummaryItem(
+                                    Icons.warning,
+                                    'Condition',
+                                    _synopsis!.analysis['Condition'] ?? 'N/A',
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.thumb_up_outlined, size: 20),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.thumb_down_outlined, size: 20),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Theme.of(context).dividerColor),
                   ),
-                  child: Column(
+                  const SizedBox(height: 24),
+                  // Suggested Legal Sections
+                  Row(
                     children: [
-                      TabBar(
-                        controller: _tabController,
-                        labelColor: AppTheme.primary,
-                        unselectedLabelColor: Colors.grey,
-                        indicatorColor: AppTheme.primary,
-                        tabs: const [
-                          Tab(text: 'Subject'),
-                          Tab(text: 'Situation'),
-                          Tab(text: 'Position'),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            _buildSummaryItem(
-                              Icons.gavel,
-                              'Alleged Offence',
-                              'Theft in a dwelling house involving the breaking of a lock during night hours.',
-                            ),
-                            const SizedBox(height: 16),
-                            const Divider(),
-                            const SizedBox(height: 16),
-                            _buildSummaryItem(
-                              Icons.schedule,
-                              'Time of Occurrence',
-                              'Between 02:00 AM and 04:00 AM on 14th Oct 2023.',
-                            ),
-                          ],
+                      const Icon(Icons.book, color: AppTheme.primary),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Suggested Legal Sections',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 24),
-                // Suggested Legal Sections
-                Row(
-                  children: [
-                    const Icon(Icons.book, color: AppTheme.primary),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Suggested Legal Sections',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                  const SizedBox(height: 16),
+                  ..._synopsis!.suggestedSections.map(
+                    (section) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _buildLegalCard(
+                        context,
+                        section.act,
+                        'Section ${section.section}',
+                        section.title,
+                        section.mapping.isNotEmpty ? section.mapping : null,
+                        AppTheme.primary,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                _buildLegalCard(
-                  context,
-                  'BNS 2023',
-                  'Section 305',
-                  'Theft in a dwelling house, etc.',
-                  'Mapped from IPC Section 380',
-                  AppTheme.primary,
-                ),
-                const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
-                  'BNS 2023',
-                  'Section 331(4)',
-                  'Lurking house-trespass or house-breaking by night.',
-                  'Mapped from IPC Section 457',
-                  Colors.purple,
-                ),
-                const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
-                  'Constitution',
-                  'Article 21',
-                  'Protection of life and personal liberty.',
-                  null,
-                  Colors.orange,
-                ),
+                  ),
+                ],
               ],
             ),
           ),
-          Positioned(
-            bottom: 80,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.ios_share),
-                label: const Text('Export Report'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(
-                    context,
-                  ).primaryColorDark, // Use dark color for contrast
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
+          if (_synopsis != null)
+            Positioned(
+              bottom: 80,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.ios_share),
+                  label: const Text('Export Report'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(
+                      context,
+                    ).primaryColorDark, // Use dark color for contrast
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
+                    shape: const StadiumBorder(),
                   ),
-                  shape: const StadiumBorder(),
                 ),
               ),
             ),
-          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
