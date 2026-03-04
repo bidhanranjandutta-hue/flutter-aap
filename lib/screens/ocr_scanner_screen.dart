@@ -10,6 +10,32 @@ class OCRScannerScreen extends StatefulWidget {
 
 class _OCRScannerScreenState extends State<OCRScannerScreen> {
   int _viewMode = 0; // 0: Original, 1: Digitized
+  final TransformationController _transformationController =
+      TransformationController();
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
+  void _zoomIn() {
+    final currentScale = _transformationController.value.getMaxScaleOnAxis();
+    if (currentScale < 4.0) {
+      final zoomFactor = (currentScale * 1.5).clamp(0.5, 4.0) / currentScale;
+      final matrix = _transformationController.value.clone()..scale(zoomFactor, zoomFactor, 1.0);
+      _transformationController.value = matrix;
+    }
+  }
+
+  void _zoomOut() {
+    final currentScale = _transformationController.value.getMaxScaleOnAxis();
+    if (currentScale > 0.5) {
+      final zoomFactor = (currentScale / 1.5).clamp(0.5, 4.0) / currentScale;
+      final matrix = _transformationController.value.clone()..scale(zoomFactor, zoomFactor, 1.0);
+      _transformationController.value = matrix;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,41 +105,51 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    // Simulated Image
-                    Container(
-                      color: Colors.grey[300],
-                      alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.image,
-                        size: 64,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    // Highlights (Simulated)
-                    Positioned(
-                      top: 100,
-                      left: 40,
-                      child: Container(
-                        width: 120,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.2),
-                          border: Border.all(color: AppTheme.primary),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 150,
-                      right: 60,
-                      child: Container(
-                        width: 150,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.yellow.withOpacity(0.2),
-                          border: Border.all(color: Colors.yellow),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
+                    InteractiveViewer(
+                      transformationController: _transformationController,
+                      minScale: 0.5,
+                      maxScale: 4.0,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          // Simulated Image
+                          Container(
+                            color: Colors.grey[300],
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              Icons.image,
+                              size: 64,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          // Highlights (Simulated)
+                          Positioned(
+                            top: 100,
+                            left: 40,
+                            child: Container(
+                              width: 120,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: AppTheme.primary.withOpacity(0.2),
+                                border: Border.all(color: AppTheme.primary),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 150,
+                            right: 60,
+                            child: Container(
+                              width: 150,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: Colors.yellow.withOpacity(0.2),
+                                border: Border.all(color: Colors.yellow),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     // Zoom Controls
@@ -124,7 +160,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         children: [
                           FloatingActionButton.small(
                             heroTag: 'zoom_in',
-                            onPressed: () {},
+                            onPressed: _zoomIn,
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
                             child: const Icon(Icons.add),
@@ -132,7 +168,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                           const SizedBox(height: 8),
                           FloatingActionButton.small(
                             heroTag: 'zoom_out',
-                            onPressed: () {},
+                            onPressed: _zoomOut,
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
                             child: const Icon(Icons.remove),
