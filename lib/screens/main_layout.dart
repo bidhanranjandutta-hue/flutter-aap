@@ -4,6 +4,7 @@ import '../services/search_cache_service.dart';
 import 'dashboard_screen.dart';
 import 'law_map_screen.dart';
 import 'ocr_scanner_screen.dart';
+import 'live_diagnostic_screen.dart';
 
 class MainLayout extends StatefulWidget {
   final int initialIndex;
@@ -125,6 +126,18 @@ class _MainLayoutState extends State<MainLayout> {
         ),
       ),
       body: IndexedStack(index: _currentIndex, children: _screens),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LiveDiagnosticScreen()),
+          );
+        },
+        backgroundColor: AppTheme.secondary,
+        foregroundColor: Colors.white,
+        tooltip: 'Live Problem Solving',
+        child: const Icon(Icons.support_agent),
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
