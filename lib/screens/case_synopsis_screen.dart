@@ -138,11 +138,25 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       children: [
                         IconButton(
                           icon: const Icon(Icons.thumb_up_outlined, size: 20),
-                          onPressed: () {},
+                          onPressed: () {
+                            // TODO: Implement feature
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Feature coming soon!'),
+                              ),
+                            );
+                          },
                         ),
                         IconButton(
                           icon: const Icon(Icons.thumb_down_outlined, size: 20),
-                          onPressed: () {},
+                          onPressed: () {
+                            // TODO: Implement feature
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Feature coming soon!'),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -242,7 +256,12 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
             right: 0,
             child: Center(
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  // TODO: Implement feature
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Feature coming soon!')),
+                  );
+                },
                 icon: const Icon(Icons.ios_share),
                 label: const Text('Export Report'),
                 style: ElevatedButton.styleFrom(
