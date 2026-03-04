@@ -207,31 +207,29 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildLegalCard(
-                  context,
-                  'BNS 2023',
-                  'Section 305',
-                  'Theft in a dwelling house, etc.',
-                  'Mapped from IPC Section 380',
-                  AppTheme.primary,
+                const _LegalCard(
+                  tag: 'BNS 2023',
+                  title: 'Section 305',
+                  subtitle: 'Theft in a dwelling house, etc.',
+                  mapping: 'Mapped from IPC Section 380',
+                  color: AppTheme.primary,
                 ),
                 const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
-                  'BNS 2023',
-                  'Section 331(4)',
-                  'Lurking house-trespass or house-breaking by night.',
-                  'Mapped from IPC Section 457',
-                  Colors.purple,
+                const _LegalCard(
+                  tag: 'BNS 2023',
+                  title: 'Section 331(4)',
+                  subtitle:
+                      'Lurking house-trespass or house-breaking by night.',
+                  mapping: 'Mapped from IPC Section 457',
+                  color: Colors.purple,
                 ),
                 const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
-                  'Constitution',
-                  'Article 21',
-                  'Protection of life and personal liberty.',
-                  null,
-                  Colors.orange,
+                const _LegalCard(
+                  tag: 'Constitution',
+                  title: 'Article 21',
+                  subtitle: 'Protection of life and personal liberty.',
+                  mapping: null,
+                  color: Colors.orange,
                 ),
               ],
             ),
@@ -314,15 +312,25 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
       ],
     );
   }
+}
 
-  Widget _buildLegalCard(
-    BuildContext context,
-    String tag,
-    String title,
-    String subtitle,
-    String? mapping,
-    Color color,
-  ) {
+class _LegalCard extends StatelessWidget {
+  final String tag;
+  final String title;
+  final String subtitle;
+  final String? mapping;
+  final Color color;
+
+  const _LegalCard({
+    required this.tag,
+    required this.title,
+    required this.subtitle,
+    this.mapping,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -393,7 +401,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    mapping,
+                    mapping!,
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
