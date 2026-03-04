@@ -223,23 +223,21 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     ),
                   ),
                   // Additional Info
-                  Padding(
-                    padding: const EdgeInsets.all(16),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
                     child: Row(
                       children: [
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Max Penalty',
-                            'Death / Life Imprisonment',
+                          child: InfoBox(
+                            label: 'Max Penalty',
+                            value: 'Death / Life Imprisonment',
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Compoundable',
-                            'Non-Compoundable',
+                          child: InfoBox(
+                            label: 'Compoundable',
+                            value: 'Non-Compoundable',
                           ),
                         ),
                       ],
@@ -569,8 +567,16 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ),
     );
   }
+}
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+class InfoBox extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const InfoBox({super.key, required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
