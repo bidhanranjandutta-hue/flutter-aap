@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import '../theme/app_theme.dart';
 
 class CaseSynopsisScreen extends StatefulWidget {
@@ -11,6 +12,34 @@ class CaseSynopsisScreen extends StatefulWidget {
 class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String? _selectedFileName;
+
+  Future<void> _pickFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'jpg', 'jpeg'],
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _selectedFileName = result.files.first.name;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error picking file: $e')));
+      }
+    }
+  }
+
+  void _clearFile() {
+    setState(() {
+      _selectedFileName = null;
+    });
+  }
 
   @override
   void initState() {
@@ -93,26 +122,73 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        'Tap to scan or upload FIR (PDF, JPG)',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 14),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                      if (_selectedFileName == null) ...[
+                        Text(
+                          'Tap to scan or upload FIR (PDF, JPG)',
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 14,
                           ),
                         ),
-                        child: const Text('Select File'),
-                      ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _pickFile,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text('Select File'),
+                        ),
+                      ] else ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.description,
+                                color: AppTheme.primary,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  _selectedFileName!,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.close,
+                                  size: 20,
+                                  color: Colors.red,
+                                ),
+                                onPressed: _clearFile,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
