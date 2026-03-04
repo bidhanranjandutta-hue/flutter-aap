@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 
 class LawMapScreen extends StatefulWidget {
@@ -10,6 +11,19 @@ class LawMapScreen extends StatefulWidget {
 
 class _LawMapScreenState extends State<LawMapScreen> {
   int _selectedSegment = 0;
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(text: "IPC 302");
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +48,11 @@ class _LawMapScreenState extends State<LawMapScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: Theme.of(context).cardColor,
             child: TextField(
+              controller: _searchController,
+              maxLength: 50,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
+              ],
               decoration: InputDecoration(
                 hintText: 'Search IPC Section (e.g., 302)',
                 prefixIcon: const Icon(Icons.search),
@@ -45,8 +64,8 @@ class _LawMapScreenState extends State<LawMapScreen> {
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                counterText: "",
               ),
-              controller: TextEditingController(text: "IPC 302"),
             ),
           ),
           // Segmented Control
