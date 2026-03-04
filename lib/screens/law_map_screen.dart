@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 
 class LawMapScreen extends StatefulWidget {
@@ -464,14 +465,27 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         Icons.bookmark_border,
                         color: AppTheme.primary,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        // TODO: Implement feature
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Feature coming soon!')),
+                        );
+                      },
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
                   const SizedBox(width: 8),
                   IconButton(
                     icon: const Icon(Icons.copy, color: Colors.grey),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final textToCopy = '$title ($tag)\n$subtitle\n\n$content';
+                      await Clipboard.setData(ClipboardData(text: textToCopy));
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('$title copied to clipboard')),
+                        );
+                      }
+                    },
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
