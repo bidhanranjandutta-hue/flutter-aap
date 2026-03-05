@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../services/auth_service.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -54,7 +55,7 @@ class DashboardScreen extends StatelessWidget {
                                   ),
                             ),
                             Text(
-                              'Inspector Sharma',
+                              AuthService().currentUser?.name ?? 'Guest',
                               style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
