@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import '../theme/app_theme.dart';
 
 class CaseSynopsisScreen extends StatefulWidget {
@@ -22,6 +23,64 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickAndValidateFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'jpg', 'jpeg'],
+        withReadStream: true, // Prefer streaming to avoid loading huge files entirely into memory
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final file = result.files.first;
+
+        // Security Validation: Validate file size (e.g., max 10MB) to prevent DoS
+        const int maxFileSize = 10 * 1024 * 1024; // 10MB in bytes
+        if (file.size > maxFileSize) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error: File size exceeds the 10MB limit.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+
+        // Security Validation: Validate extension (defense-in-depth)
+        final extension = file.extension?.toLowerCase();
+        if (extension != 'pdf' && extension != 'jpg' && extension != 'jpeg') {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Error: Invalid file type. Only PDF and JPG are allowed.',
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Successfully processed ${file.name}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error picking file: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -99,7 +158,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _pickAndValidateFile,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.primary,
                           foregroundColor: Colors.white,
