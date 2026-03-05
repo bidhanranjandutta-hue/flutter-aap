@@ -1,0 +1,3 @@
+## 2024-11-20 - Extract TextEditingController to State Lifecycle
+**Learning:** In Flutter, instantiating stateful objects like `TextEditingController` directly within a widget's `build` method causes them to be recreated on every rebuild. Not only does this discard user input state (like the current search text), it introduces unnecessary allocation overhead during rapid UI updates (such as switching tabs or segments).
+**Action:** Always declare and manage `TextEditingController` instances as late final fields within a `StatefulWidget`'s State lifecycle methods (`initState` and `dispose`).
