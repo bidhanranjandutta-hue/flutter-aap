@@ -171,19 +171,21 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       Container(
                         padding: const EdgeInsets.all(20),
                         child: Column(
-                          children: [
-                            _buildSummaryItem(
-                              Icons.gavel,
-                              'Alleged Offence',
-                              'Theft in a dwelling house involving the breaking of a lock during night hours.',
+                          children: const [
+                            _SummaryItem(
+                              icon: Icons.gavel,
+                              title: 'Alleged Offence',
+                              content:
+                                  'Theft in a dwelling house involving the breaking of a lock during night hours.',
                             ),
-                            const SizedBox(height: 16),
-                            const Divider(),
-                            const SizedBox(height: 16),
-                            _buildSummaryItem(
-                              Icons.schedule,
-                              'Time of Occurrence',
-                              'Between 02:00 AM and 04:00 AM on 14th Oct 2023.',
+                            SizedBox(height: 16),
+                            Divider(),
+                            SizedBox(height: 16),
+                            _SummaryItem(
+                              icon: Icons.schedule,
+                              title: 'Time of Occurrence',
+                              content:
+                                  'Between 02:00 AM and 04:00 AM on 14th Oct 2023.',
                             ),
                           ],
                         ),
@@ -282,39 +284,6 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
     );
   }
 
-  Widget _buildSummaryItem(IconData icon, String title, String content) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: AppTheme.primary, size: 20),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                content,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14,
-                  height: 1.5,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildLegalCard(
     BuildContext context,
     String tag,
@@ -402,6 +371,52 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
           ],
         ],
       ),
+    );
+  }
+}
+
+class _SummaryItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String content;
+
+  const _SummaryItem({
+    required this.icon,
+    required this.title,
+    required this.content,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: AppTheme.primary, size: 20),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                content,
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
