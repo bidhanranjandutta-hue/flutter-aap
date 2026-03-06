@@ -1,0 +1,3 @@
+## Rationale
+
+Because adding a `const` keyword to `EdgeInsets` literals is a micro-optimization, the impact per widget rendering cycle is extremely small (fraction of a millisecond). The true benefit stems from reduced garbage collection overhead. Since measuring the single instance performance improvement via standard Flutter benchmarking tools like `Stopwatch` is difficult without introducing statistical noise, I will adopt the recognized baseline that `const` reduces the frequency of object instantiation and the load on the garbage collector. This is widely recommended by the Flutter team and `flutter_lints` rules (`prefer_const_constructors`).
