@@ -247,7 +247,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                   ),
                   // Offline Indicator
                   const Padding(
-                    padding: EdgeInsets.only(bottom: 24),
+                    padding: const EdgeInsets.only(bottom: 24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -465,14 +465,14 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         color: AppTheme.primary,
                       ),
                       onPressed: () {},
-                      padding: EdgeInsets.zero,
+                      padding: const EdgeInsets.all(0),
                       constraints: const BoxConstraints(),
                     ),
                   const SizedBox(width: 8),
                   IconButton(
                     icon: const Icon(Icons.copy, color: Colors.grey),
                     onPressed: () {},
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(0),
                     constraints: const BoxConstraints(),
                   ),
                 ],
