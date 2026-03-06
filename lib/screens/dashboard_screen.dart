@@ -66,7 +66,14 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.notifications_outlined),
-                          onPressed: () {},
+                          onPressed: () {
+                            // TODO: Implement feature
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Feature coming soon!'),
+                              ),
+                            );
+                          },
                         ),
                         Positioned(
                           right: 12,
@@ -124,7 +131,14 @@ class DashboardScreen extends StatelessWidget {
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                // TODO: Implement feature
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Feature coming soon!'),
+                                  ),
+                                );
+                              },
                               child: const Text('View All'),
                             ),
                           ],
@@ -242,7 +256,14 @@ class DashboardScreen extends StatelessWidget {
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             TextButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                // TODO: Implement feature
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Feature coming soon!'),
+                                  ),
+                                );
+                              },
                               icon: const Icon(Icons.add_to_drive, size: 16),
                               label: const Text('Drive'),
                             ),
@@ -433,7 +454,12 @@ class DashboardScreen extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.more_vert, color: Colors.grey),
-            onPressed: () {},
+            onPressed: () {
+              // TODO: Implement feature
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Feature coming soon!')),
+              );
+            },
           ),
         ],
       ),
