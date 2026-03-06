@@ -241,7 +241,7 @@ class WelcomeScreen extends StatelessWidget {
                                 Icons.g_mobiledata,
                                 size: 28,
                               ), // Placeholder for Google Icon
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
                                 'Continue with Google',
                                 style: TextStyle(
