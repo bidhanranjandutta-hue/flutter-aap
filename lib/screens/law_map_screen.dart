@@ -252,7 +252,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.check_circle, color: Colors.green, size: 16),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           'DATABASE OFFLINE READY',
                           style: TextStyle(
