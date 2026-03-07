@@ -164,7 +164,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                       const Row(
                         children: [
                           Icon(Icons.sync, color: AppTheme.primary, size: 20),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
                             'AI analyzing context...',
                             style: TextStyle(fontWeight: FontWeight.bold),
