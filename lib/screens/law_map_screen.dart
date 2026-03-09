@@ -11,17 +11,33 @@ class LawMapScreen extends StatefulWidget {
 class _LawMapScreenState extends State<LawMapScreen> {
   int _selectedSegment = 0;
 
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(text: "IPC 302");
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           'Law Compatibility Map',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: theme.cardColor,
         elevation: 1,
         actions: [
           IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
@@ -32,38 +48,38 @@ class _LawMapScreenState extends State<LawMapScreen> {
           // Search Input
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor,
+            color: theme.cardColor,
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search IPC Section (e.g., 302)',
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: const Icon(Icons.mic, color: AppTheme.primary),
                 filled: true,
-                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                fillColor: theme.scaffoldBackgroundColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              controller: TextEditingController(text: "IPC 302"),
+              controller: _searchController,
             ),
           ),
           // Segmented Control
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor,
+            color: theme.cardColor,
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: theme.scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
-                  _buildSegmentButton(0, 'Comparison'),
-                  _buildSegmentButton(1, 'Full Text'),
-                  _buildSegmentButton(2, 'Case Law'),
+                  _buildSegmentButton(0, 'Comparison', theme),
+                  _buildSegmentButton(1, 'Full Text', theme),
+                  _buildSegmentButton(2, 'Case Law', theme),
                 ],
               ),
             ),
@@ -87,7 +103,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.3),
+                            color: AppTheme.primary.withValues(alpha: 0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -201,6 +217,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                       children: [
                         _buildLawCard(
                           context,
+                          theme,
                           'IPC',
                           'Section 302',
                           'Indian Penal Code',
@@ -212,6 +229,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         const SizedBox(height: 8),
                         _buildLawCard(
                           context,
+                          theme,
                           'BNS',
                           'Section 103',
                           'Bharatiya Nyaya Sanhita',
@@ -230,6 +248,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         Expanded(
                           child: _buildInfoBox(
                             context,
+                            theme,
                             'Max Penalty',
                             'Death / Life Imprisonment',
                           ),
@@ -238,6 +257,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         Expanded(
                           child: _buildInfoBox(
                             context,
+                            theme,
                             'Compoundable',
                             'Non-Compoundable',
                           ),
@@ -273,8 +293,8 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: Theme.of(context).cardColor,
-        foregroundColor: Theme.of(context).iconTheme.color,
+        backgroundColor: theme.cardColor,
+        foregroundColor: theme.iconTheme.color,
         child: const Icon(Icons.save_alt),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -297,7 +317,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildSegmentButton(int index, String text) {
+  Widget _buildSegmentButton(int index, String text, ThemeData theme) {
     bool isSelected = _selectedSegment == index;
     return Expanded(
       child: GestureDetector(
@@ -309,14 +329,12 @@ class _LawMapScreenState extends State<LawMapScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected
-                ? Theme.of(context).cardColor
-                : Colors.transparent,
+            color: isSelected ? theme.cardColor : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
                     ),
                   ]
@@ -366,10 +384,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: badgeColor == Colors.greenAccent
-                ? Border.all(color: Colors.greenAccent.withOpacity(0.5))
+                ? Border.all(color: Colors.greenAccent.withValues(alpha: 0.5))
                 : null,
           ),
           child: Text(
@@ -387,6 +405,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
 
   Widget _buildLawCard(
     BuildContext context,
+    ThemeData theme,
     String tag,
     String title,
     String subtitle,
@@ -397,13 +416,13 @@ class _LawMapScreenState extends State<LawMapScreen> {
     return Container(
       decoration: BoxDecoration(
         color: isOld
-            ? Theme.of(context).cardColor
-            : AppTheme.primary.withOpacity(0.05),
+            ? theme.cardColor
+            : AppTheme.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isOld
-              ? Theme.of(context).dividerColor
-              : AppTheme.primary.withOpacity(0.2),
+              ? theme.dividerColor
+              : AppTheme.primary.withValues(alpha: 0.2),
         ),
       ),
       padding: const EdgeInsets.all(16),
@@ -421,7 +440,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     decoration: BoxDecoration(
                       color: isOld
                           ? Colors.grey[200]
-                          : AppTheme.primary.withOpacity(0.1),
+                          : AppTheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.center,
@@ -494,7 +513,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                 ? RichText(
                     text: TextSpan(
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                        color: theme.textTheme.bodyMedium?.color,
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -508,7 +527,9 @@ class _LawMapScreenState extends State<LawMapScreen> {
                           text:
                               "When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.",
                           style: TextStyle(
-                            backgroundColor: Colors.green.withOpacity(0.1),
+                            backgroundColor: Colors.green.withValues(
+                              alpha: 0.1,
+                            ),
                             color: Colors.green[800],
                           ),
                         ),
@@ -550,7 +571,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.primary.withOpacity(0.1),
+                    color: AppTheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const Text(
@@ -570,13 +591,18 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+  Widget _buildInfoBox(
+    BuildContext context,
+    ThemeData theme,
+    String label,
+    String value,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).dividerColor),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
