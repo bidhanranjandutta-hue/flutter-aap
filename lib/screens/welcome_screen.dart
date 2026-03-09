@@ -161,25 +161,24 @@ class WelcomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 24),
                                 // Features
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.analytics,
-                                  'Instant Case Analysis',
-                                  'Automated insights from FIRs & case files.',
+                                const _FeatureItem(
+                                  icon: Icons.analytics,
+                                  title: 'Instant Case Analysis',
+                                  subtitle:
+                                      'Automated insights from FIRs & case files.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.document_scanner,
-                                  'Smart OCR Tools',
-                                  'Extract text from handwritten documents instantly.',
+                                const _FeatureItem(
+                                  icon: Icons.document_scanner,
+                                  title: 'Smart OCR Tools',
+                                  subtitle:
+                                      'Extract text from handwritten documents instantly.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.gavel,
-                                  'New Law Mapping',
-                                  'BNS • BNSS • BSA',
+                                const _FeatureItem(
+                                  icon: Icons.gavel,
+                                  title: 'New Law Mapping',
+                                  subtitle: 'BNS • BNSS • BSA',
                                 ),
                               ],
                             ),
@@ -271,23 +270,40 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildFeatureItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
+/// ⚡ Bolt Performance Optimization:
+/// Extracted `_buildFeatureItem` into a `const StatelessWidget` class.
+/// This prevents the widget from being needlessly rebuilt when the parent
+/// `WelcomeScreen` rebuilds, saving layout and paint cycles.
+class _FeatureItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _FeatureItem({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // ⚡ Cache InheritedWidget lookup to prevent repeated O(depth) tree traversals
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+    final textTheme = theme.textTheme;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: Theme.of(context).primaryColor, size: 24),
+          child: Icon(icon, color: primaryColor, size: 24),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -296,12 +312,12 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                style: textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 2),
-              Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+              Text(subtitle, style: textTheme.bodySmall),
             ],
           ),
         ),
