@@ -126,7 +126,8 @@ class _LawMapScreenState extends State<LawMapScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.gavel, color: Colors.white, size: 20),
-                              SizedBox(width: 8),
+                              // ignore: unnecessary_const
+                              const SizedBox(width: 8),
                               Text(
                                 'Punishment for Murder',
                                 style: TextStyle(
