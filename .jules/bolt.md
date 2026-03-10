@@ -1,0 +1,3 @@
+## 2024-05-15 - Unnecessary Theme.of(context) Lookups in Flutter
+**Learning:** Calling `Theme.of(context)` repeatedly inside a `build` method is inefficient. While modern Flutter (since ~v1.12) optimizes this using an O(1) hash map lookup, doing it multiple times (e.g., 17 times in `WelcomeScreen`, 14 times in `DashboardScreen`) still causes redundant hash map traversals and function call overhead.
+**Action:** Cache the result of `Theme.of(context)` at the top of the `build` method into a local variable (e.g., `final theme = Theme.of(context);`) and use that variable throughout the method to reduce overhead.
