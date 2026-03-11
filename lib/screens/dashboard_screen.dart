@@ -105,14 +105,11 @@ class DashboardScreen extends StatelessWidget {
           ),
           // Main Scrollable Content
           Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Quick Actions Grid
-                  Padding(
-                    padding: const EdgeInsets.all(16),
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverToBoxAdapter(
                     child: Column(
                       children: [
                         Row(
@@ -228,9 +225,10 @@ class DashboardScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Recent Activity Feed
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverToBoxAdapter(
                     child: Column(
                       children: [
                         Row(
@@ -249,42 +247,53 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'FIR_2023_0912_Theft.pdf',
-                          'Edited 10m ago • Case #402',
-                          Icons.picture_as_pdf,
-                          Colors.red,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Witness_Statement_Rao.docx',
-                          'Edited 1h ago • Case #398',
-                          Icons.description,
-                          Colors.blue,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Evidence_Photos_Site_B',
-                          'Created yesterday • 12 items',
-                          Icons.folder,
-                          Colors.amber,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'BNS_Reference_Draft_v2.pdf',
-                          'Edited 2 days ago • Personal',
-                          Icons.picture_as_pdf,
-                          Colors.red,
-                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 100,
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      _buildFileItem(
+                        context,
+                        'FIR_2023_0912_Theft.pdf',
+                        'Edited 10m ago • Case #402',
+                        Icons.picture_as_pdf,
+                        Colors.red,
+                      ),
+                      const SizedBox(height: 12),
+                      _buildFileItem(
+                        context,
+                        'Witness_Statement_Rao.docx',
+                        'Edited 1h ago • Case #398',
+                        Icons.description,
+                        Colors.blue,
+                      ),
+                      const SizedBox(height: 12),
+                      _buildFileItem(
+                        context,
+                        'Evidence_Photos_Site_B',
+                        'Created yesterday • 12 items',
+                        Icons.folder,
+                        Colors.amber,
+                      ),
+                      const SizedBox(height: 12),
+                      _buildFileItem(
+                        context,
+                        'BNS_Reference_Draft_v2.pdf',
+                        'Edited 2 days ago • Personal',
+                        Icons.picture_as_pdf,
+                        Colors.red,
+                      ),
+                    ]),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
