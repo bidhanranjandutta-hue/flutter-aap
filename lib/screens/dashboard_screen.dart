@@ -19,7 +19,7 @@ class DashboardScreen extends StatelessWidget {
               bottom: 16,
             ),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor.withOpacity(0.9),
+              color: Theme.of(context).cardColor.withValues(alpha: 0.9),
               border: Border(
                 bottom: BorderSide(color: Theme.of(context).dividerColor),
               ),
@@ -145,7 +145,9 @@ class DashboardScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.primary.withOpacity(0.3),
+                                  color: AppTheme.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -156,7 +158,7 @@ class DashboardScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Icon(
@@ -199,27 +201,27 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             // Case Synopsis
                             Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Case Synopsis',
-                                'Generate summary',
-                                Icons.summarize,
-                                Colors.purple,
-                                Colors.purple[50]!,
-                                () => Navigator.pushNamed(context, '/synopsis'),
+                              child: _ToolCard(
+                                title: 'Case Synopsis',
+                                subtitle: 'Generate summary',
+                                icon: Icons.summarize,
+                                iconColor: Colors.purple,
+                                iconBgColor: Colors.purple[50]!,
+                                onTap: () =>
+                                    Navigator.pushNamed(context, '/synopsis'),
                               ),
                             ),
                             const SizedBox(width: 12),
                             // Law Map
                             Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Law Map',
-                                'IPC ⇄ BNS',
-                                Icons.compare_arrows,
-                                Colors.orange,
-                                Colors.orange[50]!,
-                                () => Navigator.pushNamed(context, '/law_map'),
+                              child: _ToolCard(
+                                title: 'Law Map',
+                                subtitle: 'IPC ⇄ BNS',
+                                icon: Icons.compare_arrows,
+                                iconColor: Colors.orange,
+                                iconBgColor: Colors.orange[50]!,
+                                onTap: () =>
+                                    Navigator.pushNamed(context, '/law_map'),
                                 badge: 'New',
                               ),
                             ),
@@ -249,36 +251,32 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'FIR_2023_0912_Theft.pdf',
-                          'Edited 10m ago • Case #402',
-                          Icons.picture_as_pdf,
-                          Colors.red,
+                        const _FileItem(
+                          title: 'FIR_2023_0912_Theft.pdf',
+                          subtitle: 'Edited 10m ago • Case #402',
+                          icon: Icons.picture_as_pdf,
+                          iconColor: Colors.red,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Witness_Statement_Rao.docx',
-                          'Edited 1h ago • Case #398',
-                          Icons.description,
-                          Colors.blue,
+                        const _FileItem(
+                          title: 'Witness_Statement_Rao.docx',
+                          subtitle: 'Edited 1h ago • Case #398',
+                          icon: Icons.description,
+                          iconColor: Colors.blue,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Evidence_Photos_Site_B',
-                          'Created yesterday • 12 items',
-                          Icons.folder,
-                          Colors.amber,
+                        const _FileItem(
+                          title: 'Evidence_Photos_Site_B',
+                          subtitle: 'Created yesterday • 12 items',
+                          icon: Icons.folder,
+                          iconColor: Colors.amber,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'BNS_Reference_Draft_v2.pdf',
-                          'Edited 2 days ago • Personal',
-                          Icons.picture_as_pdf,
-                          Colors.red,
+                        const _FileItem(
+                          title: 'BNS_Reference_Draft_v2.pdf',
+                          subtitle: 'Edited 2 days ago • Personal',
+                          icon: Icons.picture_as_pdf,
+                          iconColor: Colors.red,
                         ),
                       ],
                     ),
@@ -313,25 +311,39 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildToolCard(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-    Color iconBgColor,
-    VoidCallback onTap, {
-    String? badge,
-  }) {
+class _ToolCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
+  final VoidCallback onTap;
+  final String? badge;
+
+  const _ToolCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.iconColor,
+    required this.iconBgColor,
+    required this.onTap,
+    this.badge,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final currentBadge = badge;
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Theme.of(context).dividerColor),
+          border: Border.all(color: theme.dividerColor),
         ),
         child: Stack(
           children: [
@@ -355,10 +367,10 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+                Text(subtitle, style: theme.textTheme.bodySmall),
               ],
             ),
-            if (badge != null)
+            if (currentBadge != null)
               Positioned(
                 top: 0,
                 right: 0,
@@ -369,11 +381,13 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: Colors.green[50],
-                    border: Border.all(color: Colors.green.withOpacity(0.2)),
+                    border: Border.all(
+                      color: Colors.green.withValues(alpha: 0.2),
+                    ),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    badge,
+                    currentBadge,
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
@@ -387,27 +401,37 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildFileItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-  ) {
+class _FileItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+
+  const _FileItem({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: iconColor, size: 24),
@@ -427,7 +451,7 @@ class DashboardScreen extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+                Text(subtitle, style: theme.textTheme.bodySmall),
               ],
             ),
           ),
