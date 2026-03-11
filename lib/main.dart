@@ -19,7 +19,6 @@ class MainApp extends StatelessWidget {
       title: 'NyayaAssist',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
         '/': (context) => const WelcomeScreen(),
