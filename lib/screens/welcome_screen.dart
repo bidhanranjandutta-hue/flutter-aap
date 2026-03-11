@@ -26,182 +26,179 @@ class WelcomeScreen extends StatelessWidget {
           Expanded(
             child: Stack(
               children: [
-                SingleChildScrollView(
+                ListView(
                   padding: const EdgeInsets.only(bottom: 120),
-                  child: Column(
-                    children: [
-                      // Header / Hero Section
-                      Container(
-                        height: 280,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Theme.of(context).primaryColor.withOpacity(0.1),
-                              Theme.of(context).scaffoldBackgroundColor,
-                            ],
-                          ),
-                          borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(40),
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            // Emblem/Logo Placeholder
-                            Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 96,
-                                    height: 96,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).cardColor,
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
-                                          blurRadius: 10,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
-                                      border: Border.all(
-                                        color: Theme.of(context).cardColor,
-                                        width: 4,
-                                      ),
-                                    ),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.local_police,
-                                          size: 48,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        // Spinner simulation (just static here for simplicity or use CircularProgressIndicator)
-                                        SizedBox(
-                                          width: 90,
-                                          height: 90,
-                                          child: CircularProgressIndicator(
-                                            value: 0.7,
-                                            strokeWidth: 2,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  Theme.of(context).primaryColor
-                                                      .withOpacity(0.2),
-                                                ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Text(
-                                    'NyayaAssist',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.w900,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Container(
-                                    height: 4,
-                                    width: 64,
-                                    decoration: BoxDecoration(
-                                      color: AppTheme.secondary,
-                                      borderRadius: BorderRadius.circular(2),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    'EMPOWERING INDIAN POLICE',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 1.5,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                  children: [
+                    // Header / Hero Section
+                    Container(
+                      height: 280,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Theme.of(context).primaryColor.withOpacity(0.1),
+                            Theme.of(context).scaffoldBackgroundColor,
                           ],
                         ),
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(40),
+                        ),
                       ),
-                      // Value Proposition Card
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Card(
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(24),
+                      child: Stack(
+                        children: [
+                          // Emblem/Logo Placeholder
+                          Center(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Modern Policing, Simplified.',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.titleLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'AI-driven tools tailored for the new legal framework.',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(color: AppTheme.textMuted),
+                                Container(
+                                  width: 96,
+                                  height: 96,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).cardColor,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                    border: Border.all(
+                                      color: Theme.of(context).cardColor,
+                                      width: 4,
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.local_police,
+                                        size: 48,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      // Spinner simulation (just static here for simplicity or use CircularProgressIndicator)
+                                      SizedBox(
+                                        width: 90,
+                                        height: 90,
+                                        child: CircularProgressIndicator(
+                                          value: 0.7,
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Theme.of(
+                                                  context,
+                                                ).primaryColor.withOpacity(0.2),
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 const SizedBox(height: 24),
-                                // Features
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.analytics,
-                                  'Instant Case Analysis',
-                                  'Automated insights from FIRs & case files.',
+                                Text(
+                                  'NyayaAssist',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w900,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                 ),
-                                const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.document_scanner,
-                                  'Smart OCR Tools',
-                                  'Extract text from handwritten documents instantly.',
+                                const SizedBox(height: 4),
+                                Container(
+                                  height: 4,
+                                  width: 64,
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.secondary,
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
                                 ),
-                                const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.gavel,
-                                  'New Law Mapping',
-                                  'BNS • BNSS • BSA',
+                                const SizedBox(height: 12),
+                                Text(
+                                  'EMPOWERING INDIAN POLICE',
+                                  style: Theme.of(context).textTheme.labelSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.5,
+                                      ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      // Trust Badge
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.lock, size: 16, color: AppTheme.textMuted),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Secure & Encrypted Government Standards',
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(fontWeight: FontWeight.w500),
-                          ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    // Value Proposition Card
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Modern Policing, Simplified.',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'AI-driven tools tailored for the new legal framework.',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(color: AppTheme.textMuted),
+                              ),
+                              const SizedBox(height: 24),
+                              // Features
+                              _buildFeatureItem(
+                                context,
+                                Icons.analytics,
+                                'Instant Case Analysis',
+                                'Automated insights from FIRs & case files.',
+                              ),
+                              const SizedBox(height: 16),
+                              _buildFeatureItem(
+                                context,
+                                Icons.document_scanner,
+                                'Smart OCR Tools',
+                                'Extract text from handwritten documents instantly.',
+                              ),
+                              const SizedBox(height: 16),
+                              _buildFeatureItem(
+                                context,
+                                Icons.gavel,
+                                'New Law Mapping',
+                                'BNS • BNSS • BSA',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    // Trust Badge
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.lock, size: 16, color: AppTheme.textMuted),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Secure & Encrypted Government Standards',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 // Sticky Bottom Action Area
                 Positioned(
