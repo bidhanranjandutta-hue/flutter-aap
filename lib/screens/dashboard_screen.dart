@@ -6,8 +6,9 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Column(
         children: [
           // Header Section
@@ -19,10 +20,8 @@ class DashboardScreen extends StatelessWidget {
               bottom: 16,
             ),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor.withOpacity(0.9),
-              border: Border(
-                bottom: BorderSide(color: Theme.of(context).dividerColor),
-              ),
+              color: theme.cardColor.withValues(alpha: 0.9),
+              border: Border(bottom: BorderSide(color: theme.dividerColor)),
             ),
             child: Column(
               children: [
@@ -46,17 +45,17 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             Text(
                               'WELCOME BACK',
-                              style: Theme.of(context).textTheme.labelSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                    letterSpacing: 1.0,
-                                  ),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                letterSpacing: 1.0,
+                              ),
                             ),
                             Text(
                               'Inspector Sharma',
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -92,7 +91,7 @@ class DashboardScreen extends StatelessWidget {
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: const Icon(Icons.mic, color: AppTheme.primary),
                     filled: true,
-                    fillColor: Theme.of(context).colorScheme.surface,
+                    fillColor: theme.colorScheme.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
@@ -120,8 +119,9 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             Text(
                               'AI Tools',
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             TextButton(
                               onPressed: () {},
@@ -145,7 +145,9 @@ class DashboardScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.primary.withOpacity(0.3),
+                                  color: AppTheme.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -156,7 +158,7 @@ class DashboardScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Icon(
@@ -200,6 +202,7 @@ class DashboardScreen extends StatelessWidget {
                             // Case Synopsis
                             Expanded(
                               child: _buildToolCard(
+                                theme,
                                 context,
                                 'Case Synopsis',
                                 'Generate summary',
@@ -213,6 +216,7 @@ class DashboardScreen extends StatelessWidget {
                             // Law Map
                             Expanded(
                               child: _buildToolCard(
+                                theme,
                                 context,
                                 'Law Map',
                                 'IPC ⇄ BNS',
@@ -238,8 +242,9 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Recent Case Files',
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             TextButton.icon(
                               onPressed: () {},
@@ -250,6 +255,7 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         _buildFileItem(
+                          theme,
                           context,
                           'FIR_2023_0912_Theft.pdf',
                           'Edited 10m ago • Case #402',
@@ -258,6 +264,7 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         _buildFileItem(
+                          theme,
                           context,
                           'Witness_Statement_Rao.docx',
                           'Edited 1h ago • Case #398',
@@ -266,6 +273,7 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         _buildFileItem(
+                          theme,
                           context,
                           'Evidence_Photos_Site_B',
                           'Created yesterday • 12 items',
@@ -274,6 +282,7 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         _buildFileItem(
+                          theme,
                           context,
                           'BNS_Reference_Draft_v2.pdf',
                           'Edited 2 days ago • Personal',
@@ -315,6 +324,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildToolCard(
+    ThemeData theme,
     BuildContext context,
     String title,
     String subtitle,
@@ -329,9 +339,9 @@ class DashboardScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Theme.of(context).dividerColor),
+          border: Border.all(color: theme.dividerColor),
         ),
         child: Stack(
           children: [
@@ -355,7 +365,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+                Text(subtitle, style: theme.textTheme.bodySmall),
               ],
             ),
             if (badge != null)
@@ -369,7 +379,9 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: Colors.green[50],
-                    border: Border.all(color: Colors.green.withOpacity(0.2)),
+                    border: Border.all(
+                      color: Colors.green.withValues(alpha: 0.2),
+                    ),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
@@ -389,6 +401,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildFileItem(
+    ThemeData theme,
     BuildContext context,
     String title,
     String subtitle,
@@ -398,16 +411,16 @@ class DashboardScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: iconColor, size: 24),
@@ -427,7 +440,7 @@ class DashboardScreen extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+                Text(subtitle, style: theme.textTheme.bodySmall),
               ],
             ),
           ),
