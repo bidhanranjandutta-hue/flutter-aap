@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +298,7 @@ class DashboardScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
+        currentIndex: _currentIndex,
         selectedItemColor: AppTheme.primary,
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
@@ -306,6 +313,9 @@ class DashboardScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
           if (index == 2) {
             Navigator.pushNamed(context, '/ocr');
           }
