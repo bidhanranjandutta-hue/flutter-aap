@@ -6,6 +6,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ⚡ Bolt: Cache Theme.of(context) to avoid repeated O(1) lookups during build.
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Column(
         children: [
@@ -39,8 +42,8 @@ class WelcomeScreen extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Theme.of(context).primaryColor.withOpacity(0.1),
-                              Theme.of(context).scaffoldBackgroundColor,
+                              theme.primaryColor.withValues(alpha: 0.1),
+                              theme.scaffoldBackgroundColor,
                             ],
                           ),
                           borderRadius: const BorderRadius.vertical(
@@ -58,17 +61,19 @@ class WelcomeScreen extends StatelessWidget {
                                     width: 96,
                                     height: 96,
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).cardColor,
+                                      color: theme.cardColor,
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
+                                          color: Colors.black.withValues(
+                                            alpha: 0.1,
+                                          ),
                                           blurRadius: 10,
                                           offset: const Offset(0, 4),
                                         ),
                                       ],
                                       border: Border.all(
-                                        color: Theme.of(context).cardColor,
+                                        color: theme.cardColor,
                                         width: 4,
                                       ),
                                     ),
@@ -78,7 +83,7 @@ class WelcomeScreen extends StatelessWidget {
                                         Icon(
                                           Icons.local_police,
                                           size: 48,
-                                          color: Theme.of(context).primaryColor,
+                                          color: theme.primaryColor,
                                         ),
                                         // Spinner simulation (just static here for simplicity or use CircularProgressIndicator)
                                         SizedBox(
@@ -89,8 +94,9 @@ class WelcomeScreen extends StatelessWidget {
                                             strokeWidth: 2,
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
-                                                  Theme.of(context).primaryColor
-                                                      .withOpacity(0.2),
+                                                  theme.primaryColor.withValues(
+                                                    alpha: 0.2,
+                                                  ),
                                                 ),
                                           ),
                                         ),
@@ -100,12 +106,10 @@ class WelcomeScreen extends StatelessWidget {
                                   const SizedBox(height: 24),
                                   Text(
                                     'NyayaAssist',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium
+                                    style: theme.textTheme.headlineMedium
                                         ?.copyWith(
                                           fontWeight: FontWeight.w900,
-                                          color: Theme.of(context).primaryColor,
+                                          color: theme.primaryColor,
                                         ),
                                   ),
                                   const SizedBox(height: 4),
@@ -120,13 +124,10 @@ class WelcomeScreen extends StatelessWidget {
                                   const SizedBox(height: 12),
                                   Text(
                                     'EMPOWERING INDIAN POLICE',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 1.5,
-                                        ),
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1.5,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -149,34 +150,36 @@ class WelcomeScreen extends StatelessWidget {
                                 Text(
                                   'Modern Policing, Simplified.',
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.titleLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   'AI-driven tools tailored for the new legal framework.',
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(color: AppTheme.textMuted),
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: AppTheme.textMuted,
+                                  ),
                                 ),
                                 const SizedBox(height: 24),
                                 // Features
                                 _buildFeatureItem(
-                                  context,
+                                  theme,
                                   Icons.analytics,
                                   'Instant Case Analysis',
                                   'Automated insights from FIRs & case files.',
                                 ),
                                 const SizedBox(height: 16),
                                 _buildFeatureItem(
-                                  context,
+                                  theme,
                                   Icons.document_scanner,
                                   'Smart OCR Tools',
                                   'Extract text from handwritten documents instantly.',
                                 ),
                                 const SizedBox(height: 16),
                                 _buildFeatureItem(
-                                  context,
+                                  theme,
                                   Icons.gavel,
                                   'New Law Mapping',
                                   'BNS • BNSS • BSA',
@@ -195,8 +198,9 @@ class WelcomeScreen extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             'Secure & Encrypted Government Standards',
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(fontWeight: FontWeight.w500),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
@@ -211,11 +215,11 @@ class WelcomeScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).scaffoldBackgroundColor.withOpacity(0.9),
+                      color: theme.scaffoldBackgroundColor.withValues(
+                        alpha: 0.9,
+                      ),
                       border: Border(
-                        top: BorderSide(color: Theme.of(context).dividerColor),
+                        top: BorderSide(color: theme.dividerColor),
                       ),
                     ),
                     child: Column(
@@ -226,7 +230,7 @@ class WelcomeScreen extends StatelessWidget {
                             Navigator.pushNamed(context, '/dashbord');
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
+                            backgroundColor: theme.primaryColor,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -256,9 +260,9 @@ class WelcomeScreen extends StatelessWidget {
                         Text(
                           'By continuing, you agree to NyayaAssist\'s Terms of Service & Privacy Policy.\nAuthorized Personnel Only.',
                           textAlign: TextAlign.center,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.copyWith(fontSize: 10),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontSize: 10,
+                          ),
                         ),
                       ],
                     ),
@@ -273,7 +277,7 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   Widget _buildFeatureItem(
-    BuildContext context,
+    ThemeData theme,
     IconData icon,
     String title,
     String subtitle,
@@ -284,10 +288,10 @@ class WelcomeScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: theme.primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: Theme.of(context).primaryColor, size: 24),
+          child: Icon(icon, color: theme.primaryColor, size: 24),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -296,12 +300,12 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 2),
-              Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+              Text(subtitle, style: theme.textTheme.bodySmall),
             ],
           ),
         ),
