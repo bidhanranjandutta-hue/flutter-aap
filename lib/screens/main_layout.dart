@@ -130,7 +130,9 @@ class _MainLayoutState extends State<MainLayout> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const LiveDiagnosticScreen()),
+            MaterialPageRoute(
+              builder: (context) => const LiveDiagnosticScreen(),
+            ),
           );
         },
         backgroundColor: AppTheme.secondary,
