@@ -1,0 +1,3 @@
+## 2024-05-24 - [InheritedWidget Optimization Baseline]
+**Learning:** Establishing a performance baseline for 'const' vs 'non-const' Flutter widgets, micro-benchmarking allocation time often gets optimized away by the AOT compiler. The true performance benefit comes from reducing widget tree rebuilds (saving layout and paint cycles) instead. Caching InheritedWidget lookups like `Theme.of(context)` into a local variable at the top of the `build` method (e.g., `final theme = Theme.of(context);`) prevents repeated O(1) hash map traversals and function call overhead.
+**Action:** Always document the rationale for micro-optimizations. Cache `Theme.of(context)` and pass this cached data directly to UI helper methods instead of passing `BuildContext`.
