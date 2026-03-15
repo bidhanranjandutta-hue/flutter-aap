@@ -35,10 +35,17 @@ class DashboardScreen extends StatelessWidget {
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.person, color: Colors.grey),
+                          child: Icon(
+                            Icons.person,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Column(
