@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/custom_bottom_navigation_bar.dart';
 
 class LawMapScreen extends StatefulWidget {
   const LawMapScreen({super.key});
@@ -277,23 +278,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
         foregroundColor: Theme.of(context).iconTheme.color,
         child: const Icon(Icons.save_alt),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 2, // Law Map
-        selectedItemColor: AppTheme.primary,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.folder), label: 'Cases'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Law Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.gavel), label: 'BNS Guide'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
-        },
-      ),
+      bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 3),
     );
   }
 
