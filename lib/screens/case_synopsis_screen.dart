@@ -26,8 +26,9 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -37,7 +38,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
           'Case Synopsis',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: theme.cardColor,
         elevation: 1,
         actions: [
           IconButton(icon: const Icon(Icons.history), onPressed: () {}),
@@ -62,7 +63,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                     vertical: 32,
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
+                    color: theme.cardColor,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       // Dashed border simulated as solid for simplicity
@@ -151,9 +152,9 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                 const SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
+                    color: theme.cardColor,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Theme.of(context).dividerColor),
+                    border: Border.all(color: theme.dividerColor),
                   ),
                   child: Column(
                     children: [
@@ -208,7 +209,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                 ),
                 const SizedBox(height: 16),
                 _buildLegalCard(
-                  context,
+                  theme,
                   'BNS 2023',
                   'Section 305',
                   'Theft in a dwelling house, etc.',
@@ -217,7 +218,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                 ),
                 const SizedBox(height: 12),
                 _buildLegalCard(
-                  context,
+                  theme,
                   'BNS 2023',
                   'Section 331(4)',
                   'Lurking house-trespass or house-breaking by night.',
@@ -226,7 +227,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                 ),
                 const SizedBox(height: 12),
                 _buildLegalCard(
-                  context,
+                  theme,
                   'Constitution',
                   'Article 21',
                   'Protection of life and personal liberty.',
@@ -246,9 +247,8 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                 icon: const Icon(Icons.ios_share),
                 label: const Text('Export Report'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(
-                    context,
-                  ).primaryColorDark, // Use dark color for contrast
+                  backgroundColor:
+                      theme.primaryColorDark, // Use dark color for contrast
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
@@ -316,7 +316,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
   }
 
   Widget _buildLegalCard(
-    BuildContext context,
+    ThemeData theme,
     String tag,
     String title,
     String subtitle,
@@ -326,9 +326,9 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
