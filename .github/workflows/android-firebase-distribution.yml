@@ -1,0 +1,90 @@
+name: Android Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-distribute:
+    name: Build and Distribute Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Analyze Code
+        run: flutter analyze
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Decode Android Keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+          else
+            echo "ANDROID_KEYSTORE_BASE64 is empty or not set. Skipping release keystore setup."
+          fi
+
+      - name: Create key.properties
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
+            cat <<EOF > android/key.properties
+storePassword=$KEYSTORE_PASSWORD
+keyPassword=$KEY_PASSWORD
+keyAlias=$KEY_ALIAS
+storeFile=upload-keystore.jks
+EOF
+          else
+            echo "Android signing secrets are missing. Skipping release keystore setup."
+          fi
+
+      - name: Build Android Release APK
+        run: flutter build apk --release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Distribute to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        id: distribute
+        with:
+          appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Generate Summary
+        run: |
+          echo "## 🚀 Android Build & Distribution Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "- **App Name:** NyayaAssist" >> $GITHUB_STEP_SUMMARY
+          echo "- **Firebase Console:** [View in Firebase Console](https://console.firebase.google.com/project/_/appdistribution/app/${{ secrets.FIREBASE_ANDROID_APP_ID }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **Testers:** Notified group 'testers'." >> $GITHUB_STEP_SUMMARY
