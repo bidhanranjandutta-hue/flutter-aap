@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/custom_bottom_navigation_bar.dart';
 
 class CaseSynopsisScreen extends StatefulWidget {
   const CaseSynopsisScreen({super.key});
@@ -261,24 +262,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 1, // Analysis
-        selectedItemColor: AppTheme.primary,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.description),
-            label: 'Analysis',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
-        },
-      ),
+      bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 3),
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/custom_bottom_navigation_bar.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -289,28 +290,7 @@ class DashboardScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
-        selectedItemColor: AppTheme.primary,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.work), label: 'My Cases'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.center_focus_weak),
-            label: 'Scan',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Tools'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
-          }
-        },
-      ),
+      bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 0),
     );
   }
 

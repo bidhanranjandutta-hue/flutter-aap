@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/custom_bottom_navigation_bar.dart';
 
 class OCRScannerScreen extends StatefulWidget {
   const OCRScannerScreen({super.key});
@@ -240,29 +241,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex:
-            1, // 'Scan' is 2nd item (index 1) in list: [Home, Scan, Cases, Profile]
-        selectedItemColor: AppTheme.primary,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.document_scanner),
-            label: 'Scan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder_open),
-            label: 'Cases',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
-        },
-      ),
+      bottomNavigationBar: const CustomBottomNavigationBar(currentIndex: 2),
     );
   }
 
