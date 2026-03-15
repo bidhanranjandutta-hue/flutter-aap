@@ -10,18 +10,33 @@ class LawMapScreen extends StatefulWidget {
 
 class _LawMapScreenState extends State<LawMapScreen> {
   int _selectedSegment = 0;
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(text: "IPC 302");
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           'Law Compatibility Map',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: theme.cardColor,
         elevation: 1,
         actions: [
           IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
@@ -32,21 +47,21 @@ class _LawMapScreenState extends State<LawMapScreen> {
           // Search Input
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor,
+            color: theme.cardColor,
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search IPC Section (e.g., 302)',
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: const Icon(Icons.mic, color: AppTheme.primary),
                 filled: true,
-                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                fillColor: theme.scaffoldBackgroundColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              controller: TextEditingController(text: "IPC 302"),
+              controller: _searchController,
             ),
           ),
           // Segmented Control
@@ -298,6 +313,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
   }
 
   Widget _buildSegmentButton(int index, String text) {
+    final theme = Theme.of(context);
     bool isSelected = _selectedSegment == index;
     return Expanded(
       child: GestureDetector(
@@ -309,9 +325,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected
-                ? Theme.of(context).cardColor
-                : Colors.transparent,
+            color: isSelected ? theme.cardColor : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
             boxShadow: isSelected
                 ? [
@@ -394,16 +408,14 @@ class _LawMapScreenState extends State<LawMapScreen> {
     required bool isOld,
     bool highlight = false,
   }) {
+    final theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: isOld
-            ? Theme.of(context).cardColor
-            : AppTheme.primary.withOpacity(0.05),
+        color: isOld ? theme.cardColor : AppTheme.primary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isOld
-              ? Theme.of(context).dividerColor
-              : AppTheme.primary.withOpacity(0.2),
+          color: isOld ? theme.dividerColor : AppTheme.primary.withOpacity(0.2),
         ),
       ),
       padding: const EdgeInsets.all(16),
@@ -494,7 +506,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                 ? RichText(
                     text: TextSpan(
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                        color: theme.textTheme.bodyMedium?.color,
                         fontSize: 14,
                         height: 1.5,
                       ),
@@ -571,12 +583,13 @@ class _LawMapScreenState extends State<LawMapScreen> {
   }
 
   Widget _buildInfoBox(BuildContext context, String label, String value) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).dividerColor),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
