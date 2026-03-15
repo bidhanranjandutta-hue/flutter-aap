@@ -1,0 +1,68 @@
+name: Build and Distribute to Firebase
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload to Firebase App Distribution (Android)
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: build/app/outputs/flutter-apk/app-release.apk
+
+  build-ios:
+    name: Build iOS IPA
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build IPA
+        # Note: This step requires setting up iOS code signing certificates
+        # and provisioning profiles via fastlane match or manual setup.
+        run: flutter build ipa --release
+
+      - name: Upload to Firebase App Distribution (iOS)
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: build/ios/ipa/*.ipa
