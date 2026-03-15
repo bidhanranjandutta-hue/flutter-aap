@@ -13,8 +13,9 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
@@ -33,7 +34,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
           ],
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: theme.cardColor,
         elevation: 1,
         actions: [
           IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
@@ -44,7 +45,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
           // View Toggle
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
+            color: theme.cardColor.withValues(alpha: 0.95),
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
@@ -64,12 +65,12 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             child: Container(
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
+                color: theme.cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Theme.of(context).dividerColor),
+                border: Border.all(color: theme.dividerColor),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                   ),
                 ],
@@ -97,7 +98,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 120,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.2),
+                          color: AppTheme.primary.withValues(alpha: 0.2),
                           border: Border.all(color: AppTheme.primary),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -110,7 +111,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 150,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: Colors.yellow.withOpacity(0.2),
+                          color: Colors.yellow.withValues(alpha: 0.2),
                           border: Border.all(color: Colors.yellow),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -279,7 +280,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 2,
                     ),
                   ]
