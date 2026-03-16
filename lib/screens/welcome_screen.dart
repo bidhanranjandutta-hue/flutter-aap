@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../services/auth_service.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  bool _isLoading = false;
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final authService = MockAuthService();
+    final success = await authService.login();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,9 +249,7 @@ class WelcomeScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/dashbord');
-                          },
+                          onPressed: _isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor,
                             foregroundColor: Colors.white,
@@ -234,23 +259,32 @@ class WelcomeScreen extends StatelessWidget {
                             ),
                             minimumSize: const Size(double.infinity, 56),
                           ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.g_mobiledata,
-                                size: 28,
-                              ), // Placeholder for Google Icon
-                              SizedBox(width: 8),
-                              Text(
-                                'Continue with Google',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                          child: _isLoading
+                              ? const SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.g_mobiledata,
+                                      size: 28,
+                                    ), // Placeholder for Google Icon
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Continue with Google',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                         const SizedBox(height: 16),
                         Text(
