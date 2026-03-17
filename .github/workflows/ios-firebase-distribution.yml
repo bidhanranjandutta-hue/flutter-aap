@@ -1,0 +1,131 @@
+name: iOS CI/CD Pipeline
+
+on:
+  # Trigger the pipeline on push to the main branch
+  push:
+    branches:
+      - main
+  # Allow manual trigger from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-distribute:
+    name: Build & Distribute iOS IPA
+    # We use macOS because iOS builds require Xcode
+    runs-on: macos-latest
+
+    steps:
+      # 1. Check out the repository code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Flutter environment
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # 3. Install project dependencies
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # 4. Run tests to ensure app stability before building
+      - name: Run Tests
+        run: flutter test
+
+      # 5. Securely load iOS Certificates and Provisioning Profiles using macOS keychain
+      - name: Configure iOS Code Signing
+        env:
+          IOS_CERTIFICATE_P12_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: "temp_password_123"
+        run: |
+          # Define paths
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # Create a secure temporary keychain for code signing
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # Import Apple Certificate (p12)
+          # Note: MacOS requires `-D` instead of `--decode`
+          echo "$IOS_CERTIFICATE_P12_BASE64" | base64 -D > $CERTIFICATE_PATH
+          security import $CERTIFICATE_PATH -P "$IOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+
+          # Allow tools to access the keychain without a UI prompt (crucial for headless CI)
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # Make the keychain available to the build process
+          security list-keychains -d user -s $KEYCHAIN_PATH
+
+          # Import Provisioning Profile
+          echo "$IOS_PROVISIONING_PROFILE_BASE64" | base64 -D > $PP_PATH
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      # 6. Generate ExportOptions.plist dynamically (required for flutter build ipa)
+      - name: Generate ExportOptions.plist
+        env:
+          IOS_BUNDLE_IDENTIFIER: ${{ secrets.IOS_BUNDLE_IDENTIFIER }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+
+          # Extract the exact provisioning profile name dynamically
+          PROVISIONING_PROFILE_NAME=$(security cms -D -i $PP_PATH | xmllint --xpath "string(//key[text()='Name']/following-sibling::string)" -)
+
+          # Generate the plist mapped to the specific bundle identifier
+          cat <<EOF > ios/ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>ad-hoc</string>
+              <key>teamID</key>
+              <string>$APPLE_TEAM_ID</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>$IOS_BUNDLE_IDENTIFIER</key>
+                  <string>$PROVISIONING_PROFILE_NAME</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
+
+      # 7. Build the Release IPA
+      - name: Build iOS IPA
+        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+
+      # 8. Distribute the IPA to Firebase App Distribution
+      - name: Upload to Firebase App Distribution
+        id: firebase_distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_IOS }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          groups: ${{ secrets.FIREBASE_TESTER_GROUPS || 'testers' }} # Fallback to 'testers'
+          file: build/ios/ipa/*.ipa
+
+      # 9. Output Testing Links to GitHub Actions Summary
+      - name: Provide Testing Links
+        run: |
+          echo "### 🚀 iOS Distribution Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "- **Testing Link:** [Open App Distribution](${{ steps.firebase_distribution.outputs.TESTING_URI }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **Firebase Console:** [View in Console](${{ steps.firebase_distribution.outputs.FIREBASE_CONSOLE_URI }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **Direct Download:** [Download IPA](${{ steps.firebase_distribution.outputs.BINARY_DOWNLOAD_URI }})" >> $GITHUB_STEP_SUMMARY
+
+      # 10. Clean up secrets to ensure they are not left on the runner
+      - name: Clean up Code Signing Data
+        if: always()
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm -f ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+          rm -f $RUNNER_TEMP/build_certificate.p12
+          rm -f $RUNNER_TEMP/build_pp.mobileprovision
+          rm -f ios/ExportOptions.plist
