@@ -1,0 +1,91 @@
+name: Android CI/CD Pipeline
+
+on:
+  # Trigger the pipeline on push to the main branch
+  push:
+    branches:
+      - main
+  # Allow manual trigger from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-distribute:
+    name: Build & Distribute Android APK
+    # We use Ubuntu because it's faster and cheaper for Android builds
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Java 17 (Required for Android/Flutter build)
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # 3. Set up Flutter environment
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # 4. Install project dependencies
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # 5. Run tests to ensure app stability before building
+      - name: Run Tests
+        run: flutter test
+
+      # 6. Securely set up Android signing keystore and properties
+      # We extract the base64 keystore into a file and create `key.properties` for gradle.
+      - name: Configure Android Keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          # Create keystore file
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+
+          # Create key.properties file
+          cat <<EOF > android/key.properties
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=upload-keystore.jks
+          EOF
+
+      # 7. Build the Release APK
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      # 8. Distribute the APK to Firebase App Distribution
+      - name: Upload to Firebase App Distribution
+        id: firebase_distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          groups: ${{ secrets.FIREBASE_TESTER_GROUPS || 'testers' }} # Fallback to 'testers'
+          file: build/app/outputs/flutter-apk/app-release.apk
+
+      # 9. Output Testing Links to GitHub Actions Summary
+      - name: Provide Testing Links
+        run: |
+          echo "### 🚀 Android Distribution Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "- **Testing Link:** [Open App Distribution](${{ steps.firebase_distribution.outputs.TESTING_URI }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **Firebase Console:** [View in Console](${{ steps.firebase_distribution.outputs.FIREBASE_CONSOLE_URI }})" >> $GITHUB_STEP_SUMMARY
+          echo "- **Direct Download:** [Download APK](${{ steps.firebase_distribution.outputs.BINARY_DOWNLOAD_URI }})" >> $GITHUB_STEP_SUMMARY
+
+      # 10. Clean up secrets to ensure they are not left on the runner
+      - name: Clean up Keystore
+        if: always()
+        run: |
+          rm -f android/app/upload-keystore.jks
+          rm -f android/key.properties
