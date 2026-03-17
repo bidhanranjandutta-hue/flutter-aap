@@ -1,0 +1,120 @@
+name: iOS Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_and_distribute:
+    name: Build and Distribute iOS IPA
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Install Apple Certificate and Provisioning Profile
+        env:
+          IOS_CERTIFICATE_P12_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+          IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # Create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # Import certificate and provisioning profile from secrets
+          echo -n "$IOS_CERTIFICATE_P12_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$IOS_PROVISIONING_PROFILE_BASE64" | base64 -D -o $PP_PATH
+
+          # Create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # Import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$IOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # Apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Generate ExportOptions.plist
+        env:
+          IOS_BUNDLE_IDENTIFIER: ${{ secrets.IOS_BUNDLE_IDENTIFIER }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          PROVISIONING_PROFILE_NAME=$(security cms -D -i $PP_PATH | xmllint --xpath "string(//key[text()='Name']/following-sibling::string[1])" -)
+
+          cat <<EOF > ios/ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>ad-hoc</string>
+              <key>teamID</key>
+              <string>$APPLE_TEAM_ID</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>$IOS_BUNDLE_IDENTIFIER</key>
+                  <string>$PROVISIONING_PROFILE_NAME</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Build IPA
+        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+
+      - name: Upload to Firebase App Distribution
+        id: firebase_distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_IOS }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          groups: ${{ secrets.FIREBASE_TESTER_GROUPS }}
+          file: build/ios/ipa/*.ipa
+
+      - name: Write Summary to Job Summary
+        if: always()
+        env:
+          OUTCOME: ${{ steps.firebase_distribution.outcome }}
+          TESTING_URI: ${{ steps.firebase_distribution.outputs.TESTING_URI }}
+          FIREBASE_CONSOLE_URI: ${{ steps.firebase_distribution.outputs.FIREBASE_CONSOLE_URI }}
+          BINARY_DOWNLOAD_URI: ${{ steps.firebase_distribution.outputs.BINARY_DOWNLOAD_URI }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message || 'Manual build triggered.' }}
+        run: |
+          echo "## 🚀 Firebase App Distribution Result (iOS)" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$OUTCOME" == "success" ]; then
+            echo "✅ **Status:** Successfully uploaded to Firebase App Distribution!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
+            echo "- 📱 [Tester/Install Link]($TESTING_URI)" >> $GITHUB_STEP_SUMMARY
+            echo "- 🛠️ [Firebase Console]($FIREBASE_CONSOLE_URI)" >> $GITHUB_STEP_SUMMARY
+            echo "- ⬇️ [Direct Binary Download]($BINARY_DOWNLOAD_URI) *(Expires in 1 hour)*" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📝 Release Notes" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "$COMMIT_MESSAGE" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status:** Failed to upload to Firebase App Distribution." >> $GITHUB_STEP_SUMMARY
+            echo "Please check the workflow logs for more details." >> $GITHUB_STEP_SUMMARY
+          fi
