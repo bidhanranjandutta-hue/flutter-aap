@@ -249,36 +249,32 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'FIR_2023_0912_Theft.pdf',
-                          'Edited 10m ago • Case #402',
-                          Icons.picture_as_pdf,
-                          Colors.red,
+                        const _FileItem(
+                          title: 'FIR_2023_0912_Theft.pdf',
+                          subtitle: 'Edited 10m ago • Case #402',
+                          icon: Icons.picture_as_pdf,
+                          iconColor: Colors.red,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Witness_Statement_Rao.docx',
-                          'Edited 1h ago • Case #398',
-                          Icons.description,
-                          Colors.blue,
+                        const _FileItem(
+                          title: 'Witness_Statement_Rao.docx',
+                          subtitle: 'Edited 1h ago • Case #398',
+                          icon: Icons.description,
+                          iconColor: Colors.blue,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Evidence_Photos_Site_B',
-                          'Created yesterday • 12 items',
-                          Icons.folder,
-                          Colors.amber,
+                        const _FileItem(
+                          title: 'Evidence_Photos_Site_B',
+                          subtitle: 'Created yesterday • 12 items',
+                          icon: Icons.folder,
+                          iconColor: Colors.amber,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'BNS_Reference_Draft_v2.pdf',
-                          'Edited 2 days ago • Personal',
-                          Icons.picture_as_pdf,
-                          Colors.red,
+                        const _FileItem(
+                          title: 'BNS_Reference_Draft_v2.pdf',
+                          subtitle: 'Edited 2 days ago • Personal',
+                          icon: Icons.picture_as_pdf,
+                          iconColor: Colors.red,
                         ),
                       ],
                     ),
@@ -388,13 +384,23 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFileItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-  ) {
+}
+
+class _FileItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+
+  const _FileItem({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
