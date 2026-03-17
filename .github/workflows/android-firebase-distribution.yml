@@ -1,0 +1,73 @@
+name: Android Firebase Distribution
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-distribute:
+    name: Build and Distribute Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Analyze Code
+        run: flutter analyze
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Decode Keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+
+      - name: Configure Keystore Properties
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          cat <<EOF > android/key.properties
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=../app/keystore.jks
+          EOF
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Upload to Firebase App Distribution
+        id: firebase_distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          groups: ${{ secrets.FIREBASE_TESTER_GROUPS }}
+          file: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Generate Summary
+        run: |
+          echo "### Firebase App Distribution Success :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "**Testing URI:** ${{ steps.firebase_distribution.outputs.TESTING_URI }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Firebase Console URI:** ${{ steps.firebase_distribution.outputs.FIREBASE_CONSOLE_URI }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Binary Download URI:** ${{ steps.firebase_distribution.outputs.BINARY_DOWNLOAD_URI }}" >> $GITHUB_STEP_SUMMARY
