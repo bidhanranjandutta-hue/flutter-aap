@@ -1,0 +1,82 @@
+name: Android Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_and_distribute:
+    name: Build and Distribute Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Setup Android Keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+          fi
+
+      - name: Build APK
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: flutter build apk --release
+
+      - name: Upload to Firebase App Distribution
+        id: firebase_distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          groups: ${{ secrets.FIREBASE_TESTER_GROUPS }}
+          file: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Write Summary to Job Summary
+        if: always()
+        env:
+          OUTCOME: ${{ steps.firebase_distribution.outcome }}
+          TESTING_URI: ${{ steps.firebase_distribution.outputs.TESTING_URI }}
+          FIREBASE_CONSOLE_URI: ${{ steps.firebase_distribution.outputs.FIREBASE_CONSOLE_URI }}
+          BINARY_DOWNLOAD_URI: ${{ steps.firebase_distribution.outputs.BINARY_DOWNLOAD_URI }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message || 'Manual build triggered.' }}
+        run: |
+          echo "## 🚀 Firebase App Distribution Result (Android)" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$OUTCOME" == "success" ]; then
+            echo "✅ **Status:** Successfully uploaded to Firebase App Distribution!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
+            echo "- 📱 [Tester/Install Link]($TESTING_URI)" >> $GITHUB_STEP_SUMMARY
+            echo "- 🛠️ [Firebase Console]($FIREBASE_CONSOLE_URI)" >> $GITHUB_STEP_SUMMARY
+            echo "- ⬇️ [Direct Binary Download]($BINARY_DOWNLOAD_URI) *(Expires in 1 hour)*" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📝 Release Notes" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "$COMMIT_MESSAGE" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status:** Failed to upload to Firebase App Distribution." >> $GITHUB_STEP_SUMMARY
+            echo "Please check the workflow logs for more details." >> $GITHUB_STEP_SUMMARY
+          fi
