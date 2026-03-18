@@ -1,0 +1,3 @@
+## 2024-05-15 - [Refactoring UI Helper Methods]
+**Learning:** Refactoring local UI helper methods (like `_buildLawCard` or `_buildInfoBox`) that return Widgets into explicit `const StatelessWidget` classes is a recommended Flutter performance practice. This allows the Flutter engine to short-circuit the widget building process and avoid unnecessary rebuilds when the parent's `setState` is called.
+**Action:** When building UI in Flutter, prioritize creating custom `const StatelessWidget` classes instead of extracting complex widgets into local builder methods within a `StatefulWidget` or `StatelessWidget`.
