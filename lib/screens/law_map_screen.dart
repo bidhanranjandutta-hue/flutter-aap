@@ -87,7 +87,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.3),
+                            color: AppTheme.primary.withValues(alpha: 0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -146,9 +146,11 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.amber[50],
+                        color: Colors.amber.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.amber[100]!),
+                        border: Border.all(
+                          color: Colors.amber.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,12 +158,12 @@ class _LawMapScreenState extends State<LawMapScreen> {
                           Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: Colors.amber[100],
+                              color: Colors.amber.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Icon(
                               Icons.lightbulb,
-                              color: Colors.amber[800],
+                              color: Colors.amber[700],
                               size: 20,
                             ),
                           ),
@@ -173,16 +175,18 @@ class _LawMapScreenState extends State<LawMapScreen> {
                                 Text(
                                   'AI Insight: Key Change',
                                   style: TextStyle(
-                                    color: Colors.amber[800],
+                                    color: Colors.amber[700],
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                const Text(
+                                Text(
                                   "The definition of 'mob lynching' has been explicitly added as a distinct category under this section, carrying rigorous penalties including life imprisonment.",
                                   style: TextStyle(
-                                    color: Colors.black87,
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium?.color,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -316,7 +320,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
                     ),
                   ]
@@ -327,7 +331,9 @@ class _LawMapScreenState extends State<LawMapScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: isSelected ? AppTheme.primary : Colors.grey,
+              color: isSelected
+                  ? AppTheme.primary
+                  : Theme.of(context).textTheme.bodySmall?.color,
               fontSize: 12,
             ),
           ),
@@ -366,10 +372,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: badgeColor == Colors.greenAccent
-                ? Border.all(color: Colors.greenAccent.withOpacity(0.5))
+                ? Border.all(color: Colors.greenAccent.withValues(alpha: 0.5))
                 : null,
           ),
           child: Text(
@@ -398,12 +404,12 @@ class _LawMapScreenState extends State<LawMapScreen> {
       decoration: BoxDecoration(
         color: isOld
             ? Theme.of(context).cardColor
-            : AppTheme.primary.withOpacity(0.05),
+            : AppTheme.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isOld
               ? Theme.of(context).dividerColor
-              : AppTheme.primary.withOpacity(0.2),
+              : AppTheme.primary.withValues(alpha: 0.2),
         ),
       ),
       padding: const EdgeInsets.all(16),
@@ -420,8 +426,8 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                       color: isOld
-                          ? Colors.grey[200]
-                          : AppTheme.primary.withOpacity(0.1),
+                          ? Theme.of(context).dividerColor
+                          : AppTheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.center,
@@ -430,7 +436,9 @@ class _LawMapScreenState extends State<LawMapScreen> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 10,
-                        color: isOld ? Colors.grey[600] : AppTheme.primary,
+                        color: isOld
+                            ? Theme.of(context).textTheme.bodySmall?.color
+                            : AppTheme.primary,
                       ),
                     ),
                   ),
@@ -447,8 +455,8 @@ class _LawMapScreenState extends State<LawMapScreen> {
                       ),
                       Text(
                         subtitle,
-                        style: const TextStyle(
-                          color: Colors.grey,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodySmall?.color,
                           fontSize: 12,
                         ),
                       ),
@@ -485,7 +493,9 @@ class _LawMapScreenState extends State<LawMapScreen> {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                  color: isOld ? Colors.grey[300]! : AppTheme.primary,
+                  color: isOld
+                      ? Theme.of(context).dividerColor
+                      : AppTheme.primary,
                   width: 2,
                 ),
               ),
@@ -508,8 +518,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
                           text:
                               "When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.",
                           style: TextStyle(
-                            backgroundColor: Colors.green.withOpacity(0.1),
-                            color: Colors.green[800],
+                            backgroundColor: Colors.green.withValues(
+                              alpha: 0.1,
+                            ),
+                            color: Colors.green,
                           ),
                         ),
                       ],
@@ -531,16 +543,18 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green[50],
-                    border: Border.all(color: Colors.green[100]!),
+                    color: Colors.green.withValues(alpha: 0.1),
+                    border: Border.all(
+                      color: Colors.green.withValues(alpha: 0.3),
+                    ),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Added: Mob Lynching Clause',
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green[700],
+                      color: Colors.green,
                     ),
                   ),
                 ),
@@ -550,7 +564,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.primary.withOpacity(0.1),
+                    color: AppTheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const Text(

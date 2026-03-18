@@ -12,9 +12,16 @@ class AppTheme {
   static const Color textMain = Color(0xFF0F172A);
   static const Color textMuted = Color(0xFF475569);
 
+  // Extra colors for professional theme
+  static const Color dividerLight = Color(0xFFE2E8F0);
+  static const Color dividerDark = Color(0xFF334155);
+  static const Color cardLight = Color(0xFFFFFFFF);
+  static const Color cardDark = Color(0xFF1E293B);
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.light,
       colorScheme: const ColorScheme.light(
         primary: primary,
         secondary: secondary,
@@ -22,12 +29,23 @@ class AppTheme {
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: textMain,
+        error: Colors.redAccent,
+        onError: Colors.white,
       ),
       scaffoldBackgroundColor: backgroundLight,
+      cardColor: cardLight,
+      dividerColor: dividerLight,
+      iconTheme: const IconThemeData(color: textMain),
       appBarTheme: const AppBarTheme(
         backgroundColor: surfaceLight,
         foregroundColor: textMain,
         elevation: 0,
+        iconTheme: IconThemeData(color: textMain),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: surfaceLight,
+        selectedItemColor: primary,
+        unselectedItemColor: Colors.grey,
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(color: textMain),
@@ -52,6 +70,7 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
       colorScheme: const ColorScheme.dark(
         primary: primary,
         secondary: secondary,
@@ -59,12 +78,23 @@ class AppTheme {
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: Colors.white,
+        error: Colors.redAccent,
+        onError: Colors.white,
       ),
       scaffoldBackgroundColor: backgroundDark,
+      cardColor: cardDark,
+      dividerColor: dividerDark,
+      iconTheme: const IconThemeData(color: Colors.white),
       appBarTheme: const AppBarTheme(
         backgroundColor: surfaceDark,
         foregroundColor: Colors.white,
         elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: surfaceDark,
+        selectedItemColor: primary,
+        unselectedItemColor: Colors.grey,
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(color: Colors.white),

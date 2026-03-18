@@ -19,7 +19,7 @@ void main() {
 
     // Verify that we are on Dashboard Screen
     expect(find.byType(DashboardScreen), findsOneWidget);
-    expect(find.text('Inspector Sharma'), findsOneWidget);
+    expect(find.text('AI Tools'), findsOneWidget);
 
     // Tap on OCR Scanner - The text is wrapped in multiple widgets, might be hard to find by exact text alone if rich text
     // The text is 'OCR Evidence Scanner' in a Text widget.

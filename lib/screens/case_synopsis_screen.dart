@@ -66,7 +66,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       // Dashed border simulated as solid for simplicity
-                      color: AppTheme.primary.withOpacity(0.3),
+                      color: AppTheme.primary.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -75,7 +75,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.1),
+                          color: AppTheme.primary.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -95,7 +95,10 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       const SizedBox(height: 4),
                       Text(
                         'Tap to scan or upload FIR (PDF, JPG)',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 14),
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodySmall?.color,
+                          fontSize: 14,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
@@ -302,8 +305,8 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
               const SizedBox(height: 4),
               Text(
                 content,
-                style: const TextStyle(
-                  color: Colors.grey,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                   fontSize: 14,
                   height: 1.5,
                 ),
@@ -345,7 +348,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -368,7 +371,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   ),
                 ],
               ),
-              Icon(Icons.chevron_right, color: Colors.grey[300]),
+              Icon(Icons.chevron_right, color: Theme.of(context).dividerColor),
             ],
           ),
           const SizedBox(height: 4),
@@ -381,20 +384,23 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.05),
+                color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.compare_arrows,
                     size: 16,
-                    color: Colors.grey,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     mapping,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                    ),
                   ),
                 ],
               ),

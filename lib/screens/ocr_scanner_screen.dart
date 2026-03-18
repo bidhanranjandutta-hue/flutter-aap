@@ -28,7 +28,10 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             ),
             Text(
               'Scan ID #884-FIR',
-              style: TextStyle(color: Colors.grey[500], fontSize: 12),
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                fontSize: 12,
+              ),
             ),
           ],
         ),
@@ -44,17 +47,17 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
           // View Toggle
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
+            color: Theme.of(context).cardColor.withValues(alpha: 0.95),
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Theme.of(context).dividerColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
+                  _buildToggleOption(0, 'Original Scan', context),
+                  _buildToggleOption(1, 'Digitized Text', context),
                 ],
               ),
             ),
@@ -69,7 +72,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 border: Border.all(color: Theme.of(context).dividerColor),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                   ),
                 ],
@@ -81,12 +84,12 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                   children: [
                     // Simulated Image
                     Container(
-                      color: Colors.grey[300],
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       alignment: Alignment.center,
-                      child: const Icon(
+                      child: Icon(
                         Icons.image,
                         size: 64,
-                        color: Colors.grey,
+                        color: Theme.of(context).dividerColor,
                       ),
                     ),
                     // Highlights (Simulated)
@@ -97,7 +100,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 120,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.2),
+                          color: AppTheme.primary.withValues(alpha: 0.2),
                           border: Border.all(color: AppTheme.primary),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -110,7 +113,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 150,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: Colors.yellow.withOpacity(0.2),
+                          color: Colors.yellow.withValues(alpha: 0.2),
                           border: Border.all(color: Colors.yellow),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -151,8 +154,10 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.blue[50],
-                border: Border.all(color: Colors.blue[100]!),
+                color: AppTheme.primary.withValues(alpha: 0.1),
+                border: Border.all(
+                  color: AppTheme.primary.withValues(alpha: 0.3),
+                ),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -183,7 +188,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
                     value: 0.78,
-                    backgroundColor: Colors.blue[200],
+                    backgroundColor: AppTheme.primary.withValues(alpha: 0.2),
                     color: AppTheme.primary,
                     minHeight: 6,
                     borderRadius: BorderRadius.circular(3),
@@ -191,7 +196,10 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Restoring illegible words in paragraph 2.',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
@@ -266,7 +274,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildToggleOption(int index, String text) {
+  Widget _buildToggleOption(int index, String text, BuildContext context) {
     bool isSelected = _viewMode == index;
     return Expanded(
       child: GestureDetector(
@@ -274,12 +282,14 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.transparent,
+            color: isSelected
+                ? Theme.of(context).cardColor
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 2,
                     ),
                   ]
@@ -290,7 +300,9 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: isSelected ? AppTheme.primary : Colors.grey,
+              color: isSelected
+                  ? AppTheme.primary
+                  : Theme.of(context).textTheme.bodySmall?.color,
               fontSize: 12,
             ),
           ),
@@ -309,7 +321,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       ),
       child: Column(
         children: [
-          Icon(icon, color: Colors.grey[700], size: 24),
+          Icon(icon, color: Theme.of(context).iconTheme.color, size: 24),
           const SizedBox(height: 4),
           Text(
             label,
@@ -317,7 +329,10 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
           ),
           Text(
             subLabel,
-            style: TextStyle(color: Colors.grey[400], fontSize: 10),
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodySmall?.color,
+              fontSize: 10,
+            ),
           ),
         ],
       ),
