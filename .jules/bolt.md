@@ -1,0 +1,3 @@
+## 2024-03-18 - [Flutter Widget Tree Optimization]
+**Learning:** Extracting private helper methods that return Widgets (like `_buildToolCard`) into standalone `const StatelessWidget` classes is a significant architectural optimization in Flutter. Using `const` widgets allows the Flutter framework to short-circuit the widget rebuilding process entirely, skipping the `build` method invocation for those parts of the tree when parent state changes. This drastically reduces CPU overhead during repaints compared to simply calling a function that instantiates new widget instances every time.
+**Action:** Always prefer creating explicit `const StatelessWidget` classes over `Widget _buildX()` local methods for reusable UI components.
