@@ -161,22 +161,19 @@ class WelcomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 24),
                                 // Features
-                                _buildFeatureItem(
-                                  context,
+                                const FeatureItem(
                                   Icons.analytics,
                                   'Instant Case Analysis',
                                   'Automated insights from FIRs & case files.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
+                                const FeatureItem(
                                   Icons.document_scanner,
                                   'Smart OCR Tools',
                                   'Extract text from handwritten documents instantly.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
+                                const FeatureItem(
                                   Icons.gavel,
                                   'New Law Mapping',
                                   'BNS • BNSS • BSA',
@@ -271,13 +268,17 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildFeatureItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
+class FeatureItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const FeatureItem(this.icon, this.title, this.subtitle, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

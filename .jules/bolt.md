@@ -1,0 +1,3 @@
+## 2024-03-18 - Repeated Theme.of(context) calls
+**Learning:** `Theme.of(context)` is called repetitively within complex `build` methods across multiple screens. This causes unnecessary InheritedWidget lookups traversing the widget tree in O(1) constant time, which can introduce function call overhead in complex UI trees and slow down micro-benchmarking allocation time (though AOT compiler optimizes it).
+**Action:** Extract UI helper methods like `_buildFeatureItem`, `_buildToolCard`, `_buildFileItem` that return Widgets into explicit `const StatelessWidget` classes. This allows the Flutter engine to short-circuit the widget building process and avoid unnecessary rebuilds.
