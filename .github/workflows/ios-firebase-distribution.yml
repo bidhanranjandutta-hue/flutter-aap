@@ -1,0 +1,102 @@
+name: iOS Firebase Distribution
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy_ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install Apple Certificate and Provisioning Profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: "temp_password_123"
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # import certificate and provisioning profile from secrets
+          echo "$BUILD_CERTIFICATE_BASE64" | base64 -D > $CERTIFICATE_PATH
+          echo "$BUILD_PROVISION_PROFILE_BASE64" | base64 -D > $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychains -d user -s $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+      - name: Build iOS IPA
+        env:
+          IOS_BUNDLE_IDENTIFIER: ${{ secrets.IOS_BUNDLE_IDENTIFIER }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          # Parse provision profile name
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          PROVISIONING_PROFILE_NAME=$(security cms -D -i $PP_PATH | xmllint --xpath 'string(//key[text()="Name"]/following-sibling::string[1])' -)
+
+          # Generate ExportOptions.plist
+          cat <<EOF > ios/ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>ad-hoc</string>
+              <key>teamID</key>
+              <string>${APPLE_TEAM_ID}</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>${IOS_BUNDLE_IDENTIFIER}</key>
+                  <string>${PROVISIONING_PROFILE_NAME}</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
+
+          flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+
+      - name: Distribute iOS App to Firebase
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_IOS }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          groups: ${{ secrets.FIREBASE_TESTER_GROUPS }}
+          file: build/ios/ipa/*.ipa
+
+      - name: Upload iOS IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release-ipa
+          path: build/ios/ipa/*.ipa
