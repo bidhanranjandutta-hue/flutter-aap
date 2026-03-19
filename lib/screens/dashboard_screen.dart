@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../theme/app_theme.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -6,6 +7,13 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Retrieve the user object passed from the WelcomeScreen
+    final user =
+        ModalRoute.of(context)?.settings.arguments as GoogleSignInAccount?;
+    final String displayName = user?.displayName ?? 'Inspector Sharma';
+    final String? photoUrl = user?.photoUrl;
+    final String email = user?.email ?? '';
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -38,7 +46,18 @@ class DashboardScreen extends StatelessWidget {
                             color: Colors.grey[300],
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.person, color: Colors.grey),
+                          clipBehavior: Clip.antiAlias,
+                          child: photoUrl != null
+                              ? Image.network(
+                                  photoUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(
+                                        Icons.person,
+                                        color: Colors.grey,
+                                      ),
+                                )
+                              : const Icon(Icons.person, color: Colors.grey),
                         ),
                         const SizedBox(width: 12),
                         Column(
@@ -54,10 +73,17 @@ class DashboardScreen extends StatelessWidget {
                                   ),
                             ),
                             Text(
-                              'Inspector Sharma',
+                              displayName,
                               style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
+                            if (email.isNotEmpty)
+                              Text(
+                                email,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodySmall?.copyWith(fontSize: 10),
+                              ),
                           ],
                         ),
                       ],
