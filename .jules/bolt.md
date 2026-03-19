@@ -1,0 +1,3 @@
+## 2024-03-19 - [Refactoring UI helper methods to const StatelessWidgets]
+**Learning:** Returning Widgets from local UI helper methods (like `_buildFileItem` in Flutter) instead of explicit `const StatelessWidget` classes bypasses the Flutter engine's ability to short-circuit the widget building process. This leads to unnecessary rebuilds during state changes or animations, impacting performance and eating up CPU cycles.
+**Action:** Extract UI helper methods that return Widgets into dedicated `const StatelessWidget` classes to leverage Flutter's const optimization and prevent unnecessary widget rebuilds.
