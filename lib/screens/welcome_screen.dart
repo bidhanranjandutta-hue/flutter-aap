@@ -75,10 +75,13 @@ class WelcomeScreen extends StatelessWidget {
                                     child: Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        Icon(
-                                          Icons.local_police,
-                                          size: 48,
-                                          color: Theme.of(context).primaryColor,
+                                        ClipOval(
+                                          child: Image.asset(
+                                            'assets/NYAYAASSIST.png',
+                                            width: 72,
+                                            height: 72,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                         // Spinner simulation (just static here for simplicity or use CircularProgressIndicator)
                                         SizedBox(
