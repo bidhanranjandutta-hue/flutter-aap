@@ -1,0 +1,3 @@
+## 2024-05-24 - [Flutter Widget Rebuild Optimization]
+**Learning:** Refactoring local UI helper methods that return Widgets (like `_buildToolCard` or `_buildLawCard`) into explicit `const StatelessWidget` classes is a critical pattern in Flutter. It allows the Flutter engine to short-circuit the widget building process, identifying that the widget hasn't changed if its constructor parameters are constant, thereby significantly avoiding unnecessary rebuilds and improving rendering performance, especially in frequently updated screens (like those with segment controls).
+**Action:** Always extract complex or repeatedly used local UI builder methods into explicit `const StatelessWidget` classes when building or refactoring Flutter UI to ensure optimal rendering performance.
