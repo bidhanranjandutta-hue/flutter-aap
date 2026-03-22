@@ -1,0 +1,3 @@
+## 2024-05-24 - Flutter App Rendering and Color Optimizations
+**Learning:** In modern Flutter applications, relying heavily on local `_build...` methods inside `build()` to construct widgets causes the Flutter engine to re-evaluate and re-create those widgets unnecessarily during partial screen rebuilds. Additionally, using `Color.withOpacity()` creates a color space conversion that risks precision loss compared to the newer `Color.withValues(alpha: ...)`.
+**Action:** Always refactor local UI helper methods (like `_buildToolCard`) into explicit `const StatelessWidget` classes to allow Flutter to short-circuit the widget building process. Use `Color.withValues(alpha: ...)` for transparency instead of `.withOpacity()` for optimal precision and performance.
