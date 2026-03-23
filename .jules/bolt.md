@@ -1,0 +1,3 @@
+## 2024-03-23 - Extracting Widget Builders to StatelessWidgets
+**Learning:** Extracting local widget-building methods (like `_buildToolCard` and `_buildFileItem`) into explicit `const StatelessWidget` classes is crucial for Flutter performance. It allows the framework's element tree diffing algorithm to run more efficiently, better scopes rebuilds, and lets the engine short-circuit the widget building process, avoiding unnecessary re-renders of static or isolated UI pieces within a large `Scaffold` or `ListView`.
+**Action:** Always prefer creating separate `StatelessWidget` classes over local helper methods returning `Widget`, especially in complex screens like `DashboardScreen`.
