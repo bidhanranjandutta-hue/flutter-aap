@@ -1,0 +1,3 @@
+## 2024-05-24 - Flutter Widget Extraction & Const Constructors
+**Learning:** Found a specific Flutter performance pattern in this app: UI helper methods (like `_buildToolCard` and `_buildFileItem`) return non-const Widgets, preventing the framework from short-circuiting the build process. Furthermore, closures passed as `onTap` callbacks and non-constant color lookups (like `Colors.purple[50]`) prevent adding `const` to extracted classes.
+**Action:** Extract widget-building helper methods into proper `StatelessWidget` classes. Replace closure callbacks with static `routeName` parameters and use `.shade50` instead of `[50]` for colors to ensure these widgets can be instantiated with the `const` keyword, reducing unnecessary rebuilds during diffing.
