@@ -199,27 +199,25 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             // Case Synopsis
                             Expanded(
-                              child: _buildToolCard(
-                                context,
+                              child: const ToolCard(
                                 'Case Synopsis',
                                 'Generate summary',
                                 Icons.summarize,
                                 Colors.purple,
-                                Colors.purple[50]!,
-                                () => Navigator.pushNamed(context, '/synopsis'),
+                                Color(0xFFF3E5F5),
+                                '/synopsis',
                               ),
                             ),
                             const SizedBox(width: 12),
                             // Law Map
                             Expanded(
-                              child: _buildToolCard(
-                                context,
+                              child: const ToolCard(
                                 'Law Map',
                                 'IPC ⇄ BNS',
                                 Icons.compare_arrows,
                                 Colors.orange,
-                                Colors.orange[50]!,
-                                () => Navigator.pushNamed(context, '/law_map'),
+                                Color(0xFFFFF3E0),
+                                '/law_map',
                                 badge: 'New',
                               ),
                             ),
@@ -249,32 +247,28 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'FIR_2023_0912_Theft.pdf',
                           'Edited 10m ago • Case #402',
                           Icons.picture_as_pdf,
                           Colors.red,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'Witness_Statement_Rao.docx',
                           'Edited 1h ago • Case #398',
                           Icons.description,
                           Colors.blue,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'Evidence_Photos_Site_B',
                           'Created yesterday • 12 items',
                           Icons.folder,
                           Colors.amber,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'BNS_Reference_Draft_v2.pdf',
                           'Edited 2 days ago • Personal',
                           Icons.picture_as_pdf,
@@ -313,19 +307,32 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildToolCard(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-    Color iconBgColor,
-    VoidCallback onTap, {
-    String? badge,
-  }) {
+class ToolCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
+  final String routeName;
+  final String? badge;
+
+  const ToolCard(
+    this.title,
+    this.subtitle,
+    this.icon,
+    this.iconColor,
+    this.iconBgColor,
+    this.routeName, {
+    super.key,
+    this.badge,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () => Navigator.pushNamed(context, routeName),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -373,7 +380,7 @@ class DashboardScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    badge,
+                    badge!,
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
@@ -387,14 +394,24 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildFileItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-  ) {
+class FileItemCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+
+  const FileItemCard(
+    this.title,
+    this.subtitle,
+    this.icon,
+    this.iconColor, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
