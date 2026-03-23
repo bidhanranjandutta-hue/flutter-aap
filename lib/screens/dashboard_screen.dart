@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -87,6 +88,12 @@ class DashboardScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 // Search Bar
                 TextField(
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(100),
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'[a-zA-Z0-9\s.,/-]'),
+                    ),
+                  ],
                   decoration: InputDecoration(
                     hintText: 'Search FIRs, statutes, or people...',
                     prefixIcon: const Icon(Icons.search),

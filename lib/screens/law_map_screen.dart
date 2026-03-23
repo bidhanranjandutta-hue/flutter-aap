@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 
 class LawMapScreen extends StatefulWidget {
@@ -34,6 +35,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: Theme.of(context).cardColor,
             child: TextField(
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(50),
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s()-]')),
+              ],
               decoration: InputDecoration(
                 hintText: 'Search IPC Section (e.g., 302)',
                 prefixIcon: const Icon(Icons.search),
