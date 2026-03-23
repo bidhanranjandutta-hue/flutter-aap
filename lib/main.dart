@@ -23,7 +23,7 @@ class MainApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const WelcomeScreen(),
-        '/dashbord': (context) => const DashboardScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
         '/law_map': (context) => const LawMapScreen(),
         '/ocr': (context) => const OCRScannerScreen(),
         '/synopsis': (context) => const CaseSynopsisScreen(),
