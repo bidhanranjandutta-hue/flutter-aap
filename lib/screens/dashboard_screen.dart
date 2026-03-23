@@ -6,6 +6,33 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const files = [
+      {
+        'title': 'FIR_2023_0912_Theft.pdf',
+        'subtitle': 'Edited 10m ago • Case #402',
+        'icon': Icons.picture_as_pdf,
+        'color': Colors.red,
+      },
+      {
+        'title': 'Witness_Statement_Rao.docx',
+        'subtitle': 'Edited 1h ago • Case #398',
+        'icon': Icons.description,
+        'color': Colors.blue,
+      },
+      {
+        'title': 'Evidence_Photos_Site_B',
+        'subtitle': 'Created yesterday • 12 items',
+        'icon': Icons.folder,
+        'color': Colors.amber,
+      },
+      {
+        'title': 'BNS_Reference_Draft_v2.pdf',
+        'subtitle': 'Edited 2 days ago • Personal',
+        'icon': Icons.picture_as_pdf,
+        'color': Colors.red,
+      },
+    ];
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -105,186 +132,189 @@ class DashboardScreen extends StatelessWidget {
           ),
           // Main Scrollable Content
           Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Quick Actions Grid
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Quick Actions Grid
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
                           children: [
-                            Text(
-                              'AI Tools',
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text('View All'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        // OCR Card
-                        InkWell(
-                          onTap: () => Navigator.pushNamed(context, '/ocr'),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [AppTheme.primary, Color(0xFF2B71FA)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppTheme.primary.withOpacity(0.3),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Row(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(8),
+                                Text(
+                                  'AI Tools',
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: const Text('View All'),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            // OCR Card
+                            InkWell(
+                              onTap: () => Navigator.pushNamed(context, '/ocr'),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      AppTheme.primary,
+                                      Color(0xFF2B71FA),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                  child: const Icon(
-                                    Icons.document_scanner,
-                                    color: Colors.white,
-                                    size: 24,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppTheme.primary.withOpacity(0.3),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Icon(
+                                        Icons.document_scanner,
+                                        color: Colors.white,
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'OCR Evidence Scanner',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Extract text from FIRs & handwritten notes instantly.',
+                                            style: TextStyle(
+                                              color: Colors.blue[100],
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                // Case Synopsis
+                                Expanded(
+                                  child: _buildToolCard(
+                                    context,
+                                    'Case Synopsis',
+                                    'Generate summary',
+                                    Icons.summarize,
+                                    Colors.purple,
+                                    Colors.purple[50]!,
+                                    () => Navigator.pushNamed(
+                                      context,
+                                      '/synopsis',
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(width: 16),
+                                const SizedBox(width: 12),
+                                // Law Map
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'OCR Evidence Scanner',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        'Extract text from FIRs & handwritten notes instantly.',
-                                        style: TextStyle(
-                                          color: Colors.blue[100],
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
+                                  child: _buildToolCard(
+                                    context,
+                                    'Law Map',
+                                    'IPC ⇄ BNS',
+                                    Icons.compare_arrows,
+                                    Colors.orange,
+                                    Colors.orange[50]!,
+                                    () => Navigator.pushNamed(
+                                      context,
+                                      '/law_map',
+                                    ),
+                                    badge: 'New',
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            // Case Synopsis
-                            Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Case Synopsis',
-                                'Generate summary',
-                                Icons.summarize,
-                                Colors.purple,
-                                Colors.purple[50]!,
-                                () => Navigator.pushNamed(context, '/synopsis'),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            // Law Map
-                            Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Law Map',
-                                'IPC ⇄ BNS',
-                                Icons.compare_arrows,
-                                Colors.orange,
-                                Colors.orange[50]!,
-                                () => Navigator.pushNamed(context, '/law_map'),
-                                badge: 'New',
-                              ),
-                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  // Recent Activity Feed
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                      // Recent Activity Feed Header
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
                           children: [
-                            Text(
-                              'Recent Case Files',
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Recent Case Files',
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                TextButton.icon(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.add_to_drive,
+                                    size: 16,
+                                  ),
+                                  label: const Text('Drive'),
+                                ),
+                              ],
                             ),
-                            TextButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(Icons.add_to_drive, size: 16),
-                              label: const Text('Drive'),
-                            ),
+                            const SizedBox(height: 12),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'FIR_2023_0912_Theft.pdf',
-                          'Edited 10m ago • Case #402',
-                          Icons.picture_as_pdf,
-                          Colors.red,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Witness_Statement_Rao.docx',
-                          'Edited 1h ago • Case #398',
-                          Icons.description,
-                          Colors.blue,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Evidence_Photos_Site_B',
-                          'Created yesterday • 12 items',
-                          Icons.folder,
-                          Colors.amber,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'BNS_Reference_Draft_v2.pdf',
-                          'Edited 2 days ago • Personal',
-                          Icons.picture_as_pdf,
-                          Colors.red,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final file = files[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _buildFileItem(
+                          context,
+                          file['title'] as String,
+                          file['subtitle'] as String,
+                          file['icon'] as IconData,
+                          file['color'] as Color,
+                        ),
+                      );
+                    }, childCount: 4),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 100)),
+              ],
             ),
           ),
         ],
