@@ -39,7 +39,7 @@ class WelcomeScreen extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Theme.of(context).primaryColor.withOpacity(0.1),
+                              AppTheme.primary.withValues(alpha: 0.1),
                               Theme.of(context).scaffoldBackgroundColor,
                             ],
                           ),
@@ -62,7 +62,9 @@ class WelcomeScreen extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
+                                          color: Colors.black.withValues(
+                                            alpha: 0.1,
+                                          ),
                                           blurRadius: 10,
                                           offset: const Offset(0, 4),
                                         ),
@@ -78,7 +80,7 @@ class WelcomeScreen extends StatelessWidget {
                                         Icon(
                                           Icons.local_police,
                                           size: 48,
-                                          color: Theme.of(context).primaryColor,
+                                          color: AppTheme.primary,
                                         ),
                                         // Spinner simulation (just static here for simplicity or use CircularProgressIndicator)
                                         SizedBox(
@@ -89,8 +91,9 @@ class WelcomeScreen extends StatelessWidget {
                                             strokeWidth: 2,
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
-                                                  Theme.of(context).primaryColor
-                                                      .withOpacity(0.2),
+                                                  AppTheme.primary.withValues(
+                                                    alpha: 0.2,
+                                                  ),
                                                 ),
                                           ),
                                         ),
@@ -105,7 +108,7 @@ class WelcomeScreen extends StatelessWidget {
                                         .headlineMedium
                                         ?.copyWith(
                                           fontWeight: FontWeight.w900,
-                                          color: Theme.of(context).primaryColor,
+                                          color: AppTheme.primary,
                                         ),
                                   ),
                                   const SizedBox(height: 4),
@@ -213,7 +216,7 @@ class WelcomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Theme.of(
                         context,
-                      ).scaffoldBackgroundColor.withOpacity(0.9),
+                      ).scaffoldBackgroundColor.withValues(alpha: 0.9),
                       border: Border(
                         top: BorderSide(color: Theme.of(context).dividerColor),
                       ),
@@ -226,7 +229,7 @@ class WelcomeScreen extends StatelessWidget {
                             Navigator.pushNamed(context, '/dashbord');
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
+                            backgroundColor: AppTheme.primary,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -284,10 +287,10 @@ class WelcomeScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: AppTheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: Theme.of(context).primaryColor, size: 24),
+          child: Icon(icon, color: AppTheme.primary, size: 24),
         ),
         const SizedBox(width: 16),
         Expanded(
