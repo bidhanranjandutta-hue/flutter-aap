@@ -199,23 +199,23 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        _buildLawCard(
-                          context,
-                          'IPC',
-                          'Section 302',
-                          'Indian Penal Code',
-                          'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
+                        const LawCard(
+                          tag: 'IPC',
+                          title: 'Section 302',
+                          subtitle: 'Indian Penal Code',
+                          content:
+                              'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
                           isOld: true,
                         ),
                         const SizedBox(height: 8),
                         const Icon(Icons.arrow_downward, color: Colors.grey),
                         const SizedBox(height: 8),
-                        _buildLawCard(
-                          context,
-                          'BNS',
-                          'Section 103',
-                          'Bharatiya Nyaya Sanhita',
-                          '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
+                        const LawCard(
+                          tag: 'BNS',
+                          title: 'Section 103',
+                          subtitle: 'Bharatiya Nyaya Sanhita',
+                          content:
+                              '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
                           isOld: false,
                           highlight: true,
                         ),
@@ -385,15 +385,49 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildLawCard(
-    BuildContext context,
-    String tag,
-    String title,
-    String subtitle,
-    String content, {
-    required bool isOld,
-    bool highlight = false,
-  }) {
+  Widget _buildInfoBox(BuildContext context, String label, String value) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Theme.of(context).dividerColor),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LawCard extends StatelessWidget {
+  final String tag;
+  final String title;
+  final String subtitle;
+  final String content;
+  final bool isOld;
+  final bool highlight;
+
+  const LawCard({
+    super.key,
+    required this.tag,
+    required this.title,
+    required this.subtitle,
+    required this.content,
+    required this.isOld,
+    this.highlight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: isOld
@@ -565,28 +599,6 @@ class _LawMapScreenState extends State<LawMapScreen> {
               ],
             ),
           ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          ),
         ],
       ),
     );
