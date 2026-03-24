@@ -1,0 +1,3 @@
+## 2024-05-24 - [Flutter Helper Methods to const StatelessWidget]
+**Learning:** Refactoring local UI helper methods (like `_buildToolCard`) that return Widgets into explicit `const StatelessWidget` classes is a recommended Flutter performance practice. It helps the framework's element tree diffing algorithm run more efficiently, better scopes rebuilds, and allows the engine to short-circuit the widget building process. In order to use `const`, input variables must be static. For example, instead of passing a `VoidCallback` closure that captures `context`, pass a `routeName` string.
+**Action:** Identify helper methods inside `build` and refactor them into `const StatelessWidget` classes.
