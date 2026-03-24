@@ -161,25 +161,24 @@ class WelcomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 24),
                                 // Features
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.analytics,
-                                  'Instant Case Analysis',
-                                  'Automated insights from FIRs & case files.',
+                                const _FeatureItem(
+                                  icon: Icons.analytics,
+                                  title: 'Instant Case Analysis',
+                                  subtitle:
+                                      'Automated insights from FIRs & case files.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.document_scanner,
-                                  'Smart OCR Tools',
-                                  'Extract text from handwritten documents instantly.',
+                                const _FeatureItem(
+                                  icon: Icons.document_scanner,
+                                  title: 'Smart OCR Tools',
+                                  subtitle:
+                                      'Extract text from handwritten documents instantly.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.gavel,
-                                  'New Law Mapping',
-                                  'BNS • BNSS • BSA',
+                                const _FeatureItem(
+                                  icon: Icons.gavel,
+                                  title: 'New Law Mapping',
+                                  subtitle: 'BNS • BNSS • BSA',
                                 ),
                               ],
                             ),
@@ -271,13 +270,25 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildFeatureItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
+// ⚡ Bolt Optimization:
+// Extracted `_buildFeatureItem` method into a `const StatelessWidget`.
+// This prevents the framework from unnecessarily rebuilding these static UI components
+// every time the parent `WelcomeScreen` rebuilds, improving the element tree diffing algorithm's efficiency.
+class _FeatureItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _FeatureItem({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
