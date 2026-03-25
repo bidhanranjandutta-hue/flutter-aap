@@ -1,0 +1,4 @@
+
+## 2025-02-13 - [Flutter Widget Rebuild Optimization]
+**Learning:** Extracting local helper methods (e.g. `_buildToolCard`, `_buildFileItem`) that return UI components into explicit `const StatelessWidget` classes is a key performance practice in Flutter. It helps the framework's element tree diffing algorithm run more efficiently, properly scopes rebuilds, and allows the engine to short-circuit the widget building process.
+**Action:** Always refactor private `_buildX` UI helpers into `_X` `StatelessWidget` classes and ensure they are instantiated with `const` to prevent unnecessary widget re-renders when the parent rebuilds. Avoid `Color.withOpacity` in modern Flutter; use `Color.withValues(alpha: ...)` instead. Avoid closures containing context in widget parameters to allow `const` instantiation.
