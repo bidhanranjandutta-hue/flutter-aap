@@ -1,0 +1,4 @@
+
+## 2024-05-18 - [Flutter UI Optimization: Extract Helper Methods to Const StatelessWidgets]
+**Learning:** Using private helper methods (like `_buildFeatureItem()`) to return UI widget trees is a Flutter anti-pattern. Every time the parent widget rebuilds, these methods are unconditionally re-executed, returning new widget allocations. This completely circumvents Flutter's reconciliation algorithm and prevents the use of `const` constructors for static parts of the UI, causing unnecessary element tree diffing overhead.
+**Action:** Always favor extracting discrete UI components into explicit, preferably `const`, `StatelessWidget` classes instead of helper methods. This allows the engine to short-circuit unchanged subtrees during build/layout phases and significantly improves rendering performance.
