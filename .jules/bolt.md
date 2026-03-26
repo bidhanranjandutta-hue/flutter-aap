@@ -1,0 +1,3 @@
+## 2024-05-24 - [Flutter List Optimization]
+**Learning:** For performance optimization PRs (Bolt persona), format titles as '⚡ Bolt: [performance improvement]' and structure the PR description with '💡 What:', '🎯 Why:', '📊 Impact:', and '🔬 Measurement:' sections.
+**Action:** Extracting local UI helper methods (like `_buildToolCard` or `_buildLawCard`) that return Widgets into explicit `const StatelessWidget` classes is a recommended Flutter performance practice. It helps the framework's element tree diffing algorithm run more efficiently, better scopes rebuilds, and allows the engine to short-circuit the widget building process.

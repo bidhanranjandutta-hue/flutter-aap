@@ -199,27 +199,25 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             // Case Synopsis
                             Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Case Synopsis',
-                                'Generate summary',
-                                Icons.summarize,
-                                Colors.purple,
-                                Colors.purple[50]!,
-                                () => Navigator.pushNamed(context, '/synopsis'),
+                              child: const _ToolCard(
+                                title: 'Case Synopsis',
+                                subtitle: 'Generate summary',
+                                icon: Icons.summarize,
+                                iconColor: Colors.purple,
+                                iconBgColor: Color(0xFFF3E5F5),
+                                routeName: '/synopsis',
                               ),
                             ),
                             const SizedBox(width: 12),
                             // Law Map
                             Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Law Map',
-                                'IPC ⇄ BNS',
-                                Icons.compare_arrows,
-                                Colors.orange,
-                                Colors.orange[50]!,
-                                () => Navigator.pushNamed(context, '/law_map'),
+                              child: const _ToolCard(
+                                title: 'Law Map',
+                                subtitle: 'IPC ⇄ BNS',
+                                icon: Icons.compare_arrows,
+                                iconColor: Colors.orange,
+                                iconBgColor: Color(0xFFFFF3E0),
+                                routeName: '/law_map',
                                 badge: 'New',
                               ),
                             ),
@@ -314,80 +312,6 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildToolCard(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-    Color iconBgColor,
-    VoidCallback onTap, {
-    String? badge,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Theme.of(context).dividerColor),
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: iconBgColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(icon, color: iconColor, size: 24),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
-            if (badge != null)
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green[50],
-                    border: Border.all(color: Colors.green.withOpacity(0.2)),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    badge,
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[700],
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildFileItem(
     BuildContext context,
     String title,
@@ -436,6 +360,92 @@ class DashboardScreen extends StatelessWidget {
             onPressed: () {},
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ToolCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
+  final String routeName;
+  final String? badge;
+
+  const _ToolCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.iconColor,
+    required this.iconBgColor,
+    required this.routeName,
+    this.badge,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, routeName),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Theme.of(context).dividerColor),
+        ),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 24),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
+            if (badge != null)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green[50],
+                    border: Border.all(color: Colors.green.withOpacity(0.2)),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    badge!,
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green[700],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
