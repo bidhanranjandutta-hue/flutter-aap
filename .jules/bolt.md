@@ -1,0 +1,4 @@
+
+## 2024-05-20 - [Extract UI Builder Methods to const StatelessWidgets]
+**Learning:** Extracting local UI helper methods (like `_buildToolCard` or `_buildFileItem`) that return Widgets into explicit `const StatelessWidget` classes is a recommended Flutter performance practice. It helps the framework's element tree diffing algorithm run more efficiently, better scopes rebuilds, and allows the engine to short-circuit the widget building process. Furthermore, to enable `const` widget instantiation, Material Color map lookups (e.g., `Colors.purple[50]`) cannot be used since they are not constant expressions; use explicit hex color literals like `Color(0xFFF3E5F5)` instead.
+**Action:** Always prefer creating explicit `const StatelessWidget` classes for UI components over local builder methods in complex screens. Use explicit hex literals when a constant color from a Material map is needed.
