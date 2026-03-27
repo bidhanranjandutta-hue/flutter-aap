@@ -19,7 +19,7 @@ class DashboardScreen extends StatelessWidget {
               bottom: 16,
             ),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor.withOpacity(0.9),
+              color: Theme.of(context).cardColor.withValues(alpha: 0.9),
               border: Border(
                 bottom: BorderSide(color: Theme.of(context).dividerColor),
               ),
@@ -145,7 +145,7 @@ class DashboardScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.primary.withOpacity(0.3),
+                                  color: AppTheme.primary.withValues(alpha: 0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -156,7 +156,7 @@ class DashboardScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Icon(
@@ -199,29 +199,12 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             // Case Synopsis
                             Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Case Synopsis',
-                                'Generate summary',
-                                Icons.summarize,
-                                Colors.purple,
-                                Colors.purple[50]!,
-                                () => Navigator.pushNamed(context, '/synopsis'),
-                              ),
+                              child: const _ToolCard('Case Synopsis', 'Generate summary', Icons.summarize, Colors.purple, Color(0xFFF3E5F5), '/synopsis'),
                             ),
                             const SizedBox(width: 12),
                             // Law Map
                             Expanded(
-                              child: _buildToolCard(
-                                context,
-                                'Law Map',
-                                'IPC ⇄ BNS',
-                                Icons.compare_arrows,
-                                Colors.orange,
-                                Colors.orange[50]!,
-                                () => Navigator.pushNamed(context, '/law_map'),
-                                badge: 'New',
-                              ),
+                              child: const _ToolCard('Law Map', 'IPC ⇄ BNS', Icons.compare_arrows, Colors.orange, Color(0xFFFFF3E0), '/law_map', badge: 'New'),
                             ),
                           ],
                         ),
@@ -249,37 +232,13 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'FIR_2023_0912_Theft.pdf',
-                          'Edited 10m ago • Case #402',
-                          Icons.picture_as_pdf,
-                          Colors.red,
-                        ),
+                        const _FileItem('FIR_2023_0912_Theft.pdf', 'Edited 10m ago • Case #402', Icons.picture_as_pdf, Colors.red),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Witness_Statement_Rao.docx',
-                          'Edited 1h ago • Case #398',
-                          Icons.description,
-                          Colors.blue,
-                        ),
+                        const _FileItem('Witness_Statement_Rao.docx', 'Edited 1h ago • Case #398', Icons.description, Colors.blue),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'Evidence_Photos_Site_B',
-                          'Created yesterday • 12 items',
-                          Icons.folder,
-                          Colors.amber,
-                        ),
+                        const _FileItem('Evidence_Photos_Site_B', 'Created yesterday • 12 items', Icons.folder, Colors.amber),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
-                          'BNS_Reference_Draft_v2.pdf',
-                          'Edited 2 days ago • Personal',
-                          Icons.picture_as_pdf,
-                          Colors.red,
-                        ),
+                        const _FileItem('BNS_Reference_Draft_v2.pdf', 'Edited 2 days ago • Personal', Icons.picture_as_pdf, Colors.red),
                       ],
                     ),
                   ),
@@ -314,18 +273,31 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildToolCard(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-    Color iconBgColor,
-    VoidCallback onTap, {
-    String? badge,
-  }) {
+}
+
+class _ToolCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
+  final String routeName;
+  final String? badge;
+
+  const _ToolCard(
+    this.title,
+    this.subtitle,
+    this.icon,
+    this.iconColor,
+    this.iconBgColor,
+    this.routeName, {
+    this.badge,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () => Navigator.pushNamed(context, routeName),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -368,16 +340,16 @@ class DashboardScreen extends StatelessWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green[50],
-                    border: Border.all(color: Colors.green.withOpacity(0.2)),
+                    color: const Color(0xFFE8F5E9), // Colors.green[50] equivalent
+                    border: Border.all(color: const Color(0xFF4CAF50).withValues(alpha: 0.2)), // Colors.green equivalent
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    badge,
-                    style: TextStyle(
+                    badge!,
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green[700],
+                      color: Color(0xFF388E3C), // Colors.green[700] equivalent
                     ),
                   ),
                 ),
@@ -387,14 +359,23 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildFileItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-  ) {
+class _FileItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+
+  const _FileItem(
+    this.title,
+    this.subtitle,
+    this.icon,
+    this.iconColor,
+  );
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -407,7 +388,7 @@ class DashboardScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: iconColor, size: 24),
