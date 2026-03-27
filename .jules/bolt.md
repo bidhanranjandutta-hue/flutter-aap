@@ -1,0 +1,3 @@
+## 2024-05-22 - [Isolate Local Ephemeral State]
+**Learning:** Managing local ephemeral state (like a selected tab index or toggle view) at the root of a large screen widget using `setState` causes the entire screen to rebuild. To optimize performance, extracting the localized UI component into its own `StatefulWidget` isolates rebuilds to just the affected node.
+**Action:** Identify helper widget builder methods that take ephemeral states or callbacks and extract them to their own `StatefulWidget` or `StatelessWidget` and instantiate them as `const` where possible to short-circuit the widget rebuilding process.
