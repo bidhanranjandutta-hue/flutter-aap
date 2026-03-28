@@ -9,8 +9,6 @@ class LawMapScreen extends StatefulWidget {
 }
 
 class _LawMapScreenState extends State<LawMapScreen> {
-  int _selectedSegment = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,24 +48,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
             ),
           ),
           // Segmented Control
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildSegmentButton(0, 'Comparison'),
-                  _buildSegmentButton(1, 'Full Text'),
-                  _buildSegmentButton(2, 'Case Law'),
-                ],
-              ),
-            ),
-          ),
+          const _SegmentControl(),
           // Main Content
           Expanded(
             child: SingleChildScrollView(
@@ -87,7 +68,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.3),
+                            color: AppTheme.primary.withValues(alpha: 0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -297,44 +278,6 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildSegmentButton(int index, String text) {
-    bool isSelected = _selectedSegment == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedSegment = index;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? Theme.of(context).cardColor
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(6),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 4,
-                    ),
-                  ]
-                : [],
-          ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isSelected ? AppTheme.primary : Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildLawHeader(
     BuildContext context,
@@ -366,10 +309,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: badgeColor == Colors.greenAccent
-                ? Border.all(color: Colors.greenAccent.withOpacity(0.5))
+                ? Border.all(color: Colors.greenAccent.withValues(alpha: 0.5))
                 : null,
           ),
           child: Text(
@@ -398,12 +341,12 @@ class _LawMapScreenState extends State<LawMapScreen> {
       decoration: BoxDecoration(
         color: isOld
             ? Theme.of(context).cardColor
-            : AppTheme.primary.withOpacity(0.05),
+            : AppTheme.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isOld
               ? Theme.of(context).dividerColor
-              : AppTheme.primary.withOpacity(0.2),
+              : AppTheme.primary.withValues(alpha: 0.2),
         ),
       ),
       padding: const EdgeInsets.all(16),
@@ -421,7 +364,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     decoration: BoxDecoration(
                       color: isOld
                           ? Colors.grey[200]
-                          : AppTheme.primary.withOpacity(0.1),
+                          : AppTheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.center,
@@ -508,7 +451,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                           text:
                               "When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.",
                           style: TextStyle(
-                            backgroundColor: Colors.green.withOpacity(0.1),
+                            backgroundColor: Colors.green.withValues(alpha: 0.1),
                             color: Colors.green[800],
                           ),
                         ),
@@ -550,7 +493,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.primary.withOpacity(0.1),
+                    color: AppTheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const Text(
@@ -588,6 +531,81 @@ class _LawMapScreenState extends State<LawMapScreen> {
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// PERFORMANCE OPTIMIZATION: Extracted Segmented Control into a separate StatefulWidget.
+// This localizes state changes (_selectedSegment) so that toggling the segment
+// only rebuilds this specific widget instead of the entire LawMapScreen.
+class _SegmentControl extends StatefulWidget {
+  const _SegmentControl();
+
+  @override
+  State<_SegmentControl> createState() => _SegmentControlState();
+}
+
+class _SegmentControlState extends State<_SegmentControl> {
+  int _selectedSegment = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            _buildSegmentButton(0, 'Comparison'),
+            _buildSegmentButton(1, 'Full Text'),
+            _buildSegmentButton(2, 'Case Law'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton(int index, String text) {
+    bool isSelected = _selectedSegment == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedSegment = index;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? Theme.of(context).cardColor
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 4,
+                    ),
+                  ]
+                : [],
+          ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isSelected ? AppTheme.primary : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ),
       ),
     );
   }
