@@ -9,8 +9,6 @@ class OCRScannerScreen extends StatefulWidget {
 }
 
 class _OCRScannerScreenState extends State<OCRScannerScreen> {
-  int _viewMode = 0; // 0: Original, 1: Digitized
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,23 +40,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       body: Column(
         children: [
           // View Toggle
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
-              ),
-            ),
-          ),
+          const _ViewToggle(),
           // Document Preview
           Expanded(
             child: Container(
@@ -69,7 +51,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 border: Border.all(color: Theme.of(context).dividerColor),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                   ),
                 ],
@@ -97,7 +79,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 120,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.2),
+                          color: AppTheme.primary.withValues(alpha: 0.2),
                           border: Border.all(color: AppTheme.primary),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -110,7 +92,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 150,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: Colors.yellow.withOpacity(0.2),
+                          color: Colors.yellow.withValues(alpha: 0.2),
                           border: Border.all(color: Colors.yellow),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -266,38 +248,6 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildToggleOption(int index, String text) {
-    bool isSelected = _viewMode == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _viewMode = index),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(6),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 2,
-                    ),
-                  ]
-                : [],
-          ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isSelected ? AppTheme.primary : Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildActionButton(IconData icon, String label, String subLabel) {
     return Container(
@@ -320,6 +270,74 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             style: TextStyle(color: Colors.grey[400], fontSize: 10),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// PERFORMANCE OPTIMIZATION: Extracted View Toggle into a separate StatefulWidget.
+// This localizes state changes (_viewMode) so that toggling the view
+// only rebuilds this specific widget instead of the entire OCRScannerScreen.
+class _ViewToggle extends StatefulWidget {
+  const _ViewToggle();
+
+  @override
+  State<_ViewToggle> createState() => _ViewToggleState();
+}
+
+class _ViewToggleState extends State<_ViewToggle> {
+  int _viewMode = 0; // 0: Original, 1: Digitized
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Theme.of(context).cardColor.withValues(alpha: 0.95),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            _buildToggleOption(0, 'Original Scan'),
+            _buildToggleOption(1, 'Digitized Text'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToggleOption(int index, String text) {
+    bool isSelected = _viewMode == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => _viewMode = index),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 2,
+                    ),
+                  ]
+                : [],
+          ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isSelected ? AppTheme.primary : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ),
       ),
     );
   }
