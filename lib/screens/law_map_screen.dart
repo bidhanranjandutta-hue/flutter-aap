@@ -9,7 +9,13 @@ class LawMapScreen extends StatefulWidget {
 }
 
 class _LawMapScreenState extends State<LawMapScreen> {
-  int _selectedSegment = 0;
+  final ValueNotifier<int> _selectedSegment = ValueNotifier<int>(0);
+
+  @override
+  void dispose() {
+    _selectedSegment.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +65,25 @@ class _LawMapScreenState extends State<LawMapScreen> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Row(
-                children: [
-                  _buildSegmentButton(0, 'Comparison'),
-                  _buildSegmentButton(1, 'Full Text'),
-                  _buildSegmentButton(2, 'Case Law'),
-                ],
+              child: ValueListenableBuilder<int>(
+                valueListenable: _selectedSegment,
+                builder: (context, selectedSegment, child) {
+                  return Row(
+                    children: [
+                      _buildSegmentButton(0, 'Comparison', selectedSegment),
+                      _buildSegmentButton(1, 'Full Text', selectedSegment),
+                      _buildSegmentButton(2, 'Case Law', selectedSegment),
+                    ],
+                  );
+                },
               ),
             ),
           ),
           // Main Content
-          Expanded(
+          ValueListenableBuilder<int>(
+            valueListenable: _selectedSegment,
+            builder: (context, selectedSegment, child) {
+              return Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -268,6 +282,8 @@ class _LawMapScreenState extends State<LawMapScreen> {
                 ],
               ),
             ),
+          );
+            },
           ),
         ],
       ),
@@ -297,14 +313,12 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildSegmentButton(int index, String text) {
-    bool isSelected = _selectedSegment == index;
+  Widget _buildSegmentButton(int index, String text, int selectedSegment) {
+    bool isSelected = selectedSegment == index;
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            _selectedSegment = index;
-          });
+          _selectedSegment.value = index;
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
