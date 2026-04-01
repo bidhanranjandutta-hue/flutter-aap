@@ -9,7 +9,13 @@ class OCRScannerScreen extends StatefulWidget {
 }
 
 class _OCRScannerScreenState extends State<OCRScannerScreen> {
-  int _viewMode = 0; // 0: Original, 1: Digitized
+  final ValueNotifier<int> _viewMode = ValueNotifier<int>(0);
+
+  @override
+  void dispose() {
+    _viewMode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +48,30 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       body: Column(
         children: [
           // View Toggle
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
-              ),
-            ),
+          ValueListenableBuilder<int>(
+            valueListenable: _viewMode,
+            builder: (context, currentMode, child) {
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                color: Theme.of(context).cardColor.withOpacity(0.95),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      _buildToggleOption(0, 'Original Scan', currentMode),
+                      _buildToggleOption(1, 'Digitized Text', currentMode),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
           // Document Preview
           Expanded(
@@ -266,11 +280,11 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildToggleOption(int index, String text) {
-    bool isSelected = _viewMode == index;
+  Widget _buildToggleOption(int index, String text, int currentMode) {
+    bool isSelected = currentMode == index;
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => _viewMode = index),
+        onTap: () => _viewMode.value = index,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(

@@ -9,7 +9,13 @@ class LawMapScreen extends StatefulWidget {
 }
 
 class _LawMapScreenState extends State<LawMapScreen> {
-  int _selectedSegment = 0;
+  final ValueNotifier<int> _selectedSegment = ValueNotifier<int>(0);
+
+  @override
+  void dispose() {
+    _selectedSegment.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +56,31 @@ class _LawMapScreenState extends State<LawMapScreen> {
             ),
           ),
           // Segmented Control
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildSegmentButton(0, 'Comparison'),
-                  _buildSegmentButton(1, 'Full Text'),
-                  _buildSegmentButton(2, 'Case Law'),
-                ],
-              ),
-            ),
+          ValueListenableBuilder<int>(
+            valueListenable: _selectedSegment,
+            builder: (context, currentSegment, child) {
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                color: Theme.of(context).cardColor,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      _buildSegmentButton(0, 'Comparison', currentSegment),
+                      _buildSegmentButton(1, 'Full Text', currentSegment),
+                      _buildSegmentButton(2, 'Case Law', currentSegment),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
           // Main Content
           Expanded(
@@ -297,14 +311,12 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildSegmentButton(int index, String text) {
-    bool isSelected = _selectedSegment == index;
+  Widget _buildSegmentButton(int index, String text, int currentSegment) {
+    bool isSelected = currentSegment == index;
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            _selectedSegment = index;
-          });
+          _selectedSegment.value = index;
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
