@@ -9,8 +9,6 @@ class LawMapScreen extends StatefulWidget {
 }
 
 class _LawMapScreenState extends State<LawMapScreen> {
-  int _selectedSegment = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,24 +48,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
             ),
           ),
           // Segmented Control
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildSegmentButton(0, 'Comparison'),
-                  _buildSegmentButton(1, 'Full Text'),
-                  _buildSegmentButton(2, 'Case Law'),
-                ],
-              ),
-            ),
-          ),
+          const _LawMapSegmentedControl(),
           // Main Content
           Expanded(
             child: SingleChildScrollView(
@@ -293,45 +274,6 @@ class _LawMapScreenState extends State<LawMapScreen> {
         onTap: (index) {
           if (index == 0) Navigator.pushNamed(context, '/dashbord');
         },
-      ),
-    );
-  }
-
-  Widget _buildSegmentButton(int index, String text) {
-    bool isSelected = _selectedSegment == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedSegment = index;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? Theme.of(context).cardColor
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(6),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 4,
-                    ),
-                  ]
-                : [],
-          ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isSelected ? AppTheme.primary : Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -588,6 +530,78 @@ class _LawMapScreenState extends State<LawMapScreen> {
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LawMapSegmentedControl extends StatefulWidget {
+  const _LawMapSegmentedControl();
+
+  @override
+  State<_LawMapSegmentedControl> createState() => _LawMapSegmentedControlState();
+}
+
+class _LawMapSegmentedControlState extends State<_LawMapSegmentedControl> {
+  int _selectedSegment = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            _buildSegmentButton(0, 'Comparison'),
+            _buildSegmentButton(1, 'Full Text'),
+            _buildSegmentButton(2, 'Case Law'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton(int index, String text) {
+    bool isSelected = _selectedSegment == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedSegment = index;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? Theme.of(context).cardColor
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                    ),
+                  ]
+                : [],
+          ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isSelected ? AppTheme.primary : Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+        ),
       ),
     );
   }
