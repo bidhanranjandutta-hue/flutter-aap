@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class OCRScannerScreen extends StatefulWidget {
+class OCRScannerScreen extends StatelessWidget {
   const OCRScannerScreen({super.key});
-
-  @override
-  State<OCRScannerScreen> createState() => _OCRScannerScreenState();
-}
-
-class _OCRScannerScreenState extends State<OCRScannerScreen> {
-  int _viewMode = 0; // 0: Original, 1: Digitized
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +44,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
-              ),
+              child: const _ViewToggle(),
             ),
           ),
           // Document Preview
@@ -222,6 +210,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildActionButton(
+                    context,
                     Icons.translate,
                     'Translate',
                     'Hindi • English',
@@ -230,6 +219,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildActionButton(
+                    context,
                     Icons.ios_share,
                     'Export',
                     'PDF • DOCX',
@@ -266,6 +256,62 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
+  Widget _buildActionButton(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String subLabel,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        border: Border.all(color: Theme.of(context).dividerColor),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: Colors.grey[700], size: 24),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+          ),
+          Text(
+            subLabel,
+            style: TextStyle(color: Colors.grey[400], fontSize: 10),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ⚡ Bolt Optimization:
+// Extracted localized UI state (_viewMode) from the parent screen into this
+// isolated StatefulWidget. This prevents the entire OCRScannerScreen from
+// rebuilding unnecessarily on every view toggle interaction, significantly
+// reducing CPU cycles and improving UI responsiveness.
+class _ViewToggle extends StatefulWidget {
+  const _ViewToggle();
+
+  @override
+  State<_ViewToggle> createState() => _ViewToggleState();
+}
+
+class _ViewToggleState extends State<_ViewToggle> {
+  int _viewMode = 0; // 0: Original, 1: Digitized
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _buildToggleOption(0, 'Original Scan'),
+        _buildToggleOption(1, 'Digitized Text'),
+      ],
+    );
+  }
+
   Widget _buildToggleOption(int index, String text) {
     bool isSelected = _viewMode == index;
     return Expanded(
@@ -295,31 +341,6 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton(IconData icon, String label, String subLabel) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border.all(color: Theme.of(context).dividerColor),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.grey[700], size: 24),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-          Text(
-            subLabel,
-            style: TextStyle(color: Colors.grey[400], fontSize: 10),
-          ),
-        ],
       ),
     );
   }
