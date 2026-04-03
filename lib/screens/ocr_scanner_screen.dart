@@ -9,8 +9,6 @@ class OCRScannerScreen extends StatefulWidget {
 }
 
 class _OCRScannerScreenState extends State<OCRScannerScreen> {
-  int _viewMode = 0; // 0: Original, 1: Digitized
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,23 +40,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       body: Column(
         children: [
           // View Toggle
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
-              ),
-            ),
-          ),
+          const _ViewModeToggle(),
           // Document Preview
           Expanded(
             child: Container(
@@ -266,6 +248,42 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
+  Widget _buildActionButton(IconData icon, String label, String subLabel) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        border: Border.all(color: Theme.of(context).dividerColor),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: Colors.grey[700], size: 24),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+          ),
+          Text(
+            subLabel,
+            style: TextStyle(color: Colors.grey[400], fontSize: 10),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ViewModeToggle extends StatefulWidget {
+  const _ViewModeToggle();
+
+  @override
+  State<_ViewModeToggle> createState() => _ViewModeToggleState();
+}
+
+class _ViewModeToggleState extends State<_ViewModeToggle> {
+  int _viewMode = 0;
+
   Widget _buildToggleOption(int index, String text) {
     bool isSelected = _viewMode == index;
     return Expanded(
@@ -299,27 +317,23 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label, String subLabel) {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border.all(color: Theme.of(context).dividerColor),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.grey[700], size: 24),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-          Text(
-            subLabel,
-            style: TextStyle(color: Colors.grey[400], fontSize: 10),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Theme.of(context).cardColor.withOpacity(0.95),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            _buildToggleOption(0, 'Original Scan'),
+            _buildToggleOption(1, 'Digitized Text'),
+          ],
+        ),
       ),
     );
   }
