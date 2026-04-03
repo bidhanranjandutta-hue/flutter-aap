@@ -1,0 +1,3 @@
+## 2026-04-03 - State Extraction Optimization
+**Learning:** In Flutter, managing local ephemeral state (like toggle switches or segmented controls) at the root level of a screen using `setState` causes the entire `Scaffold` and all its children to unnecessarily rebuild on every interaction.
+**Action:** Replace `setState` with `ValueNotifier` and use `ValueListenableBuilder` to wrap only the specific UI components that depend on the state (e.g., the toggles themselves and the content areas they control). This isolates the build scope while keeping the state functionally accessible to all necessary nodes. Remember to always implement `dispose()` to prevent memory leaks.
