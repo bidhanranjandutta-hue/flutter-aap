@@ -1,0 +1,3 @@
+## 2025-01-20 - Extract Ephemeral State to Prevent Full Screen Rebuilds
+**Learning:** Managing strictly ephemeral state (like simple tab or toggle indices) at the root level of a large screen widget using `setState` is a major performance bottleneck in Flutter, as it forces the entire screen (including all static content and nested layout structures) to rebuild unnecessarily on every interaction.
+**Action:** Always isolate localized UI control widgets along with their strictly ephemeral state into private child `StatefulWidget`s (omitting `super.key`). This scopes the `setState` rebuilds strictly to the affected UI component, keeping the parent screen a static `StatelessWidget`.
