@@ -9,7 +9,15 @@ class OCRScannerScreen extends StatefulWidget {
 }
 
 class _OCRScannerScreenState extends State<OCRScannerScreen> {
-  int _viewMode = 0; // 0: Original, 1: Digitized
+  final ValueNotifier<int> _viewModeNotifier = ValueNotifier<int>(
+    0,
+  ); // 0: Original, 1: Digitized
+
+  @override
+  void dispose() {
+    _viewModeNotifier.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +59,16 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
+              child: ValueListenableBuilder<int>(
+                valueListenable: _viewModeNotifier,
+                builder: (context, viewMode, child) {
+                  return Row(
+                    children: [
+                      _buildToggleOption(0, 'Original Scan', viewMode),
+                      _buildToggleOption(1, 'Digitized Text', viewMode),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -266,11 +279,11 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildToggleOption(int index, String text) {
-    bool isSelected = _viewMode == index;
+  Widget _buildToggleOption(int index, String text, int viewMode) {
+    bool isSelected = viewMode == index;
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => _viewMode = index),
+        onTap: () => _viewModeNotifier.value = index,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
