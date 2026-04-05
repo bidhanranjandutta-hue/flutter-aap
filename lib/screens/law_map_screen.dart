@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class LawMapScreen extends StatefulWidget {
+class LawMapScreen extends StatelessWidget {
   const LawMapScreen({super.key});
-
-  @override
-  State<LawMapScreen> createState() => _LawMapScreenState();
-}
-
-class _LawMapScreenState extends State<LawMapScreen> {
-  int _selectedSegment = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +43,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
             ),
           ),
           // Segmented Control
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildSegmentButton(0, 'Comparison'),
-                  _buildSegmentButton(1, 'Full Text'),
-                  _buildSegmentButton(2, 'Case Law'),
-                ],
-              ),
-            ),
+          _SegmentToggle(
+            onChanged: (index) {
+              // Action handled inside localized toggle
+            },
           ),
           // Main Content
           Expanded(
@@ -98,24 +78,22 @@ class _LawMapScreenState extends State<LawMapScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildLawHeader(
-                                context,
-                                'Old Law',
-                                'IPC 302',
-                                '1860 Code',
-                                Colors.white,
+                              const _LawHeader(
+                                label: 'Old Law',
+                                code: 'IPC 302',
+                                subLabel: '1860 Code',
+                                badgeColor: Colors.white,
                               ),
                               const Icon(
                                 Icons.arrow_forward,
                                 color: Colors.white,
                                 size: 32,
                               ),
-                              _buildLawHeader(
-                                context,
-                                'New Law',
-                                'BNS 103',
-                                '2023 Sanhita',
-                                Colors.greenAccent,
+                              const _LawHeader(
+                                label: 'New Law',
+                                code: 'BNS 103',
+                                subLabel: '2023 Sanhita',
+                                badgeColor: Colors.greenAccent,
                               ),
                             ],
                           ),
@@ -199,23 +177,23 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        _buildLawCard(
-                          context,
-                          'IPC',
-                          'Section 302',
-                          'Indian Penal Code',
-                          'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
+                        const _LawCard(
+                          tag: 'IPC',
+                          title: 'Section 302',
+                          subtitle: 'Indian Penal Code',
+                          content:
+                              'Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.',
                           isOld: true,
                         ),
                         const SizedBox(height: 8),
                         const Icon(Icons.arrow_downward, color: Colors.grey),
                         const SizedBox(height: 8),
-                        _buildLawCard(
-                          context,
-                          'BNS',
-                          'Section 103',
-                          'Bharatiya Nyaya Sanhita',
-                          '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
+                        const _LawCard(
+                          tag: 'BNS',
+                          title: 'Section 103',
+                          subtitle: 'Bharatiya Nyaya Sanhita',
+                          content:
+                              '(1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine.\n\n(2) When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.',
                           isOld: false,
                           highlight: true,
                         ),
@@ -228,18 +206,16 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Max Penalty',
-                            'Death / Life Imprisonment',
+                          child: const _InfoBox(
+                            label: 'Max Penalty',
+                            value: 'Death / Life Imprisonment',
                           ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Compoundable',
-                            'Non-Compoundable',
+                          child: const _InfoBox(
+                            label: 'Compoundable',
+                            value: 'Non-Compoundable',
                           ),
                         ),
                       ],
@@ -296,6 +272,41 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ),
     );
   }
+}
+
+class _SegmentToggle extends StatefulWidget {
+  final ValueChanged<int> onChanged;
+
+  const _SegmentToggle({required this.onChanged});
+
+  @override
+  State<_SegmentToggle> createState() => _SegmentToggleState();
+}
+
+class _SegmentToggleState extends State<_SegmentToggle> {
+  int _selectedSegment = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            _buildSegmentButton(0, 'Comparison'),
+            _buildSegmentButton(1, 'Full Text'),
+            _buildSegmentButton(2, 'Case Law'),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildSegmentButton(int index, String text) {
     bool isSelected = _selectedSegment == index;
@@ -305,6 +316,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
           setState(() {
             _selectedSegment = index;
           });
+          widget.onChanged(index);
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -335,14 +347,23 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ),
     );
   }
+}
 
-  Widget _buildLawHeader(
-    BuildContext context,
-    String label,
-    String code,
-    String subLabel,
-    Color badgeColor,
-  ) {
+class _LawHeader extends StatelessWidget {
+  final String label;
+  final String code;
+  final String subLabel;
+  final Color badgeColor;
+
+  const _LawHeader({
+    required this.label,
+    required this.code,
+    required this.subLabel,
+    required this.badgeColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
@@ -384,16 +405,27 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ],
     );
   }
+}
 
-  Widget _buildLawCard(
-    BuildContext context,
-    String tag,
-    String title,
-    String subtitle,
-    String content, {
-    required bool isOld,
-    bool highlight = false,
-  }) {
+class _LawCard extends StatelessWidget {
+  final String tag;
+  final String title;
+  final String subtitle;
+  final String content;
+  final bool isOld;
+  final bool highlight;
+
+  const _LawCard({
+    required this.tag,
+    required this.title,
+    required this.subtitle,
+    required this.content,
+    required this.isOld,
+    this.highlight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: isOld
@@ -569,8 +601,16 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ),
     );
   }
+}
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+class _InfoBox extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _InfoBox({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
