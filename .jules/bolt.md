@@ -1,0 +1,3 @@
+## 2024-04-05 - Isolating Localized Ephemeral State in Large Flutter Screens
+**Learning:** Managing simple visual state (like tab toggles or segmented control selections) using `setState` at the root of a large `StatefulWidget` in Flutter forces the entire screen—including complex static sub-widgets—to unnecessarily rebuild.
+**Action:** Always extract localized ephemeral UI state and its corresponding interactive widgets into separate, focused `StatefulWidget` classes (and convert the parent to a `StatelessWidget`). Provide the new focused widget with callbacks (e.g., `ValueChanged<int>`) to handle any external state updates without tearing down the entire page.

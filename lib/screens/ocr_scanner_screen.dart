@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class OCRScannerScreen extends StatefulWidget {
+class OCRScannerScreen extends StatelessWidget {
   const OCRScannerScreen({super.key});
-
-  @override
-  State<OCRScannerScreen> createState() => _OCRScannerScreenState();
-}
-
-class _OCRScannerScreenState extends State<OCRScannerScreen> {
-  int _viewMode = 0; // 0: Original, 1: Digitized
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +35,10 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       body: Column(
         children: [
           // View Toggle
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
-              ),
-            ),
+          _ViewModeToggle(
+            onChanged: (index) {
+              // Action handled inside localized toggle
+            },
           ),
           // Document Preview
           Expanded(
@@ -221,18 +202,18 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.translate,
-                    'Translate',
-                    'Hindi • English',
+                  child: const _ActionButton(
+                    icon: Icons.translate,
+                    label: 'Translate',
+                    subLabel: 'Hindi • English',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.ios_share,
-                    'Export',
-                    'PDF • DOCX',
+                  child: const _ActionButton(
+                    icon: Icons.ios_share,
+                    label: 'Export',
+                    subLabel: 'PDF • DOCX',
                   ),
                 ),
               ],
@@ -265,12 +246,51 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       ),
     );
   }
+}
+
+class _ViewModeToggle extends StatefulWidget {
+  final ValueChanged<int> onChanged;
+
+  const _ViewModeToggle({required this.onChanged});
+
+  @override
+  State<_ViewModeToggle> createState() => _ViewModeToggleState();
+}
+
+class _ViewModeToggleState extends State<_ViewModeToggle> {
+  int _viewMode = 0; // 0: Original, 1: Digitized
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Theme.of(context).cardColor.withOpacity(0.95),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            _buildToggleOption(0, 'Original Scan'),
+            _buildToggleOption(1, 'Digitized Text'),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildToggleOption(int index, String text) {
     bool isSelected = _viewMode == index;
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => _viewMode = index),
+        onTap: () {
+          setState(() {
+            _viewMode = index;
+          });
+          widget.onChanged(index);
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
@@ -298,8 +318,21 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       ),
     );
   }
+}
 
-  Widget _buildActionButton(IconData icon, String label, String subLabel) {
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subLabel;
+
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.subLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
