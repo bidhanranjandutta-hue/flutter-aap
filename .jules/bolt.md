@@ -1,0 +1,3 @@
+## 2025-02-12 - Isolate stateful toggles to avoid full-screen rebuilds
+**Learning:** Extracting localized visual components (like segmented controls or view toggles) that depend solely on their own state (`_selectedSegment` or `_viewMode`) into dedicated `StatefulWidget` classes prevents the entire screen (often a large `StatefulWidget`) from unnecessarily rebuilding on every tap.
+**Action:** When a Flutter screen is made stateful just for a small toggle or visual state, decompose it: make the screen a `StatelessWidget` and extract the state into a separate leaf `StatefulWidget`. Omit `super.key` in local private widgets to satisfy linters.
