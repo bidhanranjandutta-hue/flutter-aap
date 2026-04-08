@@ -1,0 +1,3 @@
+## 2024-04-08 - Extracted Helper Methods to const StatelessWidgets
+**Learning:** In Flutter, UI-building helper methods (e.g., `_buildLawCard`, `_buildLawHeader`) execute during every parent widget rebuild. On screens with heavy text cards and headers (like `LawMapScreen`), calling `setState` on simple local state like a segmented control toggle causes expensive full-screen redraws.
+**Action:** Extract these static `_buildHelper` methods into dedicated private `StatelessWidget` classes and instantiate them with the `const` keyword. This allows the Flutter framework to completely skip the build phase for these heavy sub-trees when the parent rebuilds.
