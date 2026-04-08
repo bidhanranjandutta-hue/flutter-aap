@@ -1,0 +1,3 @@
+## 2024-05-18 - Extracting static UI builders into const StatelessWidget
+**Learning:** In Flutter, extracting static `_buildHelper` methods that return widgets into `const StatelessWidget` classes is a safer and highly effective alternative to using `ValueNotifier` when attempting to optimize build times on predominantly static mockups. This allows the framework to skip the build phase entirely for those sub-trees when the parent rebuilds, without the risk of creating architectural state regressions.
+**Action:** Always prefer refactoring UI-building helper methods into `const StatelessWidget` over localized state management if the sub-tree's content does not dynamically change based on interactions.
