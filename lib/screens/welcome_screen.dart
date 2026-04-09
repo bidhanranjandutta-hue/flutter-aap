@@ -39,7 +39,7 @@ class WelcomeScreen extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Theme.of(context).primaryColor.withOpacity(0.1),
+                              Theme.of(context).primaryColor.withValues(alpha: 0.1),
                               Theme.of(context).scaffoldBackgroundColor,
                             ],
                           ),
@@ -62,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
+                                          color: Colors.black.withValues(alpha: 0.1),
                                           blurRadius: 10,
                                           offset: const Offset(0, 4),
                                         ),
@@ -90,7 +90,7 @@ class WelcomeScreen extends StatelessWidget {
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
                                                   Theme.of(context).primaryColor
-                                                      .withOpacity(0.2),
+                                                      .withValues(alpha: 0.2),
                                                 ),
                                           ),
                                         ),
@@ -161,25 +161,22 @@ class WelcomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 24),
                                 // Features
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.analytics,
-                                  'Instant Case Analysis',
-                                  'Automated insights from FIRs & case files.',
+                                const _FeatureItem(
+                                  icon: Icons.analytics,
+                                  title: 'Instant Case Analysis',
+                                  subtitle: 'Automated insights from FIRs & case files.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.document_scanner,
-                                  'Smart OCR Tools',
-                                  'Extract text from handwritten documents instantly.',
+                                const _FeatureItem(
+                                  icon: Icons.document_scanner,
+                                  title: 'Smart OCR Tools',
+                                  subtitle: 'Extract text from handwritten documents instantly.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.gavel,
-                                  'New Law Mapping',
-                                  'BNS • BNSS • BSA',
+                                const _FeatureItem(
+                                  icon: Icons.gavel,
+                                  title: 'New Law Mapping',
+                                  subtitle: 'BNS • BNSS • BSA',
                                 ),
                               ],
                             ),
@@ -213,7 +210,7 @@ class WelcomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Theme.of(
                         context,
-                      ).scaffoldBackgroundColor.withOpacity(0.9),
+                      ).scaffoldBackgroundColor.withValues(alpha: 0.9),
                       border: Border(
                         top: BorderSide(color: Theme.of(context).dividerColor),
                       ),
@@ -272,19 +269,28 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
+}
+
+class _FeatureItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _FeatureItem({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: Theme.of(context).primaryColor, size: 24),
