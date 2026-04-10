@@ -1,0 +1,3 @@
+## 2024-04-10 - Flutter Widget Refactoring Precision
+**Learning:** Extracting helper methods into `const StatelessWidget` classes is a huge performance win, but naive string replacements can easily corrupt the file's brace structure, causing syntax errors.
+**Action:** When using Python scripts to refactor Flutter code by appending new widget classes to the end of a file, locate the end of the existing parent class using `content.rfind('}')` to safely split and append the new code. Replacing method definitions with empty strings and appending the classes avoids unbalanced braces and 'Expected to find }' syntax errors.
