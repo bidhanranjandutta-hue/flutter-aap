@@ -1,0 +1,3 @@
+## 2024-11-20 - [Optimize rebuild performance by extracting helper methods to const StatelessWidget]
+**Learning:** In Flutter, UI-building helper methods (e.g., `_buildLawHeader`) execute during every parent rebuild. To optimize performance, refactor these methods into dedicated private `StatelessWidget` classes and instantiate them with the `const` keyword. This allows the Flutter framework to completely skip the build phase for these sub-trees when the parent rebuilds.
+**Action:** When working on UI code with performance issues, look for helper methods returning widgets and refactor them into `const StatelessWidget` classes. Update all instantiation call sites to include the `const` keyword.
