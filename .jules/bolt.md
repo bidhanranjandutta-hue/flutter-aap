@@ -1,0 +1,3 @@
+## 2026-04-17 - Flutter UI Performance Optimization
+**Learning:** In Flutter, UI-building helper methods (e.g., `_buildWidget()`) execute during every parent rebuild. Refactoring these methods into dedicated private `StatelessWidget` classes and instantiating them with the `const` keyword allows the Flutter framework to completely skip the build phase for these sub-trees when the parent rebuilds. This is crucial for avoiding unnecessary re-renders in static mockups.
+**Action:** Always prefer creating `const StatelessWidget` classes over UI building helper methods, and ensure the instantiation includes the `const` keyword.
