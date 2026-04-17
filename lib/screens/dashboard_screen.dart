@@ -5,6 +5,7 @@ class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
+  // ⚡ Bolt: Using .withValues(alpha:) instead of deprecated .withOpacity for better performance and precision.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -19,7 +20,7 @@ class DashboardScreen extends StatelessWidget {
               bottom: 16,
             ),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor.withOpacity(0.9),
+              color: Theme.of(context).cardColor.withValues(alpha: 0.9),
               border: Border(
                 bottom: BorderSide(color: Theme.of(context).dividerColor),
               ),
@@ -145,7 +146,9 @@ class DashboardScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.primary.withOpacity(0.3),
+                                  color: AppTheme.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -156,7 +159,7 @@ class DashboardScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Colors.white.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Icon(
@@ -369,7 +372,9 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: Colors.green[50],
-                    border: Border.all(color: Colors.green.withOpacity(0.2)),
+                    border: Border.all(
+                      color: Colors.green.withValues(alpha: 0.2),
+                    ),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
@@ -407,7 +412,7 @@ class DashboardScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: iconColor, size: 24),
