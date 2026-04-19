@@ -1,0 +1,3 @@
+## 2024-04-19 - ValueNotifier extraction requires wrapping ALL dependent widget subtrees
+**Learning:** When extracting primitive state (`_viewMode`, `_selectedSegment`) into a `ValueNotifier` to optimize rebuilds in Flutter, wrapping only the toggle control buttons in `ValueListenableBuilder` is insufficient if the state variable also dictates the main content area (e.g. conditional rendering based on selected tab). Failing to wrap the dependent main content will cause it to freeze because it no longer rebuilds when the state changes.
+**Action:** When replacing `setState` with `ValueNotifier`, ensure that *all* widget branches that read the state variable are either wrapped in the same `ValueListenableBuilder` or each have their own, so they react to updates correctly.
