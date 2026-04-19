@@ -9,7 +9,16 @@ class OCRScannerScreen extends StatefulWidget {
 }
 
 class _OCRScannerScreenState extends State<OCRScannerScreen> {
-  int _viewMode = 0; // 0: Original, 1: Digitized
+  // BOLT OPTIMIZATION: Extracted ephemeral UI state to ValueNotifier to avoid full screen rebuilds
+  final ValueNotifier<int> _viewMode = ValueNotifier<int>(
+    0,
+  ); // 0: Original, 1: Digitized
+
+  @override
+  void dispose() {
+    _viewMode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +60,16 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Row(
-                children: [
-                  _buildToggleOption(0, 'Original Scan'),
-                  _buildToggleOption(1, 'Digitized Text'),
-                ],
+              child: ValueListenableBuilder<int>(
+                valueListenable: _viewMode,
+                builder: (context, viewModeValue, child) {
+                  return Row(
+                    children: [
+                      _buildToggleOption(0, 'Original Scan', viewModeValue),
+                      _buildToggleOption(1, 'Digitized Text', viewModeValue),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -221,18 +235,18 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.translate,
-                    'Translate',
-                    'Hindi • English',
+                  child: const _ActionButton(
+                    icon: Icons.translate,
+                    label: 'Translate',
+                    subLabel: 'Hindi • English',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.ios_share,
-                    'Export',
-                    'PDF • DOCX',
+                  child: const _ActionButton(
+                    icon: Icons.ios_share,
+                    label: 'Export',
+                    subLabel: 'PDF • DOCX',
                   ),
                 ),
               ],
@@ -266,11 +280,11 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildToggleOption(int index, String text) {
-    bool isSelected = _viewMode == index;
+  Widget _buildToggleOption(int index, String text, int currentViewMode) {
+    bool isSelected = currentViewMode == index;
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => _viewMode = index),
+        onTap: () => _viewMode.value = index,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
@@ -298,8 +312,21 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
       ),
     );
   }
+}
 
-  Widget _buildActionButton(IconData icon, String label, String subLabel) {
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subLabel;
+
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.subLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
