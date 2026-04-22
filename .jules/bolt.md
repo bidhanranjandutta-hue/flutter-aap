@@ -1,0 +1,3 @@
+## 2024-05-24 - Prioritizing const StatelessWidget over ValueNotifier for static mock UIs
+**Learning:** When attempting to optimize state-driven widget rebuilds (e.g., segmented controls) in a predominantly static mock UI, attempting to isolate the state using `ValueNotifier` and `ValueListenableBuilder` can introduce unnecessary complexity and risk breaking parent layouts or control flow if the state needs to be lifted later.
+**Action:** Prioritize refactoring static `_buildHelper` methods (which execute during every parent rebuild) into dedicated `const StatelessWidget` classes. This reliably allows the Flutter framework to skip the build phase for these sub-trees, safely improving performance without structural risks.
