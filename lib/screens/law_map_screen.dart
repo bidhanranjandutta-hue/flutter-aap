@@ -98,8 +98,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildLawHeader(
-                                context,
+                              const _LawHeader(
                                 'Old Law',
                                 'IPC 302',
                                 '1860 Code',
@@ -110,8 +109,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                                 color: Colors.white,
                                 size: 32,
                               ),
-                              _buildLawHeader(
-                                context,
+                              const _LawHeader(
                                 'New Law',
                                 'BNS 103',
                                 '2023 Sanhita',
@@ -199,8 +197,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        _buildLawCard(
-                          context,
+                        const _LawCard(
                           'IPC',
                           'Section 302',
                           'Indian Penal Code',
@@ -210,8 +207,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         const SizedBox(height: 8),
                         const Icon(Icons.arrow_downward, color: Colors.grey),
                         const SizedBox(height: 8),
-                        _buildLawCard(
-                          context,
+                        const _LawCard(
                           'BNS',
                           'Section 103',
                           'Bharatiya Nyaya Sanhita',
@@ -228,16 +224,14 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
+                          child: const _InfoBox(
                             'Max Penalty',
                             'Death / Life Imprisonment',
                           ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
+                          child: const _InfoBox(
                             'Compoundable',
                             'Non-Compoundable',
                           ),
@@ -336,13 +330,33 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildLawHeader(
-    BuildContext context,
-    String label,
-    String code,
-    String subLabel,
-    Color badgeColor,
-  ) {
+
+
+
+
+
+}
+
+
+// ⚡ BOLT OPTIMIZATION: Refactored UI builder methods into const StatelessWidget classes.
+// This allows the Flutter framework to completely skip the build phase for these sub-trees
+// when the parent rebuilds (e.g. when _selectedSegment changes), improving performance.
+
+class _LawHeader extends StatelessWidget {
+  final String label;
+  final String code;
+  final String subLabel;
+  final Color badgeColor;
+
+  const _LawHeader(
+    this.label,
+    this.code,
+    this.subLabel,
+    this.badgeColor,
+  );
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
@@ -384,16 +398,27 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ],
     );
   }
+}
 
-  Widget _buildLawCard(
-    BuildContext context,
-    String tag,
-    String title,
-    String subtitle,
-    String content, {
-    required bool isOld,
-    bool highlight = false,
-  }) {
+class _LawCard extends StatelessWidget {
+  final String tag;
+  final String title;
+  final String subtitle;
+  final String content;
+  final bool isOld;
+  final bool highlight;
+
+  const _LawCard(
+    this.tag,
+    this.title,
+    this.subtitle,
+    this.content, {
+    required this.isOld,
+    this.highlight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: isOld
@@ -569,8 +594,16 @@ class _LawMapScreenState extends State<LawMapScreen> {
       ),
     );
   }
+}
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+class _InfoBox extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _InfoBox(this.label, this.value);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
