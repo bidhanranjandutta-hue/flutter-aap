@@ -1,0 +1,3 @@
+## 2024-05-24 - Extracting UI helper methods to const StatelessWidget in Flutter
+**Learning:** UI-building helper methods (e.g., `_buildHelper()`) execute during every parent rebuild. By refactoring these into dedicated `const StatelessWidget` classes, Flutter completely skips their build phase when the parent rebuilds. The `const` keyword at the call site is strictly required for this performance benefit.
+**Action:** When encountering static UI built by helper methods, extract them to `const StatelessWidget` classes rather than attempting complex local state isolation, as this safely optimizes build times.
