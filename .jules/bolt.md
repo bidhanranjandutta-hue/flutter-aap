@@ -1,0 +1,6 @@
+## 2024-05-24 - [ValueNotifier for localized UI State]
+**Learning:** In Flutter, heavy static screens with segmented controls (like `LawMapScreen` and `OcrScannerScreen`) often unnecessarily rebuild the entire widget tree on every toggle because `setState` is used at the top level.
+**Action:** Isolate ephemeral toggle state using `ValueNotifier` and wrap only the toggle buttons in `ValueListenableBuilder`. This drastically reduces the rebuild subtree, improving rendering performance during simple UI interactions.
+## 2024-05-24 - [Const StatelessWidget Optimization]
+**Learning:** In Flutter, UI-building helper methods (e.g., `_buildWidget()`) execute during every parent rebuild. To optimize performance, refactor these methods into dedicated private `StatelessWidget` classes and instantiate them with the `const` keyword. This allows the Flutter framework to completely skip the build phase for these sub-trees when the parent rebuilds. Extracting to a widget does not inherently skip rebuilds; the `const` instantiation at the call site is strictly required to achieve the performance benefit.
+**Action:** Always prefer `const StatelessWidget` classes over helper methods for static sub-trees. Ensure parameters like `Color` and `IconData` are properly typed to support `const` instantiation.

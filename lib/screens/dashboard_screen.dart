@@ -249,32 +249,28 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const _FileItem(
                           'FIR_2023_0912_Theft.pdf',
                           'Edited 10m ago • Case #402',
                           Icons.picture_as_pdf,
                           Colors.red,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const _FileItem(
                           'Witness_Statement_Rao.docx',
                           'Edited 1h ago • Case #398',
                           Icons.description,
                           Colors.blue,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const _FileItem(
                           'Evidence_Photos_Site_B',
                           'Created yesterday • 12 items',
                           Icons.folder,
                           Colors.amber,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const _FileItem(
                           'BNS_Reference_Draft_v2.pdf',
                           'Edited 2 days ago • Personal',
                           Icons.picture_as_pdf,
@@ -388,13 +384,20 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFileItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-  ) {
+}
+
+class _FileItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+
+  // ⚡ Bolt Performance Optimization:
+  // Extracted static helper method into a const StatelessWidget to skip rebuilds.
+  const _FileItem(this.title, this.subtitle, this.icon, this.iconColor);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
