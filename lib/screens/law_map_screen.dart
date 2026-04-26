@@ -227,19 +227,17 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Max Penalty',
-                            'Death / Life Imprisonment',
+                        const Expanded(
+                          child: _InfoBox(
+                            label: 'Max Penalty',
+                            value: 'Death / Life Imprisonment',
                           ),
                         ),
                         const SizedBox(width: 16),
-                        Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Compoundable',
-                            'Non-Compoundable',
+                        const Expanded(
+                          child: _InfoBox(
+                            label: 'Compoundable',
+                            value: 'Non-Compoundable',
                           ),
                         ),
                       ],
@@ -570,7 +568,20 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+
+}
+
+// ⚡ Bolt Optimization: Extracted `_buildInfoBox` into a `const StatelessWidget`.
+// This prevents the info boxes from needlessly rebuilding during state changes (e.g. segment toggles),
+// reducing widget rebuild overhead.
+class _InfoBox extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _InfoBox({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
