@@ -95,27 +95,25 @@ class _LawMapScreenState extends State<LawMapScreen> {
                       ),
                       child: Column(
                         children: [
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildLawHeader(
-                                context,
-                                'Old Law',
-                                'IPC 302',
-                                '1860 Code',
-                                Colors.white,
+                              _LawHeaderWidget(
+                                label: 'Old Law',
+                                code: 'IPC 302',
+                                subLabel: '1860 Code',
+                                badgeColor: Colors.white,
                               ),
-                              const Icon(
+                              Icon(
                                 Icons.arrow_forward,
                                 color: Colors.white,
                                 size: 32,
                               ),
-                              _buildLawHeader(
-                                context,
-                                'New Law',
-                                'BNS 103',
-                                '2023 Sanhita',
-                                Colors.greenAccent,
+                              _LawHeaderWidget(
+                                label: 'New Law',
+                                code: 'BNS 103',
+                                subLabel: '2023 Sanhita',
+                                badgeColor: Colors.greenAccent,
                               ),
                             ],
                           ),
@@ -223,23 +221,21 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     ),
                   ),
                   // Additional Info
-                  Padding(
-                    padding: const EdgeInsets.all(16),
+                  const Padding(
+                    padding: EdgeInsets.all(16),
                     child: Row(
                       children: [
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Max Penalty',
-                            'Death / Life Imprisonment',
+                          child: _InfoBoxWidget(
+                            label: 'Max Penalty',
+                            value: 'Death / Life Imprisonment',
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16),
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Compoundable',
-                            'Non-Compoundable',
+                          child: _InfoBoxWidget(
+                            label: 'Compoundable',
+                            value: 'Non-Compoundable',
                           ),
                         ),
                       ],
@@ -336,54 +332,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildLawHeader(
-    BuildContext context,
-    String label,
-    String code,
-    String subLabel,
-    Color badgeColor,
-  ) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          code,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
-            border: badgeColor == Colors.greenAccent
-                ? Border.all(color: Colors.greenAccent.withOpacity(0.5))
-                : null,
-          ),
-          child: Text(
-            subLabel,
-            style: TextStyle(
-              color: badgeColor,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+
 
   Widget _buildLawCard(
     BuildContext context,
@@ -570,7 +519,81 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+
+}
+
+// Performance Optimization: Refactored static _buildHelper methods into const StatelessWidget classes
+// This allows the Flutter framework to completely skip the build phase for these sub-trees
+// when the parent (LawMapScreen) rebuilds on segment selection.
+class _LawHeaderWidget extends StatelessWidget {
+  final String label;
+  final String code;
+  final String subLabel;
+  final Color badgeColor;
+
+  const _LawHeaderWidget({
+    required this.label,
+    required this.code,
+    required this.subLabel,
+    required this.badgeColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          code,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+            border: badgeColor == Colors.greenAccent
+                ? Border.all(color: Colors.greenAccent.withOpacity(0.5))
+                : null,
+          ),
+          child: Text(
+            subLabel,
+            style: TextStyle(
+              color: badgeColor,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _InfoBoxWidget extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _InfoBoxWidget({
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
