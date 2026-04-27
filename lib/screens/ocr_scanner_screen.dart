@@ -44,7 +44,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
           // View Toggle
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: Theme.of(context).cardColor.withOpacity(0.95),
+            color: Theme.of(context).cardColor.withValues(alpha: 0.95),
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
@@ -69,7 +69,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 border: Border.all(color: Theme.of(context).dividerColor),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 4,
                   ),
                 ],
@@ -97,7 +97,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 120,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.2),
+                          color: AppTheme.primary.withValues(alpha: 0.2),
                           border: Border.all(color: AppTheme.primary),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -110,7 +110,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                         width: 150,
                         height: 24,
                         decoration: BoxDecoration(
-                          color: Colors.yellow.withOpacity(0.2),
+                          color: Colors.yellow.withValues(alpha: 0.2),
                           border: Border.all(color: Colors.yellow),
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -221,18 +221,18 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.translate,
-                    'Translate',
-                    'Hindi • English',
+                  child: const _ActionButton(
+                    icon: Icons.translate,
+                    label: 'Translate',
+                    subLabel: 'Hindi • English',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildActionButton(
-                    Icons.ios_share,
-                    'Export',
-                    'PDF • DOCX',
+                  child: const _ActionButton(
+                    icon: Icons.ios_share,
+                    label: 'Export',
+                    subLabel: 'PDF • DOCX',
                   ),
                 ),
               ],
@@ -279,7 +279,7 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 2,
                     ),
                   ]
@@ -299,7 +299,22 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label, String subLabel) {
+
+}
+
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subLabel;
+
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.subLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
