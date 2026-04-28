@@ -1,0 +1,3 @@
+## 2024-10-24 - Flutter UI Helper Method Rebuild Bottleneck
+**Learning:** This codebase heavily relies on private `_buildHelper(BuildContext context, ...)` methods inside State classes to construct static UI blocks. This anti-pattern causes these static sub-trees to be rebuilt unnecessarily on every parent state change (e.g., toggling a segmented control). Extracting them into standalone widgets is not enough; they must be instantiated with the `const` keyword to actually skip the build phase.
+**Action:** Refactor static `_buildHelper` methods into private `const StatelessWidget` classes and explicitly drop the `context` parameter from the constructor to allow the framework to cache and skip rebuilding these sub-trees.
