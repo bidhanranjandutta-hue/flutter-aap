@@ -1,0 +1,3 @@
+## 2023-10-25 - Const StatelessWidget Optimization for UI Helpers
+**Learning:** In Flutter, static UI-building helper methods (e.g., `_buildLawCard()`) execute during every parent rebuild, which occurs frequently when dealing with simple state like `_selectedSegment`. Refactoring these helpers into dedicated private `StatelessWidget` classes and instantiating them with the `const` keyword allows the Flutter framework to completely skip their build phase, optimizing rebuild performance on predominantly static screens without complex state management.
+**Action:** When optimizing primarily static screens, prioritize refactoring static `_buildHelper` methods into `const StatelessWidget` classes over more complex state management to safely boost rebuild performance.
