@@ -1,0 +1,3 @@
+## 2025-02-24 - Extracted Const StatelessWidgets
+**Learning:** In Flutter, UI-building helper methods execute during every parent rebuild. Refactoring these methods into dedicated private StatelessWidget classes and instantiating them with the const keyword allows the Flutter framework to completely skip the build phase for these sub-trees when the parent rebuilds. Extracting to a widget does not inherently skip rebuilds; the const instantiation at the call site is strictly required to achieve the performance benefit.
+**Action:** Always refactor static UI helper methods into const StatelessWidget classes rather than keeping them as local methods in stateful widgets.
