@@ -87,7 +87,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primary.withOpacity(0.3),
+                            color: AppTheme.primary.withValues(alpha: 0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -228,19 +228,11 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Max Penalty',
-                            'Death / Life Imprisonment',
-                          ),
+                          child: const InfoBox(label: 'Max Penalty', value: 'Death / Life Imprisonment'),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
-                            'Compoundable',
-                            'Non-Compoundable',
-                          ),
+                          child: const InfoBox(label: 'Compoundable', value: 'Non-Compoundable'),
                         ),
                       ],
                     ),
@@ -316,7 +308,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
                     ),
                   ]
@@ -366,10 +358,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12),
             border: badgeColor == Colors.greenAccent
-                ? Border.all(color: Colors.greenAccent.withOpacity(0.5))
+                ? Border.all(color: Colors.greenAccent.withValues(alpha: 0.5))
                 : null,
           ),
           child: Text(
@@ -398,12 +390,12 @@ class _LawMapScreenState extends State<LawMapScreen> {
       decoration: BoxDecoration(
         color: isOld
             ? Theme.of(context).cardColor
-            : AppTheme.primary.withOpacity(0.05),
+            : AppTheme.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isOld
               ? Theme.of(context).dividerColor
-              : AppTheme.primary.withOpacity(0.2),
+              : AppTheme.primary.withValues(alpha: 0.2),
         ),
       ),
       padding: const EdgeInsets.all(16),
@@ -421,7 +413,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     decoration: BoxDecoration(
                       color: isOld
                           ? Colors.grey[200]
-                          : AppTheme.primary.withOpacity(0.1),
+                          : AppTheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.center,
@@ -508,7 +500,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                           text:
                               "When a group of five or more persons acting in concert commits murder on the ground of race, caste or community, sex, place of birth, language, personal belief or any other similar ground, each member of such group shall be punished with death or with imprisonment for life, and shall also be liable to fine.",
                           style: TextStyle(
-                            backgroundColor: Colors.green.withOpacity(0.1),
+                            backgroundColor: Colors.green.withValues(alpha: 0.1),
                             color: Colors.green[800],
                           ),
                         ),
@@ -550,7 +542,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.primary.withOpacity(0.1),
+                    color: AppTheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const Text(
@@ -570,7 +562,21 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+}
+
+// Performance Optimization: Extracted to a const StatelessWidget to prevent unnecessary rebuilds during parent state changes.
+class InfoBox extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const InfoBox({
+    super.key,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
