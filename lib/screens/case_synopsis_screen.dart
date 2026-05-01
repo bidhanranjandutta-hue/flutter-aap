@@ -172,7 +172,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                         padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
-                            _buildSummaryItem(
+                            const _SummaryItem(
                               Icons.gavel,
                               'Alleged Offence',
                               'Theft in a dwelling house involving the breaking of a lock during night hours.',
@@ -180,7 +180,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                             const SizedBox(height: 16),
                             const Divider(),
                             const SizedBox(height: 16),
-                            _buildSummaryItem(
+                            const _SummaryItem(
                               Icons.schedule,
                               'Time of Occurrence',
                               'Between 02:00 AM and 04:00 AM on 14th Oct 2023.',
@@ -207,8 +207,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   ],
                 ),
                 const SizedBox(height: 16),
-                _buildLegalCard(
-                  context,
+                const _LegalCard(
                   'BNS 2023',
                   'Section 305',
                   'Theft in a dwelling house, etc.',
@@ -216,8 +215,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   AppTheme.primary,
                 ),
                 const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
+                const _LegalCard(
                   'BNS 2023',
                   'Section 331(4)',
                   'Lurking house-trespass or house-breaking by night.',
@@ -225,8 +223,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   Colors.purple,
                 ),
                 const SizedBox(height: 12),
-                _buildLegalCard(
-                  context,
+                const _LegalCard(
                   'Constitution',
                   'Article 21',
                   'Protection of life and personal liberty.',
@@ -281,8 +278,21 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
       ),
     );
   }
+}
 
-  Widget _buildSummaryItem(IconData icon, String title, String content) {
+// ⚡ Bolt Performance Optimization:
+// Extracted `_buildSummaryItem` into a `const StatelessWidget`.
+// This allows the Flutter framework to skip rebuilding this sub-tree
+// when the parent rebuilds, improving rendering performance.
+class _SummaryItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String content;
+
+  const _SummaryItem(this.icon, this.title, this.content, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -314,15 +324,29 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
       ],
     );
   }
+}
 
-  Widget _buildLegalCard(
-    BuildContext context,
-    String tag,
-    String title,
-    String subtitle,
-    String? mapping,
-    Color color,
-  ) {
+// ⚡ Bolt Performance Optimization:
+// Extracted `_buildLegalCard` into a `const StatelessWidget` to enable widget caching.
+// This reduces unnecessary CPU cycles and object allocations during parent rebuilds.
+class _LegalCard extends StatelessWidget {
+  final String tag;
+  final String title;
+  final String subtitle;
+  final String? mapping;
+  final Color color;
+
+  const _LegalCard(
+    this.tag,
+    this.title,
+    this.subtitle,
+    this.mapping,
+    this.color, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -345,7 +369,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -381,7 +405,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.05),
+                color: Colors.grey.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Row(
@@ -393,7 +417,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    mapping,
+                    mapping!,
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
