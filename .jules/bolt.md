@@ -1,0 +1,3 @@
+## 2024-05-01 - Avoid Inline Controller Instantiation in Flutter build()
+**Learning:** Instantiating disposable controllers like `TextEditingController` directly inside a `StatefulWidget`'s `build` method is a severe anti-pattern. It causes the controller to be recreated on every rebuild, leading to state loss (e.g., losing text input) and significant memory leaks because the old controller is never properly disposed.
+**Action:** Always extract such controllers to class-level properties. Initialize them within `initState()` and explicitly clean them up by calling `dispose()` in the state's `dispose()` lifecycle method to ensure proper memory management and state retention.

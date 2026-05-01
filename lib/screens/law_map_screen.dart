@@ -9,6 +9,22 @@ class LawMapScreen extends StatefulWidget {
 }
 
 class _LawMapScreenState extends State<LawMapScreen> {
+  // ⚡ Bolt Optimization: Extracted TextEditingController to class level.
+  // Instantiating in build() causes memory leaks and state loss on rebuilds.
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(text: "IPC 302");
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   int _selectedSegment = 0;
 
   @override
@@ -46,7 +62,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              controller: TextEditingController(text: "IPC 302"),
+              controller: _searchController,
             ),
           ),
           // Segmented Control
