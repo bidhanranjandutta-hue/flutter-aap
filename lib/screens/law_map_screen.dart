@@ -228,16 +228,14 @@ class _LawMapScreenState extends State<LawMapScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
+                          child: const _InfoBoxWidget(
                             'Max Penalty',
                             'Death / Life Imprisonment',
                           ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _buildInfoBox(
-                            context,
+                          child: const _InfoBoxWidget(
                             'Compoundable',
                             'Non-Compoundable',
                           ),
@@ -570,7 +568,20 @@ class _LawMapScreenState extends State<LawMapScreen> {
     );
   }
 
-  Widget _buildInfoBox(BuildContext context, String label, String value) {
+}
+
+class _InfoBoxWidget extends StatelessWidget {
+  final String label;
+  final String value;
+
+  // ⚡ Bolt Performance Optimization:
+  // Refactored helper method into a const StatelessWidget to prevent unnecessary rebuilds.
+  // The const constructor allows Flutter to completely skip rebuilding this subtree
+  // when the parent widget rebuilds.
+  const _InfoBoxWidget(this.label, this.value);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
