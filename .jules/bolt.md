@@ -1,0 +1,4 @@
+
+## 2025-02-12 - Extracted UI Builder Methods into const StatelessWidgets
+**Learning:** In Flutter, using private UI builder methods (e.g., `_buildFeatureItem`) that return standard Widgets is a known performance anti-pattern. Because they aren't instantiated with `const` and simply execute as function calls during the parent's `build` phase, they force the Flutter framework to rebuild the entire sub-tree during any parent state change or animation, wasting CPU cycles and causing unnecessary re-renders.
+**Action:** Always refactor complex or frequently rendered UI builder methods into dedicated private `StatelessWidget` classes. Ensure these classes have `const` constructors and that all call sites are instantiated with the `const` keyword. This allows Flutter to short-circuit the build process and skip rebuilding the sub-tree entirely when inputs haven't changed.
