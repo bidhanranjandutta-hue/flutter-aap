@@ -199,8 +199,7 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             // Case Synopsis
                             Expanded(
-                              child: _buildToolCard(
-                                context,
+                              child: ToolCardWidget(
                                 'Case Synopsis',
                                 'Generate summary',
                                 Icons.summarize,
@@ -212,8 +211,7 @@ class DashboardScreen extends StatelessWidget {
                             const SizedBox(width: 12),
                             // Law Map
                             Expanded(
-                              child: _buildToolCard(
-                                context,
+                              child: ToolCardWidget(
                                 'Law Map',
                                 'IPC ⇄ BNS',
                                 Icons.compare_arrows,
@@ -249,32 +247,28 @@ class DashboardScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'FIR_2023_0912_Theft.pdf',
                           'Edited 10m ago • Case #402',
                           Icons.picture_as_pdf,
                           Colors.red,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'Witness_Statement_Rao.docx',
                           'Edited 1h ago • Case #398',
                           Icons.description,
                           Colors.blue,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'Evidence_Photos_Site_B',
                           'Created yesterday • 12 items',
                           Icons.folder,
                           Colors.amber,
                         ),
                         const SizedBox(height: 12),
-                        _buildFileItem(
-                          context,
+                        const FileItemCard(
                           'BNS_Reference_Draft_v2.pdf',
                           'Edited 2 days ago • Personal',
                           Icons.picture_as_pdf,
@@ -313,17 +307,102 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildToolCard(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-    Color iconBgColor,
-    VoidCallback onTap, {
-    String? badge,
-  }) {
+/// ⚡ Bolt Performance Optimization:
+/// Extracted `_buildFileItem` helper method into a dedicated `StatelessWidget`.
+///
+/// Impact: Eliminates unnecessary widget rebuilds during parent state changes by
+/// allowing Flutter to cache this widget tree using `const` constructors.
+class FileItemCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+
+  const FileItemCard(
+    this.title,
+    this.subtitle,
+    this.icon,
+    this.iconColor, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Theme.of(context).dividerColor),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: iconColor, size: 24),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.grey),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// ⚡ Bolt Performance Optimization:
+/// Extracted `_buildToolCard` helper method into a dedicated `StatelessWidget`.
+///
+/// Impact: Prevents this sub-tree from rebuilding every time the parent DashboardScreen
+/// rebuilds, allowing the framework to optimize rendering.
+class ToolCardWidget extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
+  final VoidCallback onTap;
+  final String? badge;
+
+  const ToolCardWidget(
+    this.title,
+    this.subtitle,
+    this.icon,
+    this.iconColor,
+    this.iconBgColor,
+    this.onTap, {
+    this.badge,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -373,7 +452,7 @@ class DashboardScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    badge,
+                    badge!,
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
@@ -384,58 +463,6 @@ class DashboardScreen extends StatelessWidget {
               ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildFileItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color iconColor,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Theme.of(context).dividerColor),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: iconColor, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.grey),
-            onPressed: () {},
-          ),
-        ],
       ),
     );
   }
