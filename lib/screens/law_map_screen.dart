@@ -10,6 +10,23 @@ class LawMapScreen extends StatefulWidget {
 
 class _LawMapScreenState extends State<LawMapScreen> {
   int _selectedSegment = 0;
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    // ⚡ Bolt Optimization: Moved TextEditingController to initState.
+    // Instantiating disposable controllers directly in the `build` method is an anti-pattern.
+    // It causes a memory leak by creating a new controller on every rebuild without disposing
+    // of the old ones, and it loses the current state.
+    _searchController = TextEditingController(text: "IPC 302");
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +63,7 @@ class _LawMapScreenState extends State<LawMapScreen> {
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              controller: TextEditingController(text: "IPC 302"),
+              controller: _searchController,
             ),
           ),
           // Segmented Control
