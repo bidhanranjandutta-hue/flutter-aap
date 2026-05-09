@@ -1,0 +1,3 @@
+## 2024-05-24 - Flutter Widget Caching via const constructors
+**Learning:** In Flutter, extracting helper methods (like `_buildToolCard`) into `StatelessWidget`s is not enough to skip build phases. The call site MUST use the `const` keyword. Furthermore, index lookups on MaterialColors (e.g., `Colors.purple[50]`) are NOT constant expressions, preventing the entire widget from being instantiated as `const`.
+**Action:** Always replace non-constant runtime lookups with their literal equivalents (e.g., `Color(0xFFF3E5F5)`) when extracting UI components to ensure they can be fully cached by Flutter as `const` widgets, completely skipping their build phase during parent rebuilds.
