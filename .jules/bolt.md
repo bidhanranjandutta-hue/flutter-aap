@@ -1,0 +1,3 @@
+## 2024-05-14 - Optimize rendering of UI subcomponents
+**Learning:** In Flutter, UI helper methods (e.g., `_buildWidget`) execute during every parent rebuild, consuming unnecessary CPU cycles. Furthermore, using map lookups for `MaterialColor` properties like `Colors.orange[50]!` prevents them from being treated as compile-time constants.
+**Action:** Always extract static or mostly static UI sub-trees into dedicated `StatelessWidget` classes and instantiate them using `const`. Resolve dynamic or non-const color lookups into explicit literal hex values (e.g., `Color(0xFFFFF3E0)`) to allow the new widget to fully leverage `const` instantiations, skipping unnecessary rebuilds.
