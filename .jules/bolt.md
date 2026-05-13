@@ -1,0 +1,3 @@
+## 2024-05-13 - Prevent Memory Leaks from In-Build Controllers
+**Learning:** In Flutter, instantiating disposable controllers (like `TextEditingController`) directly inside a `StatefulWidget`'s `build` method is a performance anti-pattern. It forces the framework to allocate a new object on every UI rebuild, which not only degrades performance via garbage collection overhead but also causes state loss (e.g., losing typed text or cursor position) and memory leaks if the previous instances aren't disposed properly.
+**Action:** Always initialize disposable controllers in `initState` and clean them up in `dispose` to ensure they persist across rebuilds and prevent memory leaks.
