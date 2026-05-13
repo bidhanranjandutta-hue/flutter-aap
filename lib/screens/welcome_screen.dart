@@ -39,7 +39,7 @@ class WelcomeScreen extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Theme.of(context).primaryColor.withOpacity(0.1),
+                              Theme.of(context).primaryColor.withValues(alpha: 0.1),
                               Theme.of(context).scaffoldBackgroundColor,
                             ],
                           ),
@@ -62,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
+                                          color: Colors.black.withValues(alpha: 0.1),
                                           blurRadius: 10,
                                           offset: const Offset(0, 4),
                                         ),
@@ -90,7 +90,7 @@ class WelcomeScreen extends StatelessWidget {
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
                                                   Theme.of(context).primaryColor
-                                                      .withOpacity(0.2),
+                                                      .withValues(alpha: 0.2),
                                                 ),
                                           ),
                                         ),
@@ -213,7 +213,7 @@ class WelcomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Theme.of(
                         context,
-                      ).scaffoldBackgroundColor.withOpacity(0.9),
+                      ).scaffoldBackgroundColor.withValues(alpha: 0.9),
                       border: Border(
                         top: BorderSide(color: Theme.of(context).dividerColor),
                       ),
@@ -284,7 +284,7 @@ class WelcomeScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: Theme.of(context).primaryColor, size: 24),
