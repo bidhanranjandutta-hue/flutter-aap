@@ -161,25 +161,22 @@ class WelcomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 24),
                                 // Features
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.analytics,
-                                  'Instant Case Analysis',
-                                  'Automated insights from FIRs & case files.',
+                                const FeatureItemWidget(
+                                  icon: Icons.analytics,
+                                  title: 'Instant Case Analysis',
+                                  subtitle: 'Automated insights from FIRs & case files.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.document_scanner,
-                                  'Smart OCR Tools',
-                                  'Extract text from handwritten documents instantly.',
+                                const FeatureItemWidget(
+                                  icon: Icons.document_scanner,
+                                  title: 'Smart OCR Tools',
+                                  subtitle: 'Extract text from handwritten documents instantly.',
                                 ),
                                 const SizedBox(height: 16),
-                                _buildFeatureItem(
-                                  context,
-                                  Icons.gavel,
-                                  'New Law Mapping',
-                                  'BNS • BNSS • BSA',
+                                const FeatureItemWidget(
+                                  icon: Icons.gavel,
+                                  title: 'New Law Mapping',
+                                  subtitle: 'BNS • BNSS • BSA',
                                 ),
                               ],
                             ),
@@ -272,12 +269,23 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-  ) {
+}
+
+
+class FeatureItemWidget extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const FeatureItemWidget({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -296,9 +304,10 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 2),
               Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
