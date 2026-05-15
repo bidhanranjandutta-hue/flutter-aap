@@ -1,0 +1,3 @@
+## 2024-05-15 - Unmanaged TextEditingController in Build Method
+**Learning:** Found a `TextEditingController` being instantiated directly within a `StatelessWidget` or `StatefulWidget`'s `build` method in `lib/screens/law_map_screen.dart` (`controller: TextEditingController(text: "IPC 302")`). This is a common performance anti-pattern in Flutter because it creates a new controller instance on every rebuild, leading to memory leaks and loss of user input state.
+**Action:** Extract the `TextEditingController` to a `StatefulWidget`'s state, initialize it in `initState`, and properly dispose of it in `dispose`.
