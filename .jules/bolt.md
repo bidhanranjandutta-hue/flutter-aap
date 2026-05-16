@@ -1,0 +1,3 @@
+## 2024-05-16 - Memory Leak in TextEditingController
+**Learning:** Initializing disposable controllers like `TextEditingController` directly within a stateless or `build` method (e.g. `controller: TextEditingController(text: "IPC 302")`) instead of defining them in `initState` and cleaning them in `dispose` is an anti-pattern that leads to memory leaks and state loss upon UI rebuilds. This codebase's LawMapScreen contains this issue.
+**Action:** When finding `TextEditingController` instantiation inline inside `build()`, extract it as an instance variable, initialize it in `initState`, and release it in `dispose`.
