@@ -1,0 +1,3 @@
+## 2024-05-16 - Flutter Stateful Widget Performance Anti-Pattern
+**Learning:** Initializing disposable controllers (like `TextEditingController`) directly within a `StatefulWidget`'s `build` method is a critical performance anti-pattern. Because the `build` method is called every time the widget rebuilds (e.g., when local state changes), this causes new controller instances to be created repeatedly without disposing of the previous ones, leading directly to memory leaks and loss of state (like user text input).
+**Action:** Always instantiate disposable objects inside the `initState` method and explicitly call their `dispose` method within the widget's `dispose` lifecycle hook. Ensure they are declared as `late final` in the state class.
