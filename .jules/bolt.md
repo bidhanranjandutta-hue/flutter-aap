@@ -1,0 +1,3 @@
+## 2024-05-17 - [Direct Object Instantiation in build]
+**Learning:** Instantiating disposable controllers (like `TextEditingController`) directly inside a `StatefulWidget`'s `build` method is a performance bottleneck and an anti-pattern. It causes a new controller to be instantiated on every single rebuild of the widget, leading to memory leaks and loss of text state (e.g. cursor position or modified text will be lost).
+**Action:** Always initialize disposable controllers (like `TextEditingController`) in the `initState` method and dispose of them properly in the `dispose` method to prevent memory leaks and unnecessary instantiation during rebuilds.
