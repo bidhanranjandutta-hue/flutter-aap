@@ -66,7 +66,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       // Dashed border simulated as solid for simplicity
-                      color: AppTheme.primary.withOpacity(0.3),
+                      color: AppTheme.primary.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -75,7 +75,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.1),
+                          color: AppTheme.primary.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -276,7 +276,8 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
+          // ⚡ Bolt: Use pushReplacementNamed to prevent memory leak from route stack growth
+          if (index == 0) Navigator.pushReplacementNamed(context, '/dashbord');
         },
       ),
     );
@@ -345,7 +346,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -381,7 +382,7 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.05),
+                color: Colors.grey.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Row(
