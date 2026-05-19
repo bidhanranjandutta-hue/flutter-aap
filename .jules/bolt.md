@@ -1,0 +1,3 @@
+## 2024-05-19 - Instantiating TextEditingController inside build() is an anti-pattern
+**Learning:** In Flutter, creating disposable controllers like `TextEditingController` directly inside a `StatefulWidget`'s `build` method is a critical performance and memory anti-pattern. Every time the widget rebuilds (e.g., via `setState` or parent updates), a new instance of the controller is created, leading to state loss (typed text resets), memory leaks (the previous controllers are never disposed), and unnecessary object churn.
+**Action:** Always initialize disposable controllers in the `initState` method and clean them up in the `dispose` method to ensure single instantiation and proper memory management.
