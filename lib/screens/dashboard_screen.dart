@@ -306,8 +306,9 @@ class DashboardScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
+          // Performance optimization: Use pushReplacementNamed instead of pushNamed to prevent unbounded route stack memory leaks.
           if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
+            Navigator.pushReplacementNamed(context, '/ocr');
           }
         },
       ),
