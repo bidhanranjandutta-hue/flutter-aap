@@ -307,7 +307,8 @@ class DashboardScreen extends StatelessWidget {
         ],
         onTap: (index) {
           if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
+            // Prevent unbounded route stack memory leak by replacing the route
+            Navigator.pushReplacementNamed(context, '/ocr');
           }
         },
       ),

@@ -1,0 +1,3 @@
+## 2024-05-24 - Unbounded Route Stacks in Flutter Navigation
+**Learning:** Repeatedly using `Navigator.pushNamed` in root-level navigation components (like `BottomNavigationBar` or the Welcome screen transition) creates an unbounded route stack. This is a subtle memory leak specific to Flutter's navigation architecture, as every tab switch pushes a new route instance onto the stack instead of switching views.
+**Action:** For root-level tab switching or one-way transitions (like Welcome to Dashboard), always use `Navigator.pushNamedAndRemoveUntil(context, '/route', (route) => false)` or `Navigator.pushReplacementNamed` to keep the route stack flat and prevent memory leaks.
