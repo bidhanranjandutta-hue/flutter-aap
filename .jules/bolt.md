@@ -1,0 +1,3 @@
+## 2026-02-21 - Unbounded Route Stacks in Flutter BottomNavigationBar
+**Learning:** In Flutter, repeatedly using `Navigator.pushNamed` from a persistent `BottomNavigationBar` (or heavily navigated root screens) continuously stacks new instances of screens on top of each other rather than replacing them. This creates an unbounded route stack that accumulates invisible widgets, eventually causing severe memory leaks and UI stutter.
+**Action:** Always use `Navigator.pushNamedAndRemoveUntil(context, '/route', (route) => false)` or `pushReplacementNamed` when navigating back to root tabs or dashboards to clear the underlying stack and maintain a flat routing hierarchy.
