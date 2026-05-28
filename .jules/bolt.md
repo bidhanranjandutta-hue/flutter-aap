@@ -1,0 +1,3 @@
+## 2024-05-18 - Extracting repetitive widget building methods to StatelessWidgets
+**Learning:** In Flutter, building complex UI by returning widgets from helper methods (like `_buildToolCard` or `_buildFileItem`) inside a `StatelessWidget` does not grant the performance benefits of a full widget subclass. Extracting them into separate `StatelessWidget` classes with `const` constructors drastically reduces rebuild scope and saves memory. To do so, standard parameterization needs literal values (e.g., `Color(0xFFFFF3E0)` instead of `Colors.orange[50]!`) so that `const` can be utilized fully.
+**Action:** Always favor `const` Widget classes over helper methods inside `build` for repeating UI components.
