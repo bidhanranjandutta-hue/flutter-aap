@@ -1,0 +1,3 @@
+## 2024-05-28 - Unbounded Route Stack Memory Leak in BottomNavigationBar
+**Learning:** Using `Navigator.pushNamed` to navigate to root tabs (like the Dashboard) from a `BottomNavigationBar` creates an unbounded route stack memory leak. Flutter's default push pushes a new route on top without clearing the stack, causing O(N) memory growth when users repetitively cycle through tabs.
+**Action:** When implementing root-level tab navigation (like returning home), always use `Navigator.pushNamedAndRemoveUntil(context, '/route', (route) => false)` to forcefully clear the stack and prevent infinite route nesting.
