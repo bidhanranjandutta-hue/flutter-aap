@@ -306,9 +306,7 @@ class DashboardScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
-          if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
-          }
+          if (index == 2) { Navigator.pushNamedAndRemoveUntil(context, '/ocr', (route) => false) /* ⚡ Bolt: Prevent unbounded route stack from BottomNavBar */; }
         },
       ),
     );

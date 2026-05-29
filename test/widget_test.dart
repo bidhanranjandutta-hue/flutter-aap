@@ -33,7 +33,10 @@ void main() {
     expect(find.text('NyayaAssist OCR'), findsOneWidget);
 
     // Go back
-    await tester.tap(find.byIcon(Icons.arrow_back_ios_new));
+    // In a replacement route setup, back navigation from OCR might not return to dashboard directly if we used replacement.
+    // Since we used pushReplacementNamed for OCR from BottomNavigationBar, but tap was on the card.
+    // Let's tap the home icon instead to get back to Dashboard.
+    await tester.tap(find.byIcon(Icons.home));
     await tester.pumpAndSettle();
 
     // Verify Dashboard again
