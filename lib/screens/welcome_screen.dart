@@ -223,7 +223,10 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/dashbord');
+                            Navigator.pushReplacementNamed(
+                              context,
+                              '/dashbord',
+                            ); // BOLT: Prevent memory leak by removing Welcome screen from stack
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor,
