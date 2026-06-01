@@ -1,0 +1,3 @@
+## 2024-06-01 - Bounded Navigation Stacks
+**Learning:** Flutter's standard `Navigator.pushNamed` was being used extensively inside `BottomNavigationBar` callbacks. Because tapping a bottom nav tab doesn't conceptually push a *new* screen on top of the old one but rather switches parallel views, using `pushNamed` created an unbounded, ever-growing stack of overlapping screens in memory (e.g., Home -> Scan -> Home -> Scan).
+**Action:** Always use `Navigator.pushReplacementNamed` for root-level bottom tab navigation to prevent memory leaks and keep the route stack flat. For non-returnable post-login flows, use `Navigator.pushNamedAndRemoveUntil`.
