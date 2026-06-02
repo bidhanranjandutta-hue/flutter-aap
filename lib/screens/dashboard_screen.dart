@@ -307,7 +307,8 @@ class DashboardScreen extends StatelessWidget {
         ],
         onTap: (index) {
           if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
+            // Bolt Performance: Use pushReplacementNamed for root-level tabs to prevent unbounded stack growth
+            Navigator.pushReplacementNamed(context, '/ocr');
           }
         },
       ),
