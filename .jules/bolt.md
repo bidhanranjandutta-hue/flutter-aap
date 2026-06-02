@@ -1,0 +1,3 @@
+## 2024-10-24 - Unbounded Route Stacks in Tab Navigation
+**Learning:** In Flutter, using `Navigator.pushNamed` for tab switching inside a `BottomNavigationBar` creates an unbounded route stack and a memory leak, as each tab tap stacks a new full-screen route instead of replacing it. In addition, the login/welcome screen should destroy the back-stack upon entering the app so users don't press "Back" and end up at the welcome screen.
+**Action:** Always use `Navigator.pushReplacementNamed` for root-level tab switches to maintain a flat navigation hierarchy. For post-login authentication flow, always use `Navigator.pushNamedAndRemoveUntil`.
