@@ -306,8 +306,9 @@ class DashboardScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
+          // ⚡ Bolt: Prevent memory leaks from unbounded route stacks during tab switching
           if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
+            Navigator.pushReplacementNamed(context, '/ocr');
           }
         },
       ),
