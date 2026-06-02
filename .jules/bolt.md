@@ -1,0 +1,3 @@
+## 2024-05-24 - Unbounded Navigation Stack Memory Leak
+**Learning:** Found a critical performance anti-pattern where root-level tab navigation (`BottomNavigationBar` `onTap`) used `Navigator.pushNamed()`. In Flutter, this creates an unbounded stack of routes that continuously consumes memory every time a user switches tabs.
+**Action:** Always strictly differentiate between root-level tab switching and hierarchical navigation. Use `Navigator.pushReplacementNamed()` for tab switches to keep the stack flat while preserving back-button behavior, and use `pushNamedAndRemoveUntil` for post-login screens to clear the un-returnable flows.
