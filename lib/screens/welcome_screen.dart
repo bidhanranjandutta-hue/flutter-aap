@@ -223,7 +223,8 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/dashbord');
+                            // ⚡ Bolt: Use pushNamedAndRemoveUntil for post-login screens to prevent memory leaks from unbounded route stacks
+                            Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor,
