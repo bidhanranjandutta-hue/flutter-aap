@@ -306,8 +306,9 @@ class DashboardScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
+          // ⚡ Bolt: Used pushReplacementNamed for root-level tab switching to prevent unbounded route stack growth
           if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
+            Navigator.pushReplacementNamed(context, '/ocr');
           }
         },
       ),
