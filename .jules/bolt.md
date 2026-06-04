@@ -1,0 +1,3 @@
+## 2024-06-04 - Unbounded Route Stack in Flutter BottomNavigationBar
+**Learning:** Found that using `Navigator.pushNamed()` for BottomNavigationBar tab switches creates an unbounded route stack and memory leak, as every tab click pushes a new page on top instead of replacing it. In Flutter, tab switching must not build a hierarchical history stack.
+**Action:** Always use `Navigator.pushReplacementNamed()` or dedicated state-based index switching for root-level bottom navigation tab transitions to keep the navigation stack flat and prevent memory leaks. Use `Navigator.pushNamed()` only for diving into hierarchical detail views, and `Navigator.pushNamedAndRemoveUntil()` to clear history after primary one-way transitions like welcome screens or login.
