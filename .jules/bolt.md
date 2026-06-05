@@ -1,0 +1,3 @@
+## 2024-06-05 - Route Stack Memory Leak via BottomNavigationBar
+**Learning:** Found a critical performance anti-pattern where root-level navigation via `BottomNavigationBar` and cards was using `pushNamed` repeatedly. Since the app is a toolset, users frequently switch between tabs (Dashboard <-> OCR <-> Synopsis <-> Law Map). Using `pushNamed` instead of `pushReplacementNamed` creates an unbounded route stack memory leak. In `welcome_screen.dart`, it should be `pushNamedAndRemoveUntil` since returning to the welcome screen after login shouldn't happen.
+**Action:** Always use `pushReplacementNamed` for tab switching and `pushNamedAndRemoveUntil` for un-returnable flows like login/welcome screens in Flutter.
