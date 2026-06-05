@@ -291,7 +291,10 @@ class _LawMapScreenState extends State<LawMapScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
+          // OPTIMIZATION: Use pushReplacementNamed for tab switches to prevent memory leak
+          if (index == 0) {
+            Navigator.pushReplacementNamed(context, '/dashbord');
+          }
         },
       ),
     );
