@@ -1,0 +1,3 @@
+## 2024-06-05 - Unbounded Route Stack in Flutter Bottom Navigation
+**Learning:** Flutter's `Navigator.pushNamed` inside a `BottomNavigationBar` creates a new route instance every time a user switches tabs, leading to an unbounded navigation stack and a silent memory leak if the user rapidly switches between tabs. Additionally, the login screen must clear the stack using `pushNamedAndRemoveUntil` to prevent the Android hardware back button from navigating backward to the authenticated login page.
+**Action:** Always use `Navigator.pushReplacementNamed` when switching between root-level tabs to maintain a flat routing stack while preserving state logic. Use `Navigator.pushNamedAndRemoveUntil` exclusively for un-returnable flows like login/logout.
