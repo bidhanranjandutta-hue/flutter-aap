@@ -307,7 +307,7 @@ class DashboardScreen extends StatelessWidget {
         ],
         onTap: (index) {
           if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
+            Navigator.pushReplacementNamed(context, '/ocr'); // Bolt Optimization: Prevent unbounded route stacks to save memory
           }
         },
       ),
