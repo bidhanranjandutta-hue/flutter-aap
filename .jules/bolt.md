@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Unbounded navigation stack from root-level tab switching
+**Learning:** The Flutter app's BottomNavigationBar components were repeatedly using Navigator.pushNamed() for tab switches (e.g., from Dashboard to OCR). This creates an unbounded route stack over time because the old route is not replaced or destroyed, leading to memory leaks and unpredictable back-button behavior.
+**Action:** Always use Navigator.pushReplacementNamed for root-level tab switches (or pushNamedAndRemoveUntil for post-login screens) to keep the navigation stack flat while preserving normal hierarchical navigation back-button functionality.
