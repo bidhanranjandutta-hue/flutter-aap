@@ -1,0 +1,3 @@
+## 2024-06-07 - Fixed Memory Leak in Bottom Navigation Bar
+**Learning:** Found an unbounded navigation stack issue inside the `BottomNavigationBar`. Using `Navigator.pushNamed` repeatedly for root-level tab switching continuously pushes new screens onto the stack instead of replacing them, causing a memory leak over time and breaking the expected flat navigation structure. Additionally, post-login navigation used `pushNamed` instead of clearing the stack.
+**Action:** Use `Navigator.pushReplacementNamed` for tab switches to keep the stack flat, and `Navigator.pushNamedAndRemoveUntil` for un-returnable flows like post-login transitions.
