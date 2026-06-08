@@ -276,7 +276,10 @@ class _CaseSynopsisScreenState extends State<CaseSynopsisScreen>
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
+          if (index == 0) {
+            // Bolt: Prevent memory leaks by avoiding unbounded route stacks on tab switches
+            Navigator.pushReplacementNamed(context, '/dashbord');
+          }
         },
       ),
     );
