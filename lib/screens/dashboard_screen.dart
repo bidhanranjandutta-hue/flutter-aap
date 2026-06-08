@@ -306,8 +306,11 @@ class DashboardScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
+          // ⚡ Bolt: Flatten Navigation Route Stack
+          // Replaced pushNamed with pushReplacementNamed to prevent unbounded route stack
+          // memory leaks during bottom navigation tab switches. Keeps stack flat.
           if (index == 2) {
-            Navigator.pushNamed(context, '/ocr');
+            Navigator.pushReplacementNamed(context, '/ocr');
           }
         },
       ),
