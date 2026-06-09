@@ -1,0 +1,3 @@
+## 2026-06-09 - Prevent Unbounded Route Stack Memory Leaks
+**Learning:** Found a common Flutter performance anti-pattern where root-level tab switching (like in `BottomNavigationBar`) repeatedly uses `Navigator.pushNamed`. This creates an ever-growing, unbounded route stack, leaking memory with every tab switch.
+**Action:** When implementing root-level tab switching, navigate away from the dashboard using `pushNamed` (so the user can press back to return to the dashboard), and navigate back to the dashboard using `pushNamedAndRemoveUntil` to avoid unbounded stack growth while preserving back-button behavior. Use `pushNamedAndRemoveUntil` when leaving one-way flows (like login/welcome screens).
