@@ -260,7 +260,10 @@ class _OCRScannerScreenState extends State<OCRScannerScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
-          if (index == 0) Navigator.pushNamed(context, '/dashbord');
+          if (index == 0) {
+            // ⚡ Bolt: Prevent unbounded route stack when returning to root dashboard tab
+            Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false);
+          }
         },
       ),
     );
