@@ -1,0 +1,3 @@
+## 2026-06-10 - Unbounded Route Stack Memory Leak
+**Learning:** Found a critical anti-pattern in the BottomNavigationBar implementation. `Navigator.pushNamed` is used repeatedly for root-level navigation (like returning to the dashboard from other tabs), which creates an unbounded route stack and memory leak.
+**Action:** Replace `Navigator.pushNamed` with `Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false);` when returning to root tabs to clear the stack and prevent unbounded growth, and use `pushNamedAndRemoveUntil` with an empty stack when navigating away from welcome screen to prevent returning to the auth flow.
