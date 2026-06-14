@@ -1,0 +1,3 @@
+## 2026-06-14 - Prevent Route Stack Memory Leaks in BottomNavigationBar
+**Learning:** Found a critical performance anti-pattern in the Flutter app's BottomNavigationBar navigation. The app was using `Navigator.pushNamed` to navigate back to the root dashboard from various tabs (like OCR Scanner, Law Map, Case Synopsis). This creates an unbounded route stack and memory leak because it continuously layers new Dashboard screens on top of the old ones instead of returning to the root.
+**Action:** When navigating from standard tabs back to the root tab in a BottomNavigationBar setup, always use `Navigator.pushNamedAndRemoveUntil(..., (route) => false)` to clear the stack and prevent unbounded memory growth. Also applies to one-way flows like Welcome Screen to Dashboard.
