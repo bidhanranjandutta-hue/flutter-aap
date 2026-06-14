@@ -1,0 +1,3 @@
+## 2024-06-14 - Optimize Route Stack Management
+**Learning:** Found an unbound route stack issue in Flutter `Navigator.pushNamed` usages where returning to root tabs (like `/dashboard`) repeatedly appends to the navigation stack, causing memory leaks and degraded performance over time. Standard Flutter architecture should use `pushNamedAndRemoveUntil` for root destinations.
+**Action:** Replace `Navigator.pushNamed(context, '/dashbord')` with `Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false)` when navigating back to the root tab from a sub-tab, and similarly for the one-way transition from the welcome screen, preserving standard stack behavior.
