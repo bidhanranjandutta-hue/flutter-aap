@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Route Stack Memory Leak
+**Learning:** In Flutter, using Navigator.pushNamed repeatedly for root-level navigation (like inside a BottomNavigationBar) creates an unbounded route stack and memory leaks. To fix this while preserving back-button behavior, navigate away from the root tab using pushNamed, and return to the root tab using Navigator.pushNamedAndRemoveUntil(..., (route) => false).
+**Action:** Use Navigator.pushNamedAndRemoveUntil when returning to root tabs to prevent unbounded route stack growth.
