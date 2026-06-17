@@ -1,0 +1,3 @@
+## 2024-11-20 - Flatten Navigation Route Stack
+**Learning:** Using `Navigator.pushNamed` for returning to root tabs via BottomNavigationBar creates unbounded route stacks and memory leaks in Flutter applications.
+**Action:** Use `Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false)` to clear the route stack when returning to the root tab, while maintaining `pushNamed` for navigating away to preserve back button behavior.
