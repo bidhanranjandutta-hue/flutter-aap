@@ -223,7 +223,11 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/dashbord');
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/dashbord',
+                              (route) => false,
+                            ); // Bolt: Prevent unbounded route stack memory leak
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor,
