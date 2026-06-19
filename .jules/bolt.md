@@ -1,0 +1,3 @@
+## 2026-06-19 - Flatten Navigation Route Stack
+**Learning:** In Flutter, repeatedly using `Navigator.pushNamed` to return to a root dashboard from standard screens creates an unbounded route stack, leading to a memory leak.
+**Action:** Always use `Navigator.pushNamedAndRemoveUntil` when returning to root tabs or completing one-way flows (like login) to prevent the stack from growing infinitely, while retaining `pushNamed` for forward navigation to preserve the back button.
