@@ -1,0 +1,3 @@
+## 2024-06-20 - Unbounded Route Stack Memory Leaks in BottomNavigationBar
+**Learning:** Found that `Navigator.pushNamed` was being incorrectly used for navigation back to the root tab (`/dashbord`) in BottomNavigationBar across multiple screens. This creates an unbounded route stack leading to memory leaks and broken back-button behavior as deep-link layers keep stacking indefinitely.
+**Action:** Always map root-level return navigation (like Home in BottomNavigationBar) using `Navigator.pushNamedAndRemoveUntil(..., (route) => false)` to clear the stack, while preserving normal `pushNamed` for navigating away to sub-tabs.
