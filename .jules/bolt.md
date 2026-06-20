@@ -1,0 +1,3 @@
+## 2024-06-20 - Unbounded Route Stack Memory Leak in Flutter Navigation
+**Learning:** Returning to a root tab using `Navigator.pushNamed` instead of `Navigator.pushNamedAndRemoveUntil` creates an unbounded route stack over time. This happens when standard sub-tabs inside a `BottomNavigationBar` continue to push the root screen repeatedly rather than replacing or clearing the navigation history, resulting in excessive memory usage and degraded performance for long user sessions.
+**Action:** When navigating back to a root tab like the dashboard (e.g., from a bottom navigation bar or a one-way flow like login), always clear the route stack using `Navigator.pushNamedAndRemoveUntil(..., (route) => false)` to preserve performance and prevent out-of-memory errors.
