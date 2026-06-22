@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Route Stack Memory Leak Optimization
+**Learning:** Found an unbounded route stack pattern in `BottomNavigationBar` where returning to the root dashboard using `Navigator.pushNamed` continuously adds routes instead of clearing them.
+**Action:** Replaced `pushNamed` with `pushNamedAndRemoveUntil` when returning to root tabs to prevent memory leaks and ensure the route stack is cleared properly.
