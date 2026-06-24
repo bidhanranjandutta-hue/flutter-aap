@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Unbounded Route Stack Anti-Pattern
+**Learning:** The codebase anti-pattern of using Navigator.pushNamed repeatedly to return to root-level tabs inside BottomNavigationBar creates unbounded route stacks and memory leaks.
+**Action:** Use Navigator.pushNamedAndRemoveUntil to return to the root tab or complete one-way login flows, while reserving pushNamed for navigating away from the root tab to preserve the back button.
