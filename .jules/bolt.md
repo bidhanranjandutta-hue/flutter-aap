@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Unbounded Route Stack Memory Leaks
+**Learning:** Using `Navigator.pushNamed` repeatedly for root-level navigation (like inside a BottomNavigationBar returning to the dashboard) creates an unbounded route stack, leading to memory leaks.
+**Action:** Use `Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false)` when returning to root tabs or completing one-way flows (like login) to prevent unbounded stacks. Use `pushNamed` when navigating away from root tabs to preserve back-button behavior.
