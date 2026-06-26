@@ -223,7 +223,12 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/dashbord');
+                            // Optimized: Prevent unbounded route stack memory leaks
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/dashbord',
+                              (route) => false,
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor,
@@ -254,7 +259,7 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'By continuing, you agree to NyayaAssist\'s Terms of Service & Privacy Policy.\nAuthorized Personnel Only.',
+                          "By continuing, you agree to NyayaAssist's Terms of Service & Privacy Policy.\nAuthorized Personnel Only.",
                           textAlign: TextAlign.center,
                           style: Theme.of(
                             context,
