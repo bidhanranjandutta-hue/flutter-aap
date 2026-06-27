@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Unbounded Route Stack on Root Navigation
+**Learning:** In the NyayaAssist architecture, repeatedly using `Navigator.pushNamed` to return to the root dashboard tab (spelled `'/dashbord'`) from the `BottomNavigationBar` creates an unbounded route stack and memory leak.
+**Action:** Use `Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false)` when returning to root tabs or completing one-way flows like login, while preserving `pushNamed` for standard deeper navigation to maintain back-button functionality.
