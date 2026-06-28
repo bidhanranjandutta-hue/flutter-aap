@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Route Stack Memory Leaks in Bottom Navigation
+**Learning:** Using `Navigator.pushNamed` recursively inside persistent BottomNavigationBar tabs creates an unbounded route stack memory leak because every tab switch stacks a new full-screen route on top rather than swapping out fragments.
+**Action:** Always use `Navigator.pushNamedAndRemoveUntil(context, '/dashboard_route', (route) => false)` when returning to root-level bottom navigation tabs to wipe the historical stack, while keeping standard `pushNamed` only for navigating deep into specific child screens.
