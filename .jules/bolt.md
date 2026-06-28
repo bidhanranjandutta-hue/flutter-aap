@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Unbounded Route Stacks in Flutter Bottom Navigation
+**Learning:** Using `Navigator.pushNamed` repeatedly for root-level navigation (like returning to a dashboard via a `BottomNavigationBar`) creates an unbounded route stack and memory leaks.
+**Action:** When returning to root tabs from sub-screens or completing one-way flows (like welcome screens), always use `Navigator.pushNamedAndRemoveUntil(..., (route) => false)` to clear the stack, while preserving `pushNamed` for forward navigation to maintain the back button.
