@@ -1,0 +1,3 @@
+## 2026-06-30 - Unbounded Route Stack Memory Leaks in BottomNavigationBar
+**Learning:** Using Navigator.pushNamed repeatedly for root-level navigation (like inside a BottomNavigationBar) creates an unbounded route stack and memory leaks.
+**Action:** Navigate away from the root tab (e.g., dashboard) using pushNamed, and return to the root tab using Navigator.pushNamedAndRemoveUntil(..., (route) => false).
