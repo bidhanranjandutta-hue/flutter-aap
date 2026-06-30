@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Optimize Route Stack in BottomNavigationBar
+**Learning:** Repeatedly using `Navigator.pushNamed` inside a root `BottomNavigationBar` creates an unbounded route stack and memory leak, breaking back-button behavior if not handled. `pushReplacementNamed` destroys the root route. The optimal approach is to navigate away with `pushNamed` and return to the root with `Navigator.pushNamedAndRemoveUntil(..., (route) => false)`.
+**Action:** When optimizing Flutter route stacks, strictly use `pushNamedAndRemoveUntil` to return to root tabs to prevent unbounded route stacks while preserving expected navigation flow.
