@@ -1,0 +1,3 @@
+## YYYY-MM-DD - [Preventing Unbounded Route Stacks in Flutter]
+**Learning:** Using Navigator.pushNamed repeatedly for root-level navigation (like inside a BottomNavigationBar or one-way login flows) creates an unbounded route stack and memory leaks.
+**Action:** When returning to root tabs (e.g., dashboard) from sub-tabs, or navigating in one-way flows, use Navigator.pushNamedAndRemoveUntil to clear the stack and prevent unbounded route memory leaks.
