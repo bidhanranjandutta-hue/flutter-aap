@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Unbounded Route Stack Memory Leaks in BottomNavigationBar
+**Learning:** Using Navigator.pushNamed inside BottomNavigationBar to return to root tabs (like '/dashbord') creates an unbounded route stack and memory leaks.
+**Action:** Use Navigator.pushNamedAndRemoveUntil(..., (route) => false) when returning to root tabs from sub-tabs or for one-way login flows to clear the route stack and free memory.
