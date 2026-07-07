@@ -1,0 +1,3 @@
+## YYYY-MM-DD - [Optimize route stack for bottom navigation]
+**Learning:** Using `Navigator.pushNamed` repeatedly for returning to a root-level tab (like a dashboard via a BottomNavigationBar) or for one-way flows (like login to dashboard) creates an unbounded route stack, leading to memory leaks and performance degradation.
+**Action:** Use `Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false)` when returning to root tabs or navigating past one-way flows (like welcome screens), but retain `Navigator.pushNamed` when navigating deeper into sub-screens to preserve the back button.
