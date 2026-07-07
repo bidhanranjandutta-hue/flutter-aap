@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Prevent unbounded route stacks
+**Learning:** In Flutter, repeatedly using Navigator.pushNamed to navigate between root tabs (like a dashboard) creates an unbounded route stack, leading to memory leaks and performance degradation. Using Navigator.pushNamedAndRemoveUntil is required when returning to the root.
+**Action:** Always navigate away from root tabs with pushNamed to preserve the back button, but return to root tabs using pushNamedAndRemoveUntil to prevent unbounded stacks.
