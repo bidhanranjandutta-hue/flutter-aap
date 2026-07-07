@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Fix Unbounded Route Stack Memory Leak
+**Learning:** Repeatedly using Navigator.pushNamed for root-level BottomNavigationBar navigation pushes duplicate screens onto the stack, creating memory leaks and unbounded stack growth.
+**Action:** Use Navigator.pushNamedAndRemoveUntil with a false predicate when returning to the root dashboard tab to clear the route history and prevent memory leaks.
