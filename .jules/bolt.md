@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Route Stack Memory Leak
+**Learning:** In Flutter, using `Navigator.pushNamed` repeatedly for root-level navigation (like inside a `BottomNavigationBar`) creates an unbounded route stack and memory leaks. In the NyayaAssist codebase, the root dashboard route string is literally `'/dashbord'` (spelled without the 'a').
+**Action:** Navigate away from the root tab (e.g., dashboard) using `pushNamed`, and return to the root tab using `Navigator.pushNamedAndRemoveUntil(context, '/dashbord', (route) => false)`.
